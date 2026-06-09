@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="通过学习兴趣和任务偏好，评估适合重点探索的大学专业方向。" />
+    <title>专业倾向测评 | 择校地图</title>
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css?v=20260609-7" />
+  </head>
+  <body class="subpage-body">
+    <header class="site-header">
+      <a class="site-wordmark" href="./index.html" aria-label="择校地图首页">
+        <span aria-hidden="true">择</span>
+        <strong>择校地图</strong>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="./index.html">首页</a>
+        <a href="./rank.html">排名估算</a>
+        <a class="active" href="./assessment.html">专业倾向测评</a>
+        <a href="./about.html">关于</a>
+      </nav>
+    </header>
+
+    <main class="subpage-shell assessment-shell">
+      <header class="assessment-intro">
+        <span>8 个判断</span>
+        <h1>专业倾向测评</h1>
+        <p>从日常学习与任务偏好出发，找出值得优先了解的专业方向。</p>
+      </header>
+
+      <form id="assessmentForm" class="assessment-form">
+        <div id="questionList" class="question-list"></div>
+        <button class="assessment-submit" type="submit">查看倾向结果</button>
+      </form>
+
+      <section class="assessment-result" id="assessmentResult" hidden aria-live="polite"></section>
+    </main>
+
+    <footer class="page-footer">测评用于缩小探索范围，不应替代学科成绩、课程体验和真实职业访谈。</footer>
+    <script type="module" src="./assessment.js?v=20260609-7"></script>
+  </body>
+</html>

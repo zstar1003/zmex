@@ -11,7 +11,7 @@
     "majorRankingReference": "参考软科中国大学专业排名的学校-学科-专业三层次评价思路，当前静态站不内置完整商业排名明细。",
     "doubleFirstClassSource": "教育部、财政部、国家发展改革委 2022 年第二轮“双一流”建设高校及建设学科名单",
     "coordinateSource": "公开中国城市中心点经纬度数据，点位按城市中心做轻微离散化",
-    "generatedAt": "2026-06-07T15:35:15.852Z",
+    "generatedAt": "2026-06-07T16:22:48.231Z",
     "missingCoordinates": []
   },
   "schools": [
@@ -97904,40 +97904,52 @@
       },
       "majorRankings": [
         {
-          "name": "计算机科学与技术",
+          "name": "电子信息类(集成电路)",
           "estimatedRank": 25,
           "grade": "A",
-          "basis": "理工类院校常见优势专业"
+          "basis": "重点高校学科倾向"
         },
         {
-          "name": "电子信息工程",
+          "name": "电子信息类(通信)",
           "estimatedRank": 36,
           "grade": "A",
-          "basis": "理工类院校常见优势专业"
+          "basis": "重点高校学科倾向"
         },
         {
-          "name": "软件工程",
+          "name": "计算机类(智能)",
           "estimatedRank": 47,
           "grade": "B+",
-          "basis": "理工类院校常见优势专业"
+          "basis": "重点高校学科倾向"
         },
         {
-          "name": "自动化",
+          "name": "计算机类",
           "estimatedRank": 58,
           "grade": "B+",
-          "basis": "理工类院校常见优势专业"
+          "basis": "重点高校学科倾向"
         },
         {
-          "name": "机械工程",
+          "name": "电子信息类(电子工程)",
           "estimatedRank": 69,
           "grade": "B+",
-          "basis": "理工类院校常见优势专业"
+          "basis": "重点高校学科倾向"
         },
         {
-          "name": "土木工程",
+          "name": "计算机类(网络安全)",
           "estimatedRank": 80,
           "grade": "B+",
-          "basis": "理工类院校常见优势专业"
+          "basis": "重点高校学科倾向"
+        },
+        {
+          "name": "自动化类(智能制造及智能测控)",
+          "estimatedRank": 91,
+          "grade": "B",
+          "basis": "重点高校学科倾向"
+        },
+        {
+          "name": "数学类(数学、统计与信息、计算机科学深度融合培养)",
+          "estimatedRank": 102,
+          "grade": "B",
+          "basis": "重点高校学科倾向"
         }
       ],
       "tags": {

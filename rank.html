@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="按省份、科类和全省排名估算可报考的本科专业。" />
+    <title>排名估算 | 择校地图</title>
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css?v=20260609-7" />
+  </head>
+  <body class="subpage-body">
+    <header class="site-header">
+      <a class="site-wordmark" href="./index.html" aria-label="择校地图首页">
+        <span aria-hidden="true">择</span>
+        <strong>择校地图</strong>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="./index.html">首页</a>
+        <a class="active" href="./rank.html">排名估算</a>
+        <a href="./assessment.html">专业倾向测评</a>
+        <a href="./about.html">关于</a>
+      </nav>
+    </header>
+
+    <main class="subpage-shell rank-workspace">
+      <aside class="panel rank-query-panel">
+        <div class="subpage-heading">
+          <span>专业粒度</span>
+          <h1>排名估算</h1>
+          <p>同一所大学的不同专业录取位次差异很大，结果按专业分别列出。</p>
+        </div>
+        <form class="rank-page-form" id="rankForm">
+          <label>
+            <span>所在省份</span>
+            <select id="rankProvinceSelect"></select>
+          </label>
+          <label>
+            <span>科类</span>
+            <select id="rankTrackSelect">
+              <option value="physics">物理/理科/综合</option>
+              <option value="history">历史/文科</option>
+            </select>
+          </label>
+          <label>
+            <span>全省排名</span>
+            <input id="rankInput" type="number" min="1" step="1" placeholder="例如 8000" required />
+          </label>
+          <button type="submit">查询可报专业</button>
+        </form>
+        <div class="model-note">
+          <strong>参考边界</strong>
+          <p>已收录真实专业投档线的省份优先使用原始位次，其余结果为估算模型，不代替省考试院志愿系统。</p>
+        </div>
+      </aside>
+
+      <section class="rank-output" aria-live="polite">
+        <header class="rank-output-head">
+          <div>
+            <span>查询结果</span>
+            <h2 id="rankResultTitle">等待输入排名</h2>
+          </div>
+          <strong id="rankResultCount">0</strong>
+        </header>
+        <div class="rank-page-summary" id="rankSummary">选择省份、科类并输入全省排名。</div>
+        <div class="rank-page-results" id="rankResults"></div>
+      </section>
+    </main>
+
+    <footer class="page-footer">录取规则、选科限制和招生计划以各省考试院当年公布内容为准。</footer>
+    <script type="module" src="./rank-page.js?v=20260609-7"></script>
+  </body>
+</html>

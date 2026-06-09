@@ -5,6 +5,10 @@
   "type": "module",
   "scripts": {
     "start": "bun run scripts/server.mjs",
-    "build:data": "bun run scripts/build-data.mjs"
+    "build:data": "bun run scripts/build-data.mjs",
+    "vendor:three": "bun run scripts/vendor-three.mjs"
+  },
+  "dependencies": {
+    "three": "^0.184.0"
   }
 }

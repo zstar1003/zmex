@@ -237,6 +237,16 @@ const schoolMajorOverrides = {
   中山大学: ["临床医学", "工商管理", "生态学", "哲学", "数学与应用数学"],
   四川大学: ["口腔医学", "临床医学", "高分子材料与工程", "汉语言文学", "软件工程"],
   电子科技大学: ["电子科学与技术", "通信工程", "计算机科学与技术", "集成电路设计与集成系统", "软件工程"],
+  西安电子科技大学: [
+    "电子信息类(集成电路)",
+    "电子信息类(通信)",
+    "计算机类(智能)",
+    "计算机类",
+    "电子信息类(电子工程)",
+    "计算机类(网络安全)",
+    "自动化类(智能制造及智能测控)",
+    "数学类(数学、统计与信息、计算机科学深度融合培养)",
+  ],
 };
 
 function clamp(value, min, max) {
@@ -279,7 +289,8 @@ function majorGrade(rank) {
 function majorRankingsForSchool(school, category, score) {
   const majors = schoolMajorOverrides[school.name] || majorTemplates[category] || majorTemplates.综合;
   const categoryBoost = school.name.includes(category === "理工" ? "科技" : category) ? 8 : 0;
-  return majors.slice(0, 6).map((major, index) => {
+  const visibleMajorCount = schoolMajorOverrides[school.name] ? 8 : 6;
+  return majors.slice(0, visibleMajorCount).map((major, index) => {
     const estimatedRank = Math.max(1, Math.round((100 - score) * 2.2 + index * 11 - categoryBoost));
     return {
       name: major,

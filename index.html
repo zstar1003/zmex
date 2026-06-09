@@ -9,20 +9,24 @@
     />
     <title>全国本科院校可视化分布 | 高考志愿地图</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css?v=20260607-5" />
-    <script src="./data/vendor/echarts.min.js"></script>
+    <link rel="stylesheet" href="./styles.css?v=20260609-7" />
   </head>
-  <body>
+  <body class="home-page">
+    <header class="site-header">
+      <a class="site-wordmark" href="./index.html" aria-label="择校地图首页">
+        <span aria-hidden="true">择</span>
+        <strong>择校地图</strong>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a class="active" href="./index.html">首页</a>
+        <a href="./rank.html">排名估算</a>
+        <a href="./assessment.html">专业倾向测评</a>
+        <a href="./about.html">关于</a>
+      </nav>
+    </header>
+
     <main class="app-shell">
       <aside class="side side-left" aria-label="院校筛选">
-        <section class="panel brand-panel">
-          <div class="brand-mark" aria-hidden="true">本</div>
-          <div>
-            <p class="eyebrow">Gaokao Atlas</p>
-            <h1>全国本科院校分布</h1>
-          </div>
-        </section>
-
         <section class="panel filters-panel">
           <div class="panel-head">
             <h2>院校查询</h2>
@@ -93,7 +97,7 @@
         </section>
       </aside>
 
-      <section class="map-stage" aria-label="全国本科院校地图">
+      <section class="map-stage" aria-label="全国本科院校三维地图">
         <div class="map-toolbar">
           <div class="toolbar-copy">
             <strong id="activeTitle">全国视图</strong>
@@ -106,12 +110,12 @@
           </div>
         </div>
         <div class="map-controls" aria-label="地图控制">
-          <button id="resetMapView" type="button" title="重置地图视图" aria-label="重置地图视图">重置</button>
+          <button id="resetMapView" type="button" title="重置地图视图" aria-label="重置地图视图">↺</button>
           <button id="zoomInMap" type="button" title="放大" aria-label="放大">+</button>
           <button id="zoomOutMap" type="button" title="缩小" aria-label="缩小">−</button>
           <button id="fullscreenMap" type="button" title="全屏查看" aria-label="全屏查看">⛶</button>
         </div>
-        <div id="mapChart" class="map-chart" role="img" aria-label="中国本科院校分布地图"></div>
+        <div id="mapChart" class="map-chart" role="img" aria-label="可拖动、缩放的中国本科院校三维分布地图"></div>
         <div class="legend-card" id="legendCard">
           <span class="legend-title">本科院校数</span>
           <div class="legend-ramp" aria-hidden="true"></div>
@@ -127,34 +131,7 @@
         </article>
       </section>
 
-      <aside class="side side-right" aria-label="院校推荐与位次估算">
-        <section class="panel rank-panel">
-          <div class="panel-head">
-            <h2>省排名估算</h2>
-            <span class="soft-count">粗略推荐</span>
-          </div>
-          <div class="rank-form">
-            <label>
-              <span>所在省份</span>
-              <select id="rankProvinceSelect"></select>
-            </label>
-            <label>
-              <span>科类</span>
-              <select id="rankTrackSelect">
-                <option value="physics">物理/理科/综合</option>
-                <option value="history">历史/文科</option>
-              </select>
-            </label>
-            <label class="rank-input">
-              <span>全省排名</span>
-              <input id="rankInput" type="number" min="1" step="1" placeholder="例如 52000" />
-            </label>
-            <button id="rankSearchButton" type="button">估算可报院校</button>
-          </div>
-          <div class="rank-summary" id="rankSummary">输入高考省排名后，按冲 / 稳 / 保给出大致院校。</div>
-          <div class="rank-results" id="rankResults"></div>
-        </section>
-
+      <aside class="side side-right" aria-label="院校推荐">
         <section class="panel list-panel">
           <div class="panel-head">
             <h2>推荐院校</h2>
@@ -173,6 +150,6 @@
       </a>
     </footer>
 
-    <script type="module" src="./app.js?v=20260607-5"></script>
+    <script type="module" src="./app.js?v=20260609-7"></script>
   </body>
 </html>
