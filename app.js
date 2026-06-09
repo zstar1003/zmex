@@ -15,7 +15,6 @@ const state = {
   selectedId: null,
   selectedCityKey: null,
   visibleRows: 160,
-  mapMode: "density",
   detailContext: null,
   selectedMajorName: "",
   detailDismissed: false,
@@ -34,8 +33,6 @@ const els = {
   publicCount: document.querySelector("#publicCount"),
   privateCount: document.querySelector("#privateCount"),
   mapChart: document.querySelector("#mapChart"),
-  activeTitle: document.querySelector("#activeTitle"),
-  activeSubtitle: document.querySelector("#activeSubtitle"),
   detailCard: document.querySelector("#detailCard"),
   schoolList: document.querySelector("#schoolList"),
   listCount: document.querySelector("#listCount"),
@@ -49,7 +46,6 @@ const els = {
 };
 
 const formatNumber = new Intl.NumberFormat("zh-CN");
-const SCHOOL_POINT_LIMIT = 90;
 
 function debounce(fn, wait = 150) {
   let timer;
@@ -132,14 +128,6 @@ function initControls() {
   els.loadMore.addEventListener("click", () => {
     state.visibleRows += 160;
     renderList();
-  });
-
-  document.querySelectorAll("[data-map-mode]").forEach((button) => {
-    button.addEventListener("click", () => {
-      state.mapMode = button.dataset.mapMode;
-      document.querySelectorAll("[data-map-mode]").forEach((item) => item.classList.toggle("active", item === button));
-      renderMap();
-    });
   });
 
   els.resetMapView.addEventListener("click", resetMapView);
@@ -234,10 +222,6 @@ function renderStats() {
   els.publicCount.textContent = formatNumber.format(summary.publicCount);
   els.privateCount.textContent = formatNumber.format(summary.privateCount);
 
-  const title = state.filters.province || "全国视图";
-  const pointMode = usesSchoolPoints() ? "学校点" : "城市聚合";
-  els.activeTitle.textContent = title;
-  els.activeSubtitle.textContent = `${formatNumber.format(summary.total)} 所本科院校 · ${formatNumber.format(summary.cityCount)} 个城市/地区 · ${pointMode}`;
   els.sourceText.textContent = `数据来源：${state.data.meta.sourceName}（截至 ${state.data.meta.sourceDate}）；推荐/专业/位次为估算模型`;
 }
 
@@ -260,10 +244,6 @@ function aggregateByProvince(schools) {
 
 function cityKeyOf(school) {
   return `${school.province}::${school.city}`;
-}
-
-function usesSchoolPoints() {
-  return state.filtered.length <= SCHOOL_POINT_LIMIT || state.filters.query.length >= 2;
 }
 
 function schoolPriority(school) {
@@ -322,30 +302,9 @@ function aggregateByCity(schools) {
 
 function renderMap() {
   if (!state.chart) return;
-  const provinceStats = aggregateByProvince(state.filtered);
-  const schoolPointMode = usesSchoolPoints();
-  const cityGroups = aggregateByCity(state.filtered).filter((city) => city.coord);
-  const points = schoolPointMode
-    ? state.filtered
-        .filter((school) => school.coord)
-        .map((school) => ({
-          id: school.id,
-          coord: school.coord,
-          school,
-        }))
-    : cityGroups.map((city) => ({
-        id: city.key,
-        coord: city.coord,
-        cityGroup: city,
-      }));
-
   state.chart.update({
-    provinceStats,
-    points,
-    mapMode: state.mapMode,
+    provinceStats: aggregateByProvince(state.filtered),
     activeProvince: state.filters.province,
-    selectedSchoolId: state.selectedId,
-    selectedCityKey: state.selectedCityKey,
   });
 }
 
@@ -378,7 +337,7 @@ function renderList() {
 
   els.schoolList.querySelectorAll(".school-row").forEach((row) => {
     row.addEventListener("click", () => {
-      selectSchool(row.dataset.schoolId, true);
+      selectSchool(row.dataset.schoolId);
     });
   });
 
@@ -405,8 +364,8 @@ function renderSelectedDetail() {
     els.detailCard.className = "detail-card empty";
     els.detailCard.innerHTML = `
       <span class="detail-kicker">院校详情</span>
-      <h2>选择地图点或列表院校</h2>
-      <p>当前显示 ${formatNumber.format(state.filtered.length)} 所本科院校。</p>
+      <h2>从右侧列表选择院校</h2>
+      <p>当前显示 ${formatNumber.format(state.filtered.length)} 所本科院校，点击省份可筛选地区。</p>
     `;
     return;
   }
@@ -517,7 +476,7 @@ function renderCityDetail(city) {
 
   els.detailCard.querySelector(".detail-close").addEventListener("click", closeDetailCard);
   els.detailCard.querySelectorAll("[data-city-school-id]").forEach((button) => {
-    button.addEventListener("click", () => selectSchool(button.dataset.citySchoolId, true));
+    button.addEventListener("click", () => selectSchool(button.dataset.citySchoolId));
   });
   document.querySelector("#filterCityProvince").addEventListener("click", () => {
     state.filters.province = city.province;
@@ -540,27 +499,14 @@ function closeDetailCard() {
   renderSelectedDetail();
 }
 
-function selectCity(cityKey) {
-  state.selectedCityKey = cityKey;
-  state.selectedId = null;
-  state.selectedMajorName = "";
-  state.detailDismissed = false;
-  renderMap();
-  renderSelectedDetail();
-}
-
-function selectSchool(id, centerMap = false, majorName = "") {
+function selectSchool(id, majorName = "") {
   state.selectedId = id;
   state.selectedMajorName = majorName;
   state.detailDismissed = false;
   const school = state.data.schools.find((item) => item.id === id);
   state.selectedCityKey = school ? cityKeyOf(school) : null;
-  renderMap();
   renderSelectedDetail();
   renderList();
-  if (centerMap && school?.coord && usesSchoolPoints()) {
-    state.chart.focusPoint(id);
-  }
 }
 
 function resetMapView() {
@@ -591,12 +537,6 @@ async function init() {
       state.visibleRows = 160;
       applyFilters();
     },
-    onCityClick(cityKey) {
-      selectCity(cityKey);
-    },
-    onSchoolClick(id) {
-      selectSchool(id);
-    },
   });
 
   initControls();
@@ -616,7 +556,7 @@ async function init() {
   }
   applyFilters();
   if (linkedSchool && state.filtered.some((school) => school.id === linkedSchool)) {
-    selectSchool(linkedSchool, true, linkedMajor);
+    selectSchool(linkedSchool, linkedMajor);
   }
   window.addEventListener("resize", debounce(() => state.chart?.resize(), 100));
   document.addEventListener("fullscreenchange", () => {

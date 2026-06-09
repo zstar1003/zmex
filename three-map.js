@@ -13,6 +13,17 @@ const MAP_WIDTH = 112;
 const MAP_HEIGHT = 82;
 const MAP_DEPTH = 2.5;
 const MAP_COS_LATITUDE = Math.cos(35 * Math.PI / 180);
+const LABEL_OFFSETS = {
+  北京市: [-2.2, 2.2],
+  天津市: [2.4, -1.2],
+  上海市: [3.1, -0.2],
+  江苏省: [-1.6, 1.1],
+  浙江省: [0.4, -1.4],
+  香港特别行政区: [2.4, -0.9],
+  澳门特别行政区: [-2.4, -1.5],
+  海南省: [0, -1.6],
+  宁夏回族自治区: [0.4, -0.8],
+};
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
@@ -35,25 +46,6 @@ function colorForMetric(value, max, active = false) {
   const color = new THREE.Color("#efc9ca");
   color.lerp(new THREE.Color("#bd666b"), t);
   return color;
-}
-
-function pointColor(point, mapMode, selected) {
-  if (selected) return "#96343b";
-  if (point.school) {
-    if (point.school.tags.is985) return "#96343b";
-    if (point.school.tags.doubleFirstClass || point.school.tags.is211) return "#b67b35";
-    if (point.school.nature === "民办") return "#89647d";
-    return "#a84a50";
-  }
-  if (mapMode === "elite" && point.cityGroup.eliteCount) return "#b67b35";
-  if (mapMode === "private" && point.cityGroup.privateCount) return "#89647d";
-  return "#a84a50";
-}
-
-function metricValue(stat, mapMode) {
-  if (mapMode === "private") return stat?.privateCount || 0;
-  if (mapMode === "elite") return stat?.eliteCount || 0;
-  return stat?.count || 0;
 }
 
 function disposeObject(object) {
@@ -95,27 +87,56 @@ function createShape(rings, project) {
   return shape;
 }
 
-function createCountSprite(count) {
-  const canvas = document.createElement("canvas");
-  canvas.width = 96;
-  canvas.height = 96;
-  const context = canvas.getContext("2d");
-  context.clearRect(0, 0, 96, 96);
+function shortProvinceName(name) {
+  return name
+    .replace("壮族自治区", "")
+    .replace("回族自治区", "")
+    .replace("维吾尔自治区", "")
+    .replace("特别行政区", "")
+    .replace("自治区", "")
+    .replace(/[省市]$/, "");
+}
+
+function roundedRect(context, x, y, width, height, radius) {
   context.beginPath();
-  context.arc(48, 48, 29, 0, Math.PI * 2);
-  context.fillStyle = "rgba(105, 42, 47, 0.92)";
+  context.moveTo(x + radius, y);
+  context.lineTo(x + width - radius, y);
+  context.quadraticCurveTo(x + width, y, x + width, y + radius);
+  context.lineTo(x + width, y + height - radius);
+  context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  context.lineTo(x + radius, y + height);
+  context.quadraticCurveTo(x, y + height, x, y + height - radius);
+  context.lineTo(x, y + radius);
+  context.quadraticCurveTo(x, y, x + radius, y);
+  context.closePath();
+}
+
+function createProvinceLabelSprite(name, count, active) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 112;
+  canvas.height = 88;
+  const context = canvas.getContext("2d");
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  roundedRect(context, 4, 4, 104, 80, 14);
+  context.fillStyle = active ? "rgba(126, 53, 58, 0.96)" : "rgba(255, 251, 251, 0.94)";
   context.fill();
-  context.lineWidth = 5;
-  context.strokeStyle = "rgba(255, 255, 255, 0.9)";
+  context.lineWidth = 2;
+  context.strokeStyle = active ? "rgba(126, 53, 58, 1)" : "rgba(190, 101, 106, 0.5)";
   context.stroke();
-  context.fillStyle = "#ffffff";
-  context.font = "800 26px PingFang SC, sans-serif";
+
+  context.fillStyle = active ? "#fffafa" : "#4b3032";
+  context.font = "700 19px PingFang SC, Microsoft YaHei, sans-serif";
   context.textAlign = "center";
   context.textBaseline = "middle";
-  context.fillText(String(count), 48, 49);
+  context.fillText(shortProvinceName(name), 56, 27);
+
+  context.fillStyle = active ? "#ffffff" : "#9c4047";
+  context.font = "900 27px Avenir Next, PingFang SC, sans-serif";
+  context.fillText(String(count), 56, 59);
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
+  texture.minFilter = THREE.LinearFilter;
   const sprite = new THREE.Sprite(
     new THREE.SpriteMaterial({
       map: texture,
@@ -124,7 +145,7 @@ function createCountSprite(count) {
       depthWrite: false,
     }),
   );
-  sprite.scale.set(4.5, 4.5, 1);
+  sprite.scale.set(5.3, 4.15, 1);
   sprite.renderOrder = 20;
   return sprite;
 }
@@ -161,17 +182,14 @@ export class ThreeChinaMap {
     this.controls.target.copy(DEFAULT_CAMERA.target);
 
     this.mapRoot = new THREE.Group();
-    this.pointRoot = new THREE.Group();
-    this.scene.add(this.mapRoot, this.pointRoot);
+    this.labelRoot = new THREE.Group();
+    this.scene.add(this.mapRoot, this.labelRoot);
 
     this.raycaster = new THREE.Raycaster();
     this.pointer = new THREE.Vector2();
     this.provinceMeshes = [];
     this.provinceGroups = new Map();
-    this.pointMeshes = [];
-    this.pointMeshById = new Map();
     this.hoveredProvince = "";
-    this.hoveredPoint = null;
     this.pointerDown = null;
     this.cameraGoal = null;
     this.disposed = false;
@@ -262,6 +280,7 @@ export class ThreeChinaMap {
         name,
         baseZ: 0,
         targetZ: 0,
+        labelCoord: feature.properties?.centroid || feature.properties?.center,
       };
       const meshes = [];
       const topMaterials = [];
@@ -346,73 +365,42 @@ export class ThreeChinaMap {
     this.controls.addEventListener("start", () => this.hideTooltip());
   }
 
-  update({ provinceStats, points, mapMode, activeProvince, selectedSchoolId, selectedCityKey }) {
-    this.mapMode = mapMode;
+  update({ provinceStats, activeProvince }) {
     this.activeProvince = activeProvince;
     this.provinceStats = new Map(provinceStats.map((stat) => [stat.name, stat]));
-    const maxValue = Math.max(...provinceStats.map((stat) => metricValue(stat, mapMode)), 1);
+    const maxValue = Math.max(...provinceStats.map((stat) => stat.count), 1);
 
     this.provinceGroups.forEach((group, name) => {
       const stat = this.provinceStats.get(name);
-      const color = colorForMetric(metricValue(stat, mapMode), maxValue, activeProvince === name);
+      const color = colorForMetric(stat?.count || 0, maxValue, activeProvince === name);
       group.userData.topMaterials.forEach((material) => {
         material.color.copy(color);
       });
       group.userData.sideMaterials.forEach((material) => {
         material.color.copy(color).multiplyScalar(0.56);
       });
-      group.visible = !activeProvince || name === activeProvince || Boolean(stat);
+      group.visible = true;
     });
 
-    this.rebuildPoints(points, selectedSchoolId, selectedCityKey);
+    this.rebuildProvinceLabels();
   }
 
-  rebuildPoints(points, selectedSchoolId, selectedCityKey) {
-    this.scene.remove(this.pointRoot);
-    disposeObject(this.pointRoot);
-    this.pointRoot = new THREE.Group();
-    this.scene.add(this.pointRoot);
-    this.pointMeshes = [];
-    this.pointMeshById.clear();
+  rebuildProvinceLabels() {
+    this.scene.remove(this.labelRoot);
+    disposeObject(this.labelRoot);
+    this.labelRoot = new THREE.Group();
+    this.scene.add(this.labelRoot);
 
-    points.forEach((point) => {
-      const selected = point.school
-        ? point.school.id === selectedSchoolId
-        : point.cityGroup.key === selectedCityKey;
-      const size = point.school
-        ? point.school.tags.is985
-          ? 0.68
-          : point.school.tags.is211 || point.school.tags.doubleFirstClass
-            ? 0.56
-            : 0.38
-        : clamp(0.48 + Math.sqrt(point.cityGroup.count) * 0.12, 0.62, 1.35);
-      const marker = new THREE.Mesh(
-        new THREE.SphereGeometry(size, 14, 10),
-        new THREE.MeshStandardMaterial({
-          color: pointColor(point, this.mapMode, selected),
-          emissive: pointColor(point, this.mapMode, selected),
-          emissiveIntensity: selected ? 0.72 : 0.34,
-          roughness: 0.34,
-          metalness: 0.05,
-        }),
-      );
-      marker.position.copy(this.project(point.coord, MAP_DEPTH + 1.3 + size));
-      marker.userData = {
-        type: "point",
-        point,
-        baseScale: 1,
-        selected,
-      };
-      marker.renderOrder = 12;
-      this.pointRoot.add(marker);
-      this.pointMeshes.push(marker);
-      this.pointMeshById.set(point.id, marker);
-
-      if (!point.school && point.cityGroup.count >= 24) {
-        const label = createCountSprite(point.cityGroup.count);
-        label.position.copy(marker.position).add(new THREE.Vector3(0, 0, 1.15));
-        this.pointRoot.add(label);
-      }
+    this.provinceGroups.forEach((group, name) => {
+      const stat = this.provinceStats.get(name);
+      const coord = group.userData.labelCoord;
+      if (!stat?.count || !coord) return;
+      const label = createProvinceLabelSprite(name, stat.count, this.activeProvince === name);
+      const [offsetX = 0, offsetY = 0] = LABEL_OFFSETS[name] || [];
+      label.position.copy(this.project(coord, MAP_DEPTH + 2.1));
+      label.position.x += offsetX;
+      label.position.y += offsetY;
+      this.labelRoot.add(label);
     });
   }
 
@@ -426,8 +414,6 @@ export class ThreeChinaMap {
 
   hitTest(event) {
     this.setPointer(event);
-    const pointHit = this.raycaster.intersectObjects(this.pointMeshes, false)[0];
-    if (pointHit) return pointHit.object;
     return this.raycaster.intersectObjects(this.provinceMeshes, false)[0]?.object || null;
   }
 
@@ -438,14 +424,6 @@ export class ThreeChinaMap {
       return;
     }
 
-    if (hit.userData.type === "point") {
-      this.setHoveredProvince("");
-      this.setHoveredPoint(hit);
-      this.showPointTooltip(hit.userData.point, event);
-      return;
-    }
-
-    this.setHoveredPoint(null);
     this.setHoveredProvince(hit.userData.name);
     this.showProvinceTooltip(hit.userData.name, event);
   }
@@ -458,12 +436,6 @@ export class ThreeChinaMap {
 
     const hit = this.hitTest(event);
     if (!hit) return;
-    if (hit.userData.type === "point") {
-      const point = hit.userData.point;
-      if (point.school) this.handlers.onSchoolClick?.(point.school.id);
-      else this.handlers.onCityClick?.(point.cityGroup.key);
-      return;
-    }
     this.handlers.onProvinceClick?.(hit.userData.name);
   }
 
@@ -491,40 +463,9 @@ export class ThreeChinaMap {
     }
   }
 
-  setHoveredPoint(marker) {
-    if (this.hoveredPoint === marker) return;
-    if (this.hoveredPoint) this.hoveredPoint.userData.hovered = false;
-    this.hoveredPoint = marker;
-    if (marker) marker.userData.hovered = true;
-  }
-
   showProvinceTooltip(name, event) {
-    const stat = this.provinceStats.get(name) || {
-      count: 0,
-      eliteCount: 0,
-      privateCount: 0,
-    };
-    this.showTooltip(
-      name,
-      `本科院校 ${stat.count} 所 · 重点 ${stat.eliteCount} 所 · 民办 ${stat.privateCount} 所`,
-      event,
-    );
-  }
-
-  showPointTooltip(point, event) {
-    if (point.school) {
-      this.showTooltip(
-        point.school.name,
-        `${point.school.province} · ${point.school.city} · ${point.school.recommendation?.band || "院校参考"}`,
-        event,
-      );
-      return;
-    }
-    this.showTooltip(
-      `${point.cityGroup.province} · ${point.cityGroup.name}`,
-      `本科院校 ${point.cityGroup.count} 所 · 重点 ${point.cityGroup.eliteCount} 所`,
-      event,
-    );
+    const stat = this.provinceStats.get(name);
+    this.showTooltip(name, `本科院校 ${stat?.count || 0} 所 · 点击筛选`, event);
   }
 
   showTooltip(title, detail, event) {
@@ -549,14 +490,7 @@ export class ThreeChinaMap {
 
   clearHover() {
     this.setHoveredProvince("");
-    this.setHoveredPoint(null);
     this.hideTooltip();
-  }
-
-  focusPoint(id) {
-    const marker = this.pointMeshById.get(id);
-    if (!marker) return;
-    marker.userData.pulseUntil = performance.now() + 1600;
   }
 
   getDefaultView() {
@@ -601,7 +535,6 @@ export class ThreeChinaMap {
   animate() {
     if (this.disposed) return;
     this.raf = requestAnimationFrame(() => this.animate());
-    const now = performance.now();
     this.controls.update();
 
     if (this.cameraGoal) {
@@ -619,11 +552,6 @@ export class ThreeChinaMap {
 
     this.provinceGroups.forEach((group) => {
       group.position.z += (group.userData.targetZ - group.position.z) * 0.16;
-    });
-    this.pointMeshes.forEach((marker) => {
-      const pulsing = marker.userData.pulseUntil > now || marker.userData.selected;
-      const target = marker.userData.hovered ? 1.45 : pulsing ? 1.18 + Math.sin(now * 0.008) * 0.12 : 1;
-      marker.scale.lerp(new THREE.Vector3(target, target, target), 0.18);
     });
     this.renderer.render(this.scene, this.camera);
   }

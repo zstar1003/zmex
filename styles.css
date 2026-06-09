@@ -25,6 +25,13 @@ html {
   overflow: hidden;
 }
 
+html.subpage-root {
+  height: auto;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 body {
   margin: 0;
   height: 100%;
@@ -34,6 +41,12 @@ body {
   color: var(--ink);
   font-family:
     "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+html.subpage-root body {
+  height: auto;
+  min-height: 100vh;
+  overflow: visible;
 }
 
 button,
@@ -136,8 +149,7 @@ button {
 }
 
 .side-left {
-  overflow: auto;
-  padding-right: 2px;
+  overflow: hidden;
 }
 
 .panel {
@@ -164,7 +176,7 @@ h2 {
 }
 
 .filters-panel {
-  padding: 14px;
+  padding: 11px 12px;
 }
 
 .panel-head {
@@ -172,7 +184,7 @@ h2 {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  margin-bottom: 12px;
+  margin-bottom: 7px;
 }
 
 .icon-button {
@@ -200,24 +212,24 @@ h2 {
 
 .field {
   display: grid;
-  gap: 7px;
-  margin-top: 12px;
+  gap: 5px;
+  margin-top: 8px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
 }
 
 .field input,
 .field select {
   width: 100%;
-  min-height: 39px;
+  min-height: 34px;
   border: 1px solid var(--line);
   border-radius: 7px;
   outline: 0;
   background: #fbfcf8;
   color: var(--ink);
-  padding: 0 11px;
-  font-size: 13px;
+  padding: 0 9px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -230,20 +242,21 @@ h2 {
 .check-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 6px;
 }
 
 .check-grid label {
   display: flex;
   min-width: 0;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   border: 1px solid var(--line);
   border-radius: 7px;
   background: #fbfcf8;
-  padding: 8px;
+  min-height: 32px;
+  padding: 6px 7px;
   color: var(--ink);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
 }
 
@@ -256,7 +269,7 @@ h2 {
 .chip-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 7px;
+  gap: 5px;
 }
 
 .chip {
@@ -264,8 +277,8 @@ h2 {
   border-radius: 999px;
   background: #fbfcf8;
   color: #37483f;
-  padding: 7px 10px;
-  font-size: 12px;
+  padding: 5px 8px;
+  font-size: 11px;
   font-weight: 800;
   transition:
     transform 0.18s ease,
@@ -285,7 +298,7 @@ h2 {
 }
 
 .stats-panel {
-  padding: 14px;
+  padding: 10px 12px;
 }
 
 .metric-main {
@@ -296,7 +309,7 @@ h2 {
 }
 
 .metric-main span {
-  font-size: 38px;
+  font-size: 30px;
   font-weight: 900;
   line-height: 0.9;
 }
@@ -307,32 +320,25 @@ h2 {
   font-weight: 800;
 }
 
-.metric-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 13px;
+.metric-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin-top: 8px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
 }
 
-.metric-grid div {
-  border: 1px solid var(--line);
-  border-radius: 7px;
-  background: #fbfcf8;
-  padding: 10px;
-}
-
-.metric-grid strong {
-  display: block;
+.metric-inline strong {
+  margin-right: 3px;
   color: var(--ink);
-  font-size: 19px;
+  font-size: 12px;
   line-height: 1;
 }
 
-.metric-grid span {
-  display: block;
-  margin-top: 6px;
+.metric-inline span {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
 }
 
@@ -348,66 +354,9 @@ h2 {
   box-shadow: var(--shadow);
 }
 
-.map-toolbar {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  left: 14px;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  pointer-events: none;
-}
-
-.toolbar-copy {
-  display: grid;
-  gap: 3px;
-  border: 1px solid rgba(217, 222, 213, 0.92);
-  border-radius: 8px;
-  background: rgba(255, 254, 250, 0.94);
-  padding: 10px 12px;
-}
-
-.toolbar-copy strong {
-  font-size: 15px;
-}
-
-.toolbar-copy span {
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.segmented {
-  display: flex;
-  border: 1px solid rgba(217, 222, 213, 0.95);
-  border-radius: 8px;
-  background: rgba(255, 254, 250, 0.94);
-  padding: 4px;
-  pointer-events: auto;
-}
-
-.segmented button {
-  min-width: 58px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: #405048;
-  padding: 7px 9px;
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.segmented button.active {
-  background: var(--blue);
-  color: white;
-}
-
 .map-controls {
   position: absolute;
-  top: 90px;
+  top: 14px;
   left: 14px;
   z-index: 3;
   display: flex;
@@ -911,7 +860,7 @@ h2 {
 .subpage-body {
   height: auto;
   min-height: 100vh;
-  overflow: auto;
+  overflow: visible;
 }
 
 .subpage-shell {
@@ -1418,17 +1367,8 @@ h2 {
     min-height: 560px;
   }
 
-  .map-toolbar {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .segmented {
-    width: max-content;
-  }
-
   .map-controls {
-    top: 128px;
+    top: 10px;
     left: 10px;
   }
 

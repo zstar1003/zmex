@@ -9,7 +9,7 @@
     />
     <title>全国本科院校可视化分布 | 高考志愿地图</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css?v=20260609-7" />
+    <link rel="stylesheet" href="./styles.css?v=20260609-9" />
   </head>
   <body class="home-page">
     <header class="site-header">
@@ -76,46 +76,23 @@
             <span id="schoolCount">0</span>
             <small>所本科院校</small>
           </div>
-          <div class="metric-grid">
-            <div>
-              <strong id="provinceCount">0</strong>
-              <span>省级区域</span>
-            </div>
-            <div>
-              <strong id="cityCount">0</strong>
-              <span>城市/地区</span>
-            </div>
-            <div>
-              <strong id="publicCount">0</strong>
-              <span>公办</span>
-            </div>
-            <div>
-              <strong id="privateCount">0</strong>
-              <span>民办</span>
-            </div>
+          <div class="metric-inline">
+            <span><strong id="provinceCount">0</strong>省份</span>
+            <span><strong id="cityCount">0</strong>城市</span>
+            <span><strong id="publicCount">0</strong>公办</span>
+            <span><strong id="privateCount">0</strong>民办</span>
           </div>
         </section>
       </aside>
 
-      <section class="map-stage" aria-label="全国本科院校三维地图">
-        <div class="map-toolbar">
-          <div class="toolbar-copy">
-            <strong id="activeTitle">全国视图</strong>
-            <span id="activeSubtitle">按省份密度着色，城市聚合点位</span>
-          </div>
-          <div class="segmented" role="group" aria-label="地图模式">
-            <button class="active" data-map-mode="density">密度</button>
-            <button data-map-mode="elite">重点</button>
-            <button data-map-mode="private">民办</button>
-          </div>
-        </div>
+      <section class="map-stage" aria-label="全国本科院校省级数量地图">
         <div class="map-controls" aria-label="地图控制">
           <button id="resetMapView" type="button" title="重置地图视图" aria-label="重置地图视图">↺</button>
           <button id="zoomInMap" type="button" title="放大" aria-label="放大">+</button>
           <button id="zoomOutMap" type="button" title="缩小" aria-label="缩小">−</button>
           <button id="fullscreenMap" type="button" title="全屏查看" aria-label="全屏查看">⛶</button>
         </div>
-        <div id="mapChart" class="map-chart" role="img" aria-label="可拖动、缩放的中国本科院校三维分布地图"></div>
+        <div id="mapChart" class="map-chart" role="img" aria-label="可拖动、缩放的中国本科院校省级数量地图"></div>
         <div class="legend-card" id="legendCard">
           <span class="legend-title">本科院校数</span>
           <div class="legend-ramp" aria-hidden="true"></div>
@@ -126,8 +103,8 @@
         </div>
         <article class="detail-card empty" id="detailCard">
           <span class="detail-kicker">院校详情</span>
-          <h2>选择地图点或列表院校</h2>
-          <p>当前显示全国本科院校分布。</p>
+          <h2>从右侧列表选择院校</h2>
+          <p>点击省份可筛选该地区的本科院校。</p>
         </article>
       </section>
 
@@ -150,6 +127,6 @@
       </a>
     </footer>
 
-    <script type="module" src="./app.js?v=20260609-7"></script>
+    <script type="module" src="./app.js?v=20260609-9"></script>
   </body>
 </html>
