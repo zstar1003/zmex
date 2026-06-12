@@ -32,32 +32,6 @@ const provinceRankPools = {
   新疆维吾尔自治区: 220000,
 };
 
-const verifiedProgramLines = [
-  {
-    province: "浙江省",
-    track: "physics",
-    schoolName: "西安电子科技大学",
-    year: 2025,
-    sourceLabel: "浙江普通类平行志愿批",
-    programs: [
-      { name: "电子信息类(集成电路)", minScore: 653, minRank: 9859, subject: "物理&化学" },
-      { name: "电子信息类(通信)", minScore: 652, minRank: 10099, subject: "物理&化学" },
-      { name: "计算机类(智能)", minScore: 652, minRank: 10187, subject: "物理&化学" },
-      { name: "计算机类", minScore: 651, minRank: 10470, subject: "物理&化学" },
-      { name: "电子信息类(电子工程)", minScore: 651, minRank: 10476, subject: "物理&化学" },
-      { name: "计算机类(网络安全)", minScore: 650, minRank: 10886, subject: "物理&化学" },
-      { name: "电子信息类(电子科学、信息物理、空天信息)", minScore: 650, minRank: 10996, subject: "物理&化学" },
-      { name: "自动化类(智能制造及智能测控)", minScore: 649, minRank: 11459, subject: "物理&化学" },
-      { name: "数学类(数学、统计与信息、计算机科学深度融合培养)", minScore: 648, minRank: 11843, subject: "物理&化学" },
-      { name: "电子信息工程(中外合作办学)", minScore: 646, minRank: 12905, subject: "物理&化学" },
-      { name: "管理科学与工程类(数字化与商务智能融合培养)", minScore: 646, minRank: 12984, subject: "物理" },
-      { name: "通信工程(中外合作办学)", minScore: 646, minRank: 13211, subject: "物理&化学" },
-      { name: "数据科学与大数据技术(中外合作办学)", minScore: 642, minRank: 15551, subject: "物理&化学" },
-      { name: "大数据管理与应用(中外合作办学)", minScore: 637, minRank: 18286, subject: "物理" },
-    ],
-  },
-];
-
 const modeledSchoolBaseOverrides = {
   清华大学: 96.8,
   北京大学: 96.7,
@@ -116,30 +90,99 @@ function compareSchools(a, b) {
   );
 }
 
-export function verifiedLinesForSchool(school, province = "", track = "") {
-  return verifiedProgramLines
-    .filter((entry) => {
-      if (entry.schoolName !== school.name) return false;
-      if (province && entry.province !== province) return false;
-      if (track && entry.track !== track) return false;
-      return true;
-    })
-    .flatMap((entry) =>
-      entry.programs.map((program) => ({
-        ...program,
-        province: entry.province,
-        track: entry.track,
-        year: entry.year,
-        sourceLabel: entry.sourceLabel,
-      })),
-    );
+export function buildAdmissionIndex(payload = null, coverage = null) {
+  const recordsBySchoolProvince = new Map();
+  const sourcesById = new Map((payload?.sources || []).map((source) => [source.id, source]));
+  const sourceFilesById = new Map(
+    (payload?.sources || []).map((source) => [
+      source.id,
+      new Map(
+        (source.files || []).map((file) => [
+          String(file.providerSchoolId),
+          file,
+        ]),
+      ),
+    ]),
+  );
+  const coverageByProvince = new Map((coverage?.provinces || []).map((entry) => [entry.province, entry]));
+
+  for (const record of payload?.records || []) {
+    const key = `${record.schoolId}::${record.province}`;
+    if (!recordsBySchoolProvince.has(key)) recordsBySchoolProvince.set(key, []);
+    recordsBySchoolProvince.get(key).push(record);
+  }
+
+  return {
+    recordsBySchoolProvince,
+    sourcesById,
+    sourceFilesById,
+    coverageByProvince,
+  };
 }
 
-function rankTargetScore(province, rank, track) {
-  const pool = provinceRankPools[province] || 400000;
-  const percentile = clamp(rank / pool, 0.0001, 0.98);
-  const trackAdjustment = track === "history" ? -2.5 : 0;
-  return clamp(98 - Math.sqrt(percentile) * 65 + trackAdjustment, 36, 98);
+export function admissionCoverageForProvince(admissionIndex, province) {
+  return admissionIndex?.coverageByProvince?.get(province) || null;
+}
+
+export function verifiedLinesForSchool(school, province = "", track = "", admissionIndex = null) {
+  if (!school || !province || !admissionIndex) return [];
+  const records = admissionIndex.recordsBySchoolProvince.get(`${school.id}::${province}`) || [];
+  const latestByMajor = new Map();
+
+  for (const record of records) {
+    if (track && record.track !== "general" && record.track !== track) continue;
+    const previous = latestByMajor.get(record.majorName);
+    const typePriority = { official: 3, aggregated: 2, estimated: 1 };
+    const recordPriority = typePriority[record.dataType] || 0;
+    const previousPriority = typePriority[previous?.dataType] || 0;
+    if (
+      !previous ||
+      record.year > previous.year ||
+      (record.year === previous.year && recordPriority > previousPriority) ||
+      (record.year === previous.year &&
+        recordPriority === previousPriority &&
+        record.minRank > previous.minRank)
+    ) {
+      latestByMajor.set(record.majorName, record);
+    }
+  }
+
+  return [...latestByMajor.values()]
+    .map((record) => {
+      const source = admissionIndex.sourcesById.get(record.sourceId);
+      const sourceFile = admissionIndex.sourceFilesById
+        ?.get(record.sourceId)
+        ?.get(String(record.providerSchoolId || record.schoolCode || ""));
+      const rankNote = {
+        "official-score-cumulative": "由官方最低分与一分一段表对应，为同分考生位次上限。",
+        "aggregated-min-rank": "公开专业录取数据中的最低位次。",
+        "aggregated-score-cumulative": "由公开最低分与同年一分一段表对应，为同分考生位次上限。",
+        "estimated-from-score": source?.rankEstimate?.note || "由公开最低分估算，误差可能较大。",
+      }[record.rankMethod] || record.rankNote || "";
+      return {
+        name: record.majorName,
+        minScore: record.minScore,
+        minRank: record.minRank,
+        subject: record.subjectRequirement || "选科要求见招生计划",
+        province: record.province,
+        track: record.track,
+        year: record.year,
+        batch: record.batch,
+        schoolCode: record.schoolCode,
+        majorCode: record.majorCode,
+        planCount: record.planCount,
+        rankMethod: record.rankMethod || "official-min-rank",
+        rankNote,
+        dataType: record.dataType || "official",
+        sourceLabel:
+          source?.authority ||
+          (record.dataType === "aggregated" ? "公开招生数据平台" : "省级教育考试机构"),
+        sourceUrl: record.sourceUrl || sourceFile?.sourceUrl || source?.pageUrl || "",
+        sourceSha256: record.sourceSha256 || sourceFile?.sha256 || source?.sha256 || "",
+        sourceId: record.sourceId,
+      };
+    })
+    .sort((a, b) => a.minRank - b.minRank || a.name.localeCompare(b.name, "zh-CN"));
 }
 
 function scoreToEstimatedRank(province, score, track) {
@@ -147,13 +190,6 @@ function scoreToEstimatedRank(province, score, track) {
   const trackAdjustment = track === "history" ? -2.5 : 0;
   const root = clamp((98 + trackAdjustment - score) / 65, 0.012, 0.99);
   return Math.max(1, Math.round(root * root * pool));
-}
-
-function rankBandFromDiff(diff) {
-  if (diff >= 4 && diff <= 13) return "outside";
-  if (diff >= -6 && diff < 4) return "stable";
-  if (diff >= -18 && diff < -6) return "safe";
-  return "";
 }
 
 function stableSchoolOffset(name) {
@@ -212,21 +248,35 @@ function majorDemandModifier(major, index) {
   return demand;
 }
 
-function programCandidatesForSchool(school, province, track) {
-  const verifiedLines = verifiedLinesForSchool(school, province, track);
+function programCandidatesForSchool(school, province, track, admissionIndex) {
+  const verifiedLines = verifiedLinesForSchool(school, province, track, admissionIndex);
   if (verifiedLines.length) {
     return verifiedLines.map((line) => ({
       school,
       major: { name: line.name, grade: line.subject },
-      adjustedScore: rankTargetScore(province, line.minRank, track),
       requiredRank: line.minRank,
       lineScore: line.minScore,
       sourceYear: line.year,
       sourceLabel: line.sourceLabel,
+      sourceUrl: line.sourceUrl,
+      sourceId: line.sourceId,
+      schoolCode: line.schoolCode,
+      majorCode: line.majorCode,
+      batch: line.batch,
+      planCount: line.planCount,
+      track: line.track,
+      rankMethod: line.rankMethod,
+      rankNote: line.rankNote,
       subject: line.subject,
-      isVerified: true,
+      dataType: line.dataType,
+      sourceSha256: line.sourceSha256,
+      isOfficial: line.dataType === "official",
+      isVerified: line.dataType !== "estimated",
     }));
   }
+
+  const coverage = admissionCoverageForProvince(admissionIndex, province);
+  if (!coverage?.fallbackAllowed) return [];
 
   const localPlanAdjustment = school.province === province ? -2.5 : 0;
   const baseScore = modeledSchoolBaseScore(school);
@@ -247,7 +297,7 @@ function programCandidatesForSchool(school, province, track) {
   });
 }
 
-function pickRankBand(items, limit) {
+function limitSchoolRepetition(items, limit) {
   const selected = [];
   const used = new Set();
   const schoolCounts = new Map();
@@ -272,25 +322,16 @@ function pickRankBand(items, limit) {
   return selected;
 }
 
-export function rankAdvisorMatches(schools, province, rank, track) {
-  const target = rankTargetScore(province, rank, track);
+export function rankAdvisorMatches(schools, province, rank, track, admissionIndex = null) {
   const matches = schools
-    .flatMap((school) =>
-      programCandidatesForSchool(school, province, track).map((program) => ({
-        ...program,
-        band: rankBandFromDiff(program.adjustedScore - target),
-      })),
-    )
-    .filter((item) => item.band && item.band !== "outside")
+    .flatMap((school) => programCandidatesForSchool(school, province, track, admissionIndex))
+    .filter((item) => item.requiredRank >= rank)
     .sort(
       (a, b) =>
-        Number(b.isVerified) - Number(a.isVerified) ||
-        b.adjustedScore - a.adjustedScore ||
+        a.requiredRank - b.requiredRank ||
         compareSchools(a.school, b.school) ||
         a.major.name.localeCompare(b.major.name, "zh-CN"),
     );
 
-  const stableMatches = matches.filter((item) => item.band === "stable");
-  const safeMatches = matches.filter((item) => item.band === "safe");
-  return [...pickRankBand(stableMatches, 18), ...pickRankBand(safeMatches, 10)].slice(0, 24);
+  return limitSchoolRepetition(matches, 320);
 }

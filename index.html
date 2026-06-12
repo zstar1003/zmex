@@ -5,17 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="全国本科院校可视化分布，基于教育部全国普通高等学校名单，用于高考志愿筛选、院校对比和区域分布查看。"
+      content="择木而栖提供全国本科院校地图、专业粒度排名估算与专业倾向测评，帮助高考考生更清楚地筛选院校和专业。"
     />
-    <title>全国本科院校可视化分布 | 高考志愿地图</title>
+    <meta name="application-name" content="择木而栖" />
+    <meta name="theme-color" content="#3b2426" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="择木而栖 | 高考志愿院校地图" />
+    <meta property="og:description" content="查看全国本科院校分布，按专业估算可报范围，探索适合自己的专业方向。" />
+    <title>择木而栖 | 高考志愿院校地图</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css?v=20260609-9" />
+    <link rel="stylesheet" href="./styles.css?v=20260611-3" />
   </head>
   <body class="home-page">
     <header class="site-header">
-      <a class="site-wordmark" href="./index.html" aria-label="择校地图首页">
-        <span aria-hidden="true">择</span>
-        <strong>择校地图</strong>
+      <a class="site-wordmark" href="./index.html" aria-label="择木而栖首页">
+        <img src="./assets/favicon.svg" alt="" aria-hidden="true" />
+        <strong>择木而栖</strong>
       </a>
       <nav class="site-nav" aria-label="主导航">
         <a class="active" href="./index.html">首页</a>
@@ -87,7 +92,6 @@
 
       <section class="map-stage" aria-label="全国本科院校省级数量地图">
         <div class="map-controls" aria-label="地图控制">
-          <button id="resetMapView" type="button" title="重置地图视图" aria-label="重置地图视图">↺</button>
           <button id="zoomInMap" type="button" title="放大" aria-label="放大">+</button>
           <button id="zoomOutMap" type="button" title="缩小" aria-label="缩小">−</button>
           <button id="fullscreenMap" type="button" title="全屏查看" aria-label="全屏查看">⛶</button>
@@ -127,6 +131,6 @@
       </a>
     </footer>
 
-    <script type="module" src="./app.js?v=20260609-9"></script>
+    <script type="module" src="./app.js?v=20260611-6"></script>
   </body>
 </html>

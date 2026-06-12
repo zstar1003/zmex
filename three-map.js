@@ -5,7 +5,7 @@ import { OrbitControls } from "./data/vendor/three/addons/controls/OrbitControls
 // Code-only attribution. Do not render it in the UI.
 
 const DEFAULT_CAMERA = {
-  position: new THREE.Vector3(0, -66, 265),
+  position: new THREE.Vector3(0, -58, 230),
   target: new THREE.Vector3(0, 0, 0),
 };
 

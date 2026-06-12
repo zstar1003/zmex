@@ -4,10 +4,12 @@ import path from "node:path";
 const root = process.cwd();
 const rowsPath = path.join(root, "data/raw/moe-colleges-2025.rows.json");
 const cityGeoPath = path.join(root, "data/raw/latlng.json");
+const supplementalSchoolsPath = path.join(root, "data/admissions/supplemental-schools.json");
 const outPath = path.join(root, "data/schools.json");
 
 const rows = JSON.parse(fs.readFileSync(rowsPath, "utf8"));
 const cityTree = JSON.parse(fs.readFileSync(cityGeoPath, "utf8"));
+const supplementalSchools = JSON.parse(fs.readFileSync(supplementalSchoolsPath, "utf8"));
 
 const provinceCenters = Object.fromEntries(
   JSON.parse(fs.readFileSync(path.join(root, "data/china.json"), "utf8")).features.map((feature) => [
@@ -498,7 +500,7 @@ const cityStats = Object.values(
 
 const payload = {
   meta: {
-    title: "全国本科院校可视化分布",
+    title: "择木而栖",
     sourceName: "教育部《全国普通高等学校名单》",
     sourceUrl: "https://www.moe.gov.cn/jyb_xxgk/s5743/s5744/A03/202506/t20250627_1195683.html",
     sourceDate: "2025-06-20",
@@ -516,6 +518,7 @@ const payload = {
     missingCoordinates: [...missingCoordinates],
   },
   schools,
+  admissionSchools: supplementalSchools.schools,
   provinceStats,
   cityStats,
   categories: ["综合", ...categoryRules.map(([category]) => category)].filter((value, index, array) => array.indexOf(value) === index),

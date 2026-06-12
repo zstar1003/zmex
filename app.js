@@ -1,5 +1,5 @@
 import { ThreeChinaMap } from "./three-map.js";
-import { verifiedLinesForSchool } from "./rank-engine.js";
+import { buildAdmissionIndex, verifiedLinesForSchool } from "./rank-engine.js";
 
 const state = {
   data: null,
@@ -16,6 +16,7 @@ const state = {
   selectedCityKey: null,
   visibleRows: 160,
   detailContext: null,
+  admissionIndex: buildAdmissionIndex(),
   selectedMajorName: "",
   detailDismissed: false,
 };
@@ -38,7 +39,6 @@ const els = {
   listCount: document.querySelector("#listCount"),
   loadMore: document.querySelector("#loadMore"),
   sourceText: document.querySelector("#sourceText"),
-  resetMapView: document.querySelector("#resetMapView"),
   zoomInMap: document.querySelector("#zoomInMap"),
   zoomOutMap: document.querySelector("#zoomOutMap"),
   fullscreenMap: document.querySelector("#fullscreenMap"),
@@ -46,6 +46,10 @@ const els = {
 };
 
 const formatNumber = new Intl.NumberFormat("zh-CN");
+
+function allSchools() {
+  return [...(state.data?.schools || []), ...(state.data?.admissionSchools || [])];
+}
 
 function debounce(fn, wait = 150) {
   let timer;
@@ -130,7 +134,6 @@ function initControls() {
     renderList();
   });
 
-  els.resetMapView.addEventListener("click", resetMapView);
   els.zoomInMap.addEventListener("click", () => zoomMap(1.2));
   els.zoomOutMap.addEventListener("click", () => zoomMap(0.82));
   els.fullscreenMap.addEventListener("click", toggleMapFullscreen);
@@ -222,7 +225,7 @@ function renderStats() {
   els.publicCount.textContent = formatNumber.format(summary.publicCount);
   els.privateCount.textContent = formatNumber.format(summary.privateCount);
 
-  els.sourceText.textContent = `数据来源：${state.data.meta.sourceName}（截至 ${state.data.meta.sourceDate}）；推荐/专业/位次为估算模型`;
+  els.sourceText.textContent = `院校名单：${state.data.meta.sourceName}；专业投档位次优先采用各省教育考试机构官方数据`;
 }
 
 function aggregateByProvince(schools) {
@@ -319,15 +322,11 @@ function renderList() {
         .join("");
       return `
         <article class="school-row ${school.id === state.selectedId ? "active" : ""}" data-school-id="${school.id}">
-          <div class="school-row-top">
-            <strong>${school.name}</strong>
-            <span class="recommend-score">${school.recommendation?.score || "-"}分</span>
-          </div>
+          <strong>${school.name}</strong>
           <div class="school-row-meta">
             <span>${school.province}</span>
             <span>${school.city}</span>
             <span>${school.department}</span>
-            <span>${school.recommendation?.band || "推荐参考"}</span>
           </div>
           <div class="tag-row">${tags}</div>
         </article>
@@ -359,7 +358,7 @@ function renderSelectedDetail() {
     }
   }
 
-  const school = state.data.schools.find((item) => item.id === state.selectedId);
+  const school = allSchools().find((item) => item.id === state.selectedId);
   if (!school) {
     els.detailCard.className = "detail-card empty";
     els.detailCard.innerHTML = `
@@ -385,13 +384,24 @@ function renderSelectedDetail() {
       `,
     )
     .join("");
-  const verifiedLines = verifiedLinesForSchool(school, state.detailContext?.province, state.detailContext?.track);
+  const verifiedLines = verifiedLinesForSchool(
+    school,
+    state.detailContext?.province,
+    state.detailContext?.track,
+    state.admissionIndex,
+  );
   const admissionLines = verifiedLines.length
     ? `
       <div class="program-lines">
         <div class="major-head">
-          <strong>${verifiedLines[0].year} ${verifiedLines[0].province}专业投档</strong>
-          <span>投档</span>
+          <strong>${verifiedLines[0].year} ${verifiedLines[0].province}专业录取</strong>
+          <span>${
+            verifiedLines.every((line) => line.dataType === "estimated")
+              ? "位次估算"
+              : verifiedLines.some((line) => line.dataType === "official")
+                ? "官方/公开"
+                : "公开"
+          }</span>
         </div>
         ${verifiedLines
           .slice(0, 12)
@@ -399,21 +409,26 @@ function renderSelectedDetail() {
             (line) => `
               <div class="line-row ${sameMajorName(line.name, selectedMajorName) ? "selected" : ""}">
                 <span>${line.name}</span>
-                <strong>${formatNumber.format(line.minRank)}名</strong>
-                <em>${line.minScore}分 · ${line.subject}</em>
+                <strong>${formatNumber.format(line.minRank)}名${line.rankMethod.includes("score-cumulative") ? "以内" : ""}</strong>
+                <em>${line.minScore ? `${line.minScore}分 · ` : ""}${line.sourceLabel}${line.dataType === "estimated" ? " · 位次估算" : ""} · ${line.subject}</em>
               </div>
             `,
           )
           .join("")}
       </div>
+      ${
+        verifiedLines[0].sourceUrl
+          ? `<a class="admission-source-link" href="${verifiedLines[0].sourceUrl}" target="_blank" rel="noreferrer">查看${verifiedLines[0].sourceLabel}原始数据</a>`
+          : ""
+      }
     `
     : "";
   els.detailCard.className = "detail-card";
   els.detailCard.innerHTML = `
-    <button class="detail-close" type="button" aria-label="关闭院校详情">×</button>
+    <a class="detail-close" href="./index.html" aria-label="关闭院校详情">×</a>
     <span class="detail-kicker">${school.province} · ${school.city}</span>
     <h2>${school.name}</h2>
-    <p>推荐分：${school.recommendation?.score || "-"} · ${school.recommendation?.band || "推荐参考"}<br/>主管部门：${school.department}<br/>办学层次：${school.level}${school.note ? ` · ${school.note}` : ""}</p>
+    <p>主管部门：${school.department}<br/>办学层次：${school.level}${school.note ? ` · ${school.note}` : ""}</p>
     <div class="tag-row">${tags}</div>
     <div class="major-ranking">
       <div class="major-head">
@@ -428,7 +443,6 @@ function renderSelectedDetail() {
       <button class="ghost-action" id="filterProvinceDetail">${school.province}</button>
     </div>
   `;
-  els.detailCard.querySelector(".detail-close").addEventListener("click", closeDetailCard);
   document.querySelector("#filterCityDetail").addEventListener("click", () => {
     state.selectedCityKey = cityKeyOf(school);
     state.detailDismissed = false;
@@ -455,7 +469,7 @@ function renderCityDetail(city) {
     .map(
       (school) => `
         <button type="button" data-city-school-id="${school.id}">
-          ${school.name}${school.tags.is985 ? " · 985" : school.tags.is211 ? " · 211" : school.tags.doubleFirstClass ? " · 双一流" : ""} · ${school.recommendation?.score || "-"}分
+          ${school.name}${school.tags.is985 ? " · 985" : school.tags.is211 ? " · 211" : school.tags.doubleFirstClass ? " · 双一流" : ""}
         </button>
       `,
     )
@@ -463,7 +477,7 @@ function renderCityDetail(city) {
 
   els.detailCard.className = "detail-card";
   els.detailCard.innerHTML = `
-    <button class="detail-close" type="button" aria-label="关闭城市详情">×</button>
+    <a class="detail-close" href="./index.html" aria-label="关闭城市详情">×</a>
     <span class="detail-kicker">${city.province}</span>
     <h2>${city.name} · ${city.count} 所本科</h2>
     <p>公办 ${city.publicCount} 所 · 民办 ${city.privateCount} 所 · 重点标签 ${city.eliteCount} 所<br/>${topCategories || "暂无类型统计"}</p>
@@ -474,7 +488,6 @@ function renderCityDetail(city) {
     </div>
   `;
 
-  els.detailCard.querySelector(".detail-close").addEventListener("click", closeDetailCard);
   els.detailCard.querySelectorAll("[data-city-school-id]").forEach((button) => {
     button.addEventListener("click", () => selectSchool(button.dataset.citySchoolId));
   });
@@ -494,23 +507,20 @@ function closeDetailCard() {
   state.selectedId = null;
   state.selectedMajorName = "";
   state.detailDismissed = true;
+  els.detailCard.className = "detail-card hidden";
+  els.detailCard.innerHTML = "";
   renderMap();
   renderList();
-  renderSelectedDetail();
 }
 
 function selectSchool(id, majorName = "") {
   state.selectedId = id;
   state.selectedMajorName = majorName;
   state.detailDismissed = false;
-  const school = state.data.schools.find((item) => item.id === id);
+  const school = allSchools().find((item) => item.id === id);
   state.selectedCityKey = school ? cityKeyOf(school) : null;
   renderSelectedDetail();
   renderList();
-}
-
-function resetMapView() {
-  state.chart?.resetView();
 }
 
 function zoomMap(factor) {
@@ -526,8 +536,19 @@ function toggleMapFullscreen() {
 }
 
 async function init() {
-  const [data, china] = await Promise.all([fetch("./data/schools.json").then((res) => res.json()), fetch("./data/china.json").then((res) => res.json())]);
+  const params = new URLSearchParams(window.location.search);
+  const linkedProvince = params.get("province") || "";
+  const [data, china, admissionCatalog] = await Promise.all([
+    fetch("./data/schools.json").then((res) => res.json()),
+    fetch("./data/china.json").then((res) => res.json()),
+    fetch("./data/admissions/index.json").then((res) => res.json()),
+  ]);
+  const provinceAdmissionEntry = admissionCatalog.provinces.find((entry) => entry.province === linkedProvince);
+  const provinceAdmissionData = provinceAdmissionEntry?.dataUrl
+    ? await fetch(provinceAdmissionEntry.dataUrl).then((res) => res.json())
+    : null;
   state.data = data;
+  state.admissionIndex = buildAdmissionIndex(provinceAdmissionData, admissionCatalog);
   state.filtered = data.schools;
   state.chart = new ThreeChinaMap(els.mapChart, china, {
     onProvinceClick(name) {
@@ -540,11 +561,10 @@ async function init() {
   });
 
   initControls();
-  const params = new URLSearchParams(window.location.search);
   const linkedSchool = params.get("school");
   const linkedMajor = params.get("major") || "";
   if (linkedSchool) {
-    const school = state.data.schools.find((item) => item.id === linkedSchool);
+    const school = allSchools().find((item) => item.id === linkedSchool);
     if (school) {
       state.filters.query = school.name;
       els.searchInput.value = school.name;
@@ -555,7 +575,7 @@ async function init() {
     }
   }
   applyFilters();
-  if (linkedSchool && state.filtered.some((school) => school.id === linkedSchool)) {
+  if (linkedSchool && allSchools().some((school) => school.id === linkedSchool)) {
     selectSchool(linkedSchool, linkedMajor);
   }
   window.addEventListener("resize", debounce(() => state.chart?.resize(), 100));

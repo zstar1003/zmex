@@ -6,9 +6,14 @@
   "scripts": {
     "start": "bun run scripts/server.mjs",
     "build:data": "bun run scripts/build-data.mjs",
+    "sync:admissions": "bun run scripts/sync-admissions.mjs",
+    "sync:aggregated": "bun run scripts/sync-gaokao-cn.mjs",
+    "parse:xinjiang-ranks": "python3 scripts/parse-xinjiang-ranks.py",
+    "verify:admissions": "bun run scripts/verify-admissions.mjs",
     "vendor:three": "bun run scripts/vendor-three.mjs"
   },
   "dependencies": {
-    "three": "^0.184.0"
+    "three": "^0.184.0",
+    "xlsx": "^0.18.5"
   }
 }
