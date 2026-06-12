@@ -827,6 +827,7 @@ h2 {
 }
 
 .source-bar {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -849,6 +850,20 @@ h2 {
 
 .source-bar a:hover {
   text-decoration: underline;
+}
+
+.visit-counter {
+  position: absolute;
+  right: 14px;
+  color: #8a7778;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.visit-counter strong {
+  color: var(--blue-deep);
+  font-variant-numeric: tabular-nums;
+  font-weight: 900;
 }
 
 .subpage-body {
@@ -1464,8 +1479,17 @@ body.about-page {
   .source-bar {
     height: auto;
     min-height: 32px;
-    flex-wrap: wrap;
+    justify-content: space-between;
     padding: 6px 10px;
+  }
+
+  .source-bar .icp-record {
+    text-align: left !important;
+  }
+
+  .visit-counter {
+    position: static;
+    flex: 0 0 auto;
   }
 
   .subpage-shell {

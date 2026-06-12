@@ -42,6 +42,7 @@ const els = {
   zoomOutMap: document.querySelector("#zoomOutMap"),
   fullscreenMap: document.querySelector("#fullscreenMap"),
   mapStage: document.querySelector(".map-stage"),
+  visitCount: document.querySelector("#visitCount"),
 };
 
 const formatNumber = new Intl.NumberFormat("zh-CN");
@@ -533,6 +534,21 @@ function toggleMapFullscreen() {
   els.mapStage.requestFullscreen?.();
 }
 
+async function initVisitorCounter() {
+  if (!els.visitCount) return;
+  try {
+    const response = await fetch("./api/visit", {
+      method: "POST",
+      cache: "no-store",
+    });
+    if (!response.ok) throw new Error(`Visitor counter returned ${response.status}`);
+    const payload = await response.json();
+    els.visitCount.textContent = formatNumber.format(payload.count);
+  } catch (error) {
+    console.warn("Visitor counter unavailable", error);
+  }
+}
+
 async function init() {
   const params = new URLSearchParams(window.location.search);
   const linkedProvince = params.get("province") || "";
@@ -580,6 +596,7 @@ async function init() {
   document.addEventListener("fullscreenchange", () => {
     window.setTimeout(() => state.chart?.resize(), 80);
   });
+  initVisitorCounter();
 }
 
 init().catch((error) => {
