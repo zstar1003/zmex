@@ -5,7 +5,7 @@ import { OrbitControls } from "./data/vendor/three/addons/controls/OrbitControls
 // Code-only attribution. Do not render it in the UI.
 
 const DEFAULT_CAMERA = {
-  position: new THREE.Vector3(0, -58, 230),
+  position: new THREE.Vector3(0, -40, 155),
   target: new THREE.Vector3(0, 0, 0),
 };
 
@@ -173,8 +173,8 @@ export class ThreeChinaMap {
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.075;
     this.controls.enablePan = false;
-    this.controls.minDistance = 145;
-    this.controls.maxDistance = 390;
+    this.controls.minDistance = 85;
+    this.controls.maxDistance = 520;
     this.controls.minPolarAngle = 0.12;
     this.controls.maxPolarAngle = 0.56;
     this.controls.minAzimuthAngle = -0.3;

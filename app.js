@@ -38,7 +38,6 @@ const els = {
   schoolList: document.querySelector("#schoolList"),
   listCount: document.querySelector("#listCount"),
   loadMore: document.querySelector("#loadMore"),
-  sourceText: document.querySelector("#sourceText"),
   zoomInMap: document.querySelector("#zoomInMap"),
   zoomOutMap: document.querySelector("#zoomOutMap"),
   fullscreenMap: document.querySelector("#fullscreenMap"),
@@ -225,7 +224,6 @@ function renderStats() {
   els.publicCount.textContent = formatNumber.format(summary.publicCount);
   els.privateCount.textContent = formatNumber.format(summary.privateCount);
 
-  els.sourceText.textContent = `院校名单：${state.data.meta.sourceName}；专业投档位次优先采用各省教育考试机构官方数据`;
 }
 
 function aggregateByProvince(schools) {

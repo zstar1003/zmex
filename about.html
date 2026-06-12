@@ -1,22 +1,32 @@
 <!doctype html>
-<html class="subpage-root" lang="zh-CN">
+<html class="subpage-root about-root" lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="了解择木而栖的院校数据来源、专业估算逻辑与高考志愿使用边界。" />
+    <meta name="description" content="了解择木而栖如何整理本科院校分布、专业录取位次数据，以及使用这些结果进行高考志愿筛选时需要注意的边界。" />
+    <meta name="keywords" content="择木而栖,高考志愿数据,专业位次说明,志愿填报参考" />
+    <meta name="robots" content="index,follow" />
+    <meta name="author" content="择木而栖" />
+    <meta name="format-detection" content="telephone=no" />
     <meta name="application-name" content="择木而栖" />
+    <meta name="apple-mobile-web-app-title" content="择木而栖" />
     <meta name="theme-color" content="#3b2426" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="关于 | 择木而栖" />
-    <meta property="og:description" content="了解院校地图、专业排名估算和倾向测评的数据来源与使用边界。" />
-    <title>关于 | 择木而栖</title>
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="择木而栖" />
+    <meta property="og:title" content="择木而栖" />
+    <meta property="og:description" content="了解院校地图、专业位次参考和倾向测评的整理方式与使用边界。" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="择木而栖" />
+    <meta name="twitter:description" content="了解院校地图、专业位次参考和倾向测评的整理方式与使用边界。" />
+    <title>择木而栖</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css?v=20260611-3" />
+    <link rel="stylesheet" href="./styles.css?v=20260612-3" />
   </head>
-  <body class="subpage-body">
+  <body class="subpage-body about-page">
     <header class="site-header">
       <a class="site-wordmark" href="./index.html" aria-label="择木而栖首页">
-        <img src="./assets/favicon.svg" alt="" aria-hidden="true" />
+        <img src="./assets/logo-mark.svg" alt="" aria-hidden="true" />
         <strong>择木而栖</strong>
       </a>
       <nav class="site-nav" aria-label="主导航">
@@ -28,71 +38,46 @@
     </header>
 
     <main class="subpage-shell about-shell">
-      <header class="about-heading">
-        <span>项目说明</span>
-        <h1>让院校分布和专业差异更容易看清</h1>
-        <p>择木而栖把本科院校名单、地域分布、院校标签和专业参考放在同一个查询体系中。</p>
-      </header>
+      <section class="about-summary">
+        <header class="about-heading">
+          <span>关于择木而栖</span>
+          <h1>把复杂的信息理清</h1>
+          <p>本网站整理院校分布、专业录取位次与学习倾向，帮助考生缩小范围，再比较具体专业。</p>
+        </header>
+        <aside class="wechat-contact" aria-label="微信联系方式">
+          <img src="./assets/wechat.jpg" alt="微信二维码" />
+          <div>
+            <span>微信联系</span>
+            <strong>扫码添加</strong>
+            <p>数据纠错、功能建议与使用反馈。</p>
+          </div>
+        </aside>
+      </section>
 
-      <section class="about-grid">
+      <section class="about-points">
         <article>
           <span>01</span>
-          <h2>院校数据</h2>
-          <p>本科院校主体名单来自教育部全国普通高等学校名单，地图坐标用于区域分布展示。</p>
+          <h2>院校地图</h2>
+          <p>按省份查看本科院校分布，并通过性质、标签和类型快速筛选。</p>
         </article>
         <article>
           <span>02</span>
-          <h2>专业结果</h2>
-          <p>排名查询以专业为最小结果单位。页面会区分考试院官方记录、可追溯公开记录和估算记录，不用院校最低线代替全部专业。</p>
+          <h2>专业位次</h2>
+          <p>以专业为最小单位整理录取位次，不用学校最低线代替全部专业。</p>
         </article>
         <article>
           <span>03</span>
-          <h2>推荐顺序</h2>
-          <p>首页院校列表综合学校层次、重点标签和办学性质排序，适合快速浏览，不等同于官方大学排名。</p>
-        </article>
-        <article>
-          <span>04</span>
-          <h2>使用边界</h2>
-          <p>最终填报必须核对当年招生计划、选科要求、学费、培养校区和省考试院公布的投档数据。</p>
+          <h2>结果边界</h2>
+          <p>本网站优先采用官方数据，无法取得时才使用明确标注的公开记录或估算值。</p>
         </article>
       </section>
 
-      <section class="source-section">
-        <div>
-          <span>院校名单</span>
-          <h2>教育部全国普通高等学校名单</h2>
-        </div>
-        <a href="https://www.moe.gov.cn/jyb_xxgk/s5743/s5744/A03/202506/t20250627_1195683.html" target="_blank" rel="noreferrer">
-          查看教育部原始公告
-        </a>
-      </section>
-      <section class="source-section">
-        <div>
-          <span>专业投档</span>
-          <h2>省级教育考试机构原始表</h2>
-          <p>已导入浙江、山东、河北、辽宁、重庆 2025 年本科专业投档数据。最低分没有直接位次的省份，使用同年官方一分一段表换算同分位次上限。</p>
-        </div>
-        <div class="source-links">
-          <a href="https://www.zjzs.net/art/2025/7/21/art_45_11467.html" target="_blank" rel="noreferrer">浙江</a>
-          <a href="https://www.sdzk.cn/NewsInfo.aspx?NewsID=6996" target="_blank" rel="noreferrer">山东</a>
-          <a href="https://www.hebeea.edu.cn/c/2025-07-23/489213.html" target="_blank" rel="noreferrer">河北</a>
-          <a href="https://www.lnzsks.com/newsinfo/IMS_20250720_45052_5Iy0UeTt6g.htm" target="_blank" rel="noreferrer">辽宁</a>
-          <a href="https://www.cqksy.cn/web/column/col1846541_7.html" target="_blank" rel="noreferrer">重庆</a>
-        </div>
-      </section>
-      <section class="source-section">
-        <div>
-          <span>全国补充</span>
-          <h2>逐省逐校公开专业录取数据</h2>
-          <p>其余 25 个省级招生地使用 2024 年公开专业录取数据。每省扫描 1,347 个院校入口，并保留原始静态 JSON 地址与文件哈希。新疆用公开一分一段表换算位次；西藏因没有公开位次表，仅显示明确标注的估算值。</p>
-        </div>
-        <div class="source-links">
-          <a href="https://www.gaokao.cn/" target="_blank" rel="noreferrer">掌上高考</a>
-          <a href="https://www.gk100.com/read_18958315.htm" target="_blank" rel="noreferrer">新疆分段表</a>
-        </div>
+      <section class="about-reminder">
+        <strong>填报前请再核对</strong>
+        <p>当年招生计划、专业组、选科与体检要求、培养校区、学费及省级教育考试机构公布的正式投档信息。</p>
       </section>
     </main>
 
-    <footer class="page-footer">择木而栖提供信息整理与探索工具，不提供录取承诺。</footer>
+    <footer class="page-footer">本网站提供信息整理与探索工具，不提供录取承诺。</footer>
   </body>
 </html>
