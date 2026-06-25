@@ -13,25 +13,25 @@ const directions = {
   technology: {
     title: "工程与技术",
     description: "偏好逻辑、系统和可验证的问题，适合优先体验需要数学与实验基础的方向。",
-    majors: ["计算机科学与技术", "电子信息工程", "自动化", "数学与应用数学", "数据科学"],
+    majors: ["计算机科学与技术", "电子信息工程", "自动化", "数学与应用数学", "软件工程"],
     subjects: "重点观察数学、物理、信息技术课程中的持续投入感。",
   },
   people: {
     title: "人文与社会",
     description: "关注人、语言与社会运行，适合从阅读、沟通和公共议题中寻找长期兴趣。",
-    majors: ["法学", "汉语言文学", "心理学", "新闻传播学", "社会学"],
+    majors: ["法学", "汉语言文学", "心理学", "新闻学", "社会学"],
     subjects: "重点观察语文、英语、历史和社会议题写作中的优势。",
   },
   creative: {
     title: "设计与表达",
     description: "重视体验、审美和原创表达，适合通过作品与项目判断是否愿意长期训练。",
-    majors: ["建筑学", "工业设计", "数字媒体艺术", "广告学", "城乡规划"],
+    majors: ["视觉传达设计", "动画", "美术学", "戏剧影视文学", "音乐表演"],
     subjects: "重点观察美术、技术、空间想象和作品迭代过程。",
   },
   business: {
     title: "商业与组织",
     description: "喜欢目标、资源与协作，适合探索需要判断、沟通和定量分析的专业。",
-    majors: ["经济学", "金融学", "会计学", "工商管理", "信息管理与信息系统"],
+    majors: ["经济学", "金融学", "会计学", "工商管理", "国际经济与贸易"],
     subjects: "重点观察数学、地理、政治以及组织活动中的真实表现。",
   },
 };
@@ -46,6 +46,10 @@ const scale = [
   ["4", "较符合"],
   ["5", "很符合"],
 ];
+
+function majorUrl(major) {
+  return `./index.html?major=${encodeURIComponent(major)}`;
+}
 
 questionList.innerHTML = questions
   .map(
@@ -103,9 +107,9 @@ form.addEventListener("submit", (event) => {
     </div>
     <div class="major-suggestions">
       <strong>优先了解的专业</strong>
-      <div>${primary.majors.map((major) => `<span>${major}</span>`).join("")}</div>
+      <div>${primary.majors.map((major) => `<a href="${majorUrl(major)}">${major}</a>`).join("")}</div>
     </div>
-    <a class="result-link" href="./index.html">回到首页查找相关院校</a>
+    <a class="result-link" href="${majorUrl(primary.majors[0])}">查看${primary.majors[0]}相关院校</a>
   `;
   result.scrollIntoView({ behavior: "smooth", block: "start" });
 });

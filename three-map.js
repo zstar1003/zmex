@@ -13,6 +13,12 @@ const MAP_WIDTH = 112;
 const MAP_HEIGHT = 82;
 const MAP_DEPTH = 2.5;
 const MAP_COS_LATITUDE = Math.cos(35 * Math.PI / 180);
+const MAP_COLORS = {
+  active: "#b65359",
+  emptyTop: "#cfaaad",
+  lowTop: "#eba9ad",
+  highTop: "#bd666b",
+};
 const LABEL_OFFSETS = {
   北京市: [-2.2, 2.2],
   天津市: [2.4, -1.2],
@@ -40,11 +46,11 @@ function toPolygons(feature) {
 }
 
 function colorForMetric(value, max, active = false) {
-  if (active) return new THREE.Color("#b65359");
-  if (!value) return new THREE.Color("#f7e5e5");
+  if (active) return new THREE.Color(MAP_COLORS.active);
+  if (!value) return new THREE.Color(MAP_COLORS.emptyTop);
   const t = Math.sqrt(clamp(value / Math.max(max, 1), 0, 1));
-  const color = new THREE.Color("#efc9ca");
-  color.lerp(new THREE.Color("#bd666b"), t);
+  const color = new THREE.Color(MAP_COLORS.lowTop);
+  color.lerp(new THREE.Color(MAP_COLORS.highTop), t);
   return color;
 }
 

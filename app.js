@@ -1,4 +1,4 @@
-import { ThreeChinaMap } from "./three-map.js";
+import { ThreeChinaMap } from "./three-map.js?v=20260626-1";
 import { buildAdmissionIndex, verifiedLinesForSchool } from "./rank-engine.js";
 
 const state = {
@@ -6,6 +6,7 @@ const state = {
   chart: null,
   filters: {
     query: "",
+    major: "",
     province: "",
     levels: new Set(),
     natures: new Set(),
@@ -24,6 +25,7 @@ const state = {
 
 const els = {
   searchInput: document.querySelector("#searchInput"),
+  majorInput: document.querySelector("#majorInput"),
   provinceSelect: document.querySelector("#provinceSelect"),
   levelChecks: document.querySelector("#levelChecks"),
   natureChecks: document.querySelector("#natureChecks"),
@@ -50,6 +52,14 @@ const els = {
 };
 
 const formatNumber = new Intl.NumberFormat("zh-CN");
+const majorAliasMap = {
+  数据科学: ["数据科学与大数据技术", "大数据技术", "计算机科学与技术"],
+  新闻传播学: ["新闻学", "传播学", "广告学"],
+  工业设计: ["视觉传达设计", "动画", "机械工程"],
+  数字媒体艺术: ["数字媒体艺术设计", "视觉传达设计", "动画"],
+  广告学: ["新闻学", "视觉传达设计"],
+  信息管理与信息系统: ["工商管理", "电子商务", "大数据技术"],
+};
 
 function allSchools() {
   return [...(state.data?.schools || []), ...(state.data?.admissionSchools || [])];
@@ -80,6 +90,49 @@ function sameMajorName(a, b) {
   return String(a).trim() === String(b).trim();
 }
 
+function normalizeMajorText(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[（）()·\s-]/g, "");
+}
+
+function majorSearchTerms(query) {
+  const normalized = normalizeMajorText(query);
+  if (!normalized) return [];
+  const aliases = majorAliasMap[String(query || "").trim()] || [];
+  return [query, ...aliases].map(normalizeMajorText).filter(Boolean);
+}
+
+function majorMatchScore(majorName, terms) {
+  const normalizedName = normalizeMajorText(majorName);
+  if (!normalizedName || !terms.length) return 0;
+  let best = 0;
+  for (const term of terms) {
+    if (normalizedName === term) best = Math.max(best, 100);
+    else if (normalizedName.includes(term)) best = Math.max(best, 80);
+    else if (term.includes(normalizedName)) best = Math.max(best, 64);
+  }
+  return best;
+}
+
+function matchedMajorForSchool(school, query = state.filters.major) {
+  const terms = majorSearchTerms(query);
+  if (!terms.length) return null;
+  return [...(school.majorRankings || [])]
+    .map((major) => ({
+      ...major,
+      matchScore: majorMatchScore(major.name, terms),
+    }))
+    .filter((major) => major.matchScore > 0)
+    .sort(
+      (a, b) =>
+        b.matchScore - a.matchScore ||
+        (a.estimatedRank || Number.POSITIVE_INFINITY) - (b.estimatedRank || Number.POSITIVE_INFINITY) ||
+        a.name.localeCompare(b.name, "zh-CN"),
+    )[0] || null;
+}
+
 function initControls() {
   const { provinceStats, categories } = state.data;
   const provinceOptions = [...provinceStats].sort((a, b) => a.name.localeCompare(b.name, "zh-CN"));
@@ -95,6 +148,16 @@ function initControls() {
     "input",
     debounce((event) => {
       state.filters.query = event.target.value.trim();
+      state.visibleRows = 160;
+      applyFilters();
+    }),
+  );
+
+  els.majorInput.addEventListener(
+    "input",
+    debounce((event) => {
+      state.filters.major = event.target.value.trim();
+      state.selectedMajorName = state.filters.major;
       state.visibleRows = 160;
       applyFilters();
     }),
@@ -159,6 +222,7 @@ function updateSetFromCheckbox(set, checkbox) {
 
 function resetFilters() {
   state.filters.query = "";
+  state.filters.major = "";
   state.filters.province = "";
   state.filters.levels.clear();
   state.filters.natures.clear();
@@ -170,6 +234,7 @@ function resetFilters() {
   state.visibleRows = 160;
 
   els.searchInput.value = "";
+  els.majorInput.value = "";
   els.provinceSelect.value = "";
   document.querySelectorAll("input[type='checkbox']").forEach((input) => {
     input.checked = false;
@@ -179,7 +244,7 @@ function resetFilters() {
 }
 
 function applyFilters() {
-  const { query, province, levels, natures, tags, categories } = state.filters;
+  const { query, major, province, levels, natures, tags, categories } = state.filters;
   const normalizedQuery = query.toLowerCase();
 
   state.filtered = state.data.schools
@@ -188,6 +253,7 @@ function applyFilters() {
       if (levels.size && !levels.has(school.level)) return false;
       if (natures.size && !natures.has(school.nature)) return false;
       if (categories.size && !categories.has(school.category)) return false;
+      if (major && !matchedMajorForSchool(school, major)) return false;
       for (const tag of tags) {
         if (!school.tags[tag]) return false;
       }
@@ -197,7 +263,7 @@ function applyFilters() {
       }
       return true;
     })
-    .sort(compareSchools);
+    .sort((a, b) => compareFilteredSchools(a, b));
 
   if (state.selectedId && !state.filtered.some((school) => school.id === state.selectedId)) {
     state.selectedId = null;
@@ -294,6 +360,20 @@ function compareSchools(a, b) {
   );
 }
 
+function compareFilteredSchools(a, b) {
+  if (state.filters.major) {
+    const aMajor = matchedMajorForSchool(a);
+    const bMajor = matchedMajorForSchool(b);
+    return (
+      (aMajor?.estimatedRank || Number.POSITIVE_INFINITY) -
+        (bMajor?.estimatedRank || Number.POSITIVE_INFINITY) ||
+      (bMajor?.matchScore || 0) - (aMajor?.matchScore || 0) ||
+      compareSchools(a, b)
+    );
+  }
+  return compareSchools(a, b);
+}
+
 function aggregateByCity(schools) {
   return Object.values(
     schools.reduce((acc, school) => {
@@ -346,18 +426,29 @@ function renderList() {
   els.listCount.textContent = formatNumber.format(state.filtered.length);
   els.schoolList.innerHTML = visible
     .map((school) => {
+      const matchedMajor = matchedMajorForSchool(school);
       const tags = getTagLabels(school)
         .slice(0, 4)
         .map(([label, tone]) => `<span class="tag ${tone}">${label}</span>`)
         .join("");
+      const majorMatch = matchedMajor
+        ? `
+          <div class="school-major-match">
+            <span>${matchedMajor.name}</span>
+            <strong>专业约第 ${formatNumber.format(matchedMajor.estimatedRank)} 名</strong>
+            <em>${matchedMajor.grade} · ${matchedMajor.basis}</em>
+          </div>
+        `
+        : "";
       return `
-        <article class="school-row ${school.id === state.selectedId ? "active" : ""}" data-school-id="${school.id}">
+        <article class="school-row ${school.id === state.selectedId ? "active" : ""}" data-school-id="${school.id}" data-major-name="${matchedMajor?.name || ""}">
           <strong>${school.name}</strong>
           <div class="school-row-meta">
             <span>${school.province}</span>
             <span>${school.city}</span>
             <span>${school.department}</span>
           </div>
+          ${majorMatch}
           <div class="tag-row">${tags}</div>
         </article>
       `;
@@ -366,7 +457,7 @@ function renderList() {
 
   els.schoolList.querySelectorAll(".school-row").forEach((row) => {
     row.addEventListener("click", () => {
-      selectSchool(row.dataset.schoolId);
+      selectSchool(row.dataset.schoolId, row.dataset.majorName || state.filters.major);
     });
   });
 
@@ -402,7 +493,10 @@ function renderSelectedDetail() {
   const tags = getTagLabels(school)
     .map(([label, tone]) => `<span class="tag ${tone}">${label}</span>`)
     .join("");
-  const selectedMajorName = state.selectedMajorName;
+  const selectedMajorName =
+    state.selectedMajorName ||
+    matchedMajorForSchool(school, state.filters.major)?.name ||
+    state.filters.major;
   const majors = (school.majorRankings || [])
     .map(
       (major) => `
@@ -549,6 +643,9 @@ function selectSchool(id, majorName = "") {
   state.detailDismissed = false;
   const school = allSchools().find((item) => item.id === id);
   state.selectedCityKey = school ? cityKeyOf(school) : null;
+  if (!majorName && school && state.filters.major) {
+    state.selectedMajorName = matchedMajorForSchool(school)?.name || state.filters.major;
+  }
   renderSelectedDetail();
   renderList();
 }
@@ -608,6 +705,11 @@ async function init() {
   initControls();
   const linkedSchool = params.get("school");
   const linkedMajor = params.get("major") || "";
+  if (linkedMajor) {
+    state.filters.major = linkedMajor;
+    state.selectedMajorName = linkedMajor;
+    els.majorInput.value = linkedMajor;
+  }
   if (linkedSchool) {
     const school = allSchools().find((item) => item.id === linkedSchool);
     if (school) {

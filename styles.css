@@ -479,7 +479,7 @@ h2 {
 .legend-ramp {
   height: 9px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #f7e5e5, #eababc, #d17f83, #b65359);
+  background: linear-gradient(90deg, #cfaaad, #eba9ad, #d98489, #b65359);
 }
 
 .legend-row {
@@ -808,6 +808,38 @@ h2 {
   color: var(--muted);
   font-size: 11px;
   font-weight: 800;
+}
+
+.school-major-match {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 3px 8px;
+  border-top: 1px solid rgba(211, 188, 179, 0.8);
+  padding-top: 7px;
+  color: var(--ink);
+}
+
+.school-major-match span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.school-major-match strong {
+  color: var(--coral);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.school-major-match em {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
 }
 
 .load-more {
@@ -1335,7 +1367,7 @@ h2 {
   margin-top: 10px;
 }
 
-.major-suggestions span {
+.major-suggestions a {
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--blue-soft);
@@ -1343,6 +1375,12 @@ h2 {
   padding: 7px 10px;
   font-size: 12px;
   font-weight: 850;
+  text-decoration: none;
+}
+
+.major-suggestions a:hover {
+  border-color: rgba(183, 95, 100, 0.36);
+  background: rgba(183, 95, 100, 0.16);
 }
 
 .result-link {
