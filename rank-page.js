@@ -22,6 +22,7 @@ let schools = [];
 let admissionCatalog = null;
 let admissionIndex = buildAdmissionIndex();
 const admissionPayloads = new Map();
+let querySerial = 0;
 
 function selectedTargetProvinces() {
   return new Set(
@@ -46,6 +47,14 @@ function updateTargetProvinceToggle() {
 function closeTargetProvincePanel() {
   targetProvincePanel.hidden = true;
   targetProvinceToggle.setAttribute("aria-expanded", "false");
+}
+
+function readRankQuery() {
+  const province = provinceSelect.value;
+  const track = trackSelect.value;
+  const rank = Number(rankInput.value);
+  if (!province || !Number.isFinite(rank) || rank < 1) return null;
+  return { province, track, rank };
 }
 
 function renderTargetProvinceOptions() {
@@ -146,29 +155,37 @@ async function loadProvinceAdmissions(province) {
   admissionIndex = buildAdmissionIndex(admissionPayloads.get(province), admissionCatalog);
 }
 
-form.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const province = provinceSelect.value;
-  const track = trackSelect.value;
-  const rank = Number(rankInput.value);
-  if (!province || !Number.isFinite(rank) || rank < 1) {
+async function runRankQuery({ showInvalid = true } = {}) {
+  const query = readRankQuery();
+  if (!query) {
+    if (!showInvalid) return;
     resultTitle.textContent = "排名无效";
     resultCount.textContent = "0";
     summary.textContent = "请输入大于 0 的全省排名。";
     results.innerHTML = "";
     return;
   }
+
+  const serial = ++querySerial;
+  const { province, rank, track } = query;
   summary.textContent = "正在读取该省专业录取数据…";
   try {
     await loadProvinceAdmissions(province);
+    if (serial !== querySerial) return;
     renderResults(province, rank, track, selectedTargetProvinces());
   } catch (error) {
+    if (serial !== querySerial) return;
     console.error(error);
     resultTitle.textContent = "录取数据读取失败";
     resultCount.textContent = "0";
     summary.textContent = "数据文件读取失败，本次不返回估算结果，请稍后重试。";
     results.innerHTML = "";
   }
+}
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  await runRankQuery();
 });
 
 async function init() {
@@ -191,13 +208,17 @@ targetProvinceToggle.addEventListener("click", () => {
   targetProvinceToggle.setAttribute("aria-expanded", String(!isOpen));
 });
 
-targetProvinceList.addEventListener("change", updateTargetProvinceToggle);
+targetProvinceList.addEventListener("change", () => {
+  updateTargetProvinceToggle();
+  runRankQuery({ showInvalid: false });
+});
 
 targetProvinceClear.addEventListener("click", () => {
   for (const checkbox of targetProvinceList.querySelectorAll('input[type="checkbox"]')) {
     checkbox.checked = false;
   }
   updateTargetProvinceToggle();
+  runRankQuery({ showInvalid: false });
 });
 
 document.addEventListener("click", (event) => {
