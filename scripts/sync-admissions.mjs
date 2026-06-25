@@ -313,6 +313,52 @@ async function chongqingSourceRecords(source, province, rows) {
   });
 }
 
+async function hubeiGroupSourceRecords(source, province, rows) {
+  const rankMapPayload = await Bun.file(path.join(root, source.rankMapPath)).json();
+  const rankByScore = new Map(
+    rankMapPayload.rows.map((entry) => [
+      entry.score,
+      source.track === "physics" ? entry.physicsRank : entry.historyRank
+    ])
+  );
+
+  return rows.flatMap((row) => {
+    const groupCode = String(row.groupCode || "").trim();
+    const groupName = String(row.groupName || "").trim();
+    const rawSchoolName = String(row.schoolName || "").trim();
+    const school = resolveSchool(rawSchoolName);
+    const minScore = asPositiveNumber(row.minScore);
+    const minRank = rankByScore.get(minScore);
+    if (!school || !groupCode || !groupName || !minScore || !minRank) return [];
+
+    return [
+      {
+        id: `${source.id}:${groupCode}`,
+        sourceId: source.id,
+        dataType: "official",
+        province,
+        year: source.year,
+        batch: source.batch,
+        track: source.track,
+        schoolId: school.id,
+        schoolCode: groupCode.slice(0, 4),
+        schoolName: rawSchoolName,
+        canonicalSchoolName: school.name,
+        majorCode: groupCode.slice(4),
+        majorName: `${groupName}（院校专业组）`,
+        planCount: null,
+        minScore,
+        minRank,
+        rankMethod: "official-score-cumulative",
+        rankNote:
+          "由湖北省教育考试院院校专业组投档最低分和官方一分一段表累计人数对应，为同分考生位次上限。",
+        subjectRequirement: row.subjectRequirement || "选科要求见招生计划",
+        sourcePage: row.sourcePage || null
+      }
+    ];
+  });
+}
+
 async function sourceRecords(source, province, rows) {
   if (source.parser === "zhejiang-major-lines") {
     return zhejiangSourceRecords(source, province, rows);
@@ -328,6 +374,9 @@ async function sourceRecords(source, province, rows) {
   }
   if (source.parser === "chongqing-major-scores") {
     return chongqingSourceRecords(source, province, rows);
+  }
+  if (source.parser === "hubei-group-scores") {
+    return hubeiGroupSourceRecords(source, province, rows);
   }
   throw new Error(`Unsupported admission parser: ${source.parser}`);
 }
@@ -351,6 +400,9 @@ function sourceDataRowCount(source, rows) {
     return rows.slice(5).filter((row) => row.some((cell) => cell !== null && cell !== "")).length;
   }
   if (source.parser === "chongqing-major-scores") {
+    return rows.length;
+  }
+  if (source.parser === "hubei-group-scores") {
     return rows.length;
   }
   return 0;
