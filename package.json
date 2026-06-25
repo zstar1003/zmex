@@ -1,8 +1,14 @@
 {
-  "name": "gaokao-undergraduate-atlas",
+  "name": "zmex",
   "version": "1.0.0",
-  "private": true,
+  "description": "择木而栖：面向高考志愿筛选的全国院校地图与专业位次参考站。",
+  "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zstar1003/zmex.git"
+  },
+  "homepage": "https://zmex.zstar.website/",
   "scripts": {
     "start": "bun run scripts/server.mjs",
     "build:data": "bun run scripts/build-data.mjs",

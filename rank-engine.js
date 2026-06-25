@@ -322,8 +322,10 @@ function limitSchoolRepetition(items, limit) {
   return selected;
 }
 
-export function rankAdvisorMatches(schools, province, rank, track, admissionIndex = null) {
+export function rankAdvisorMatches(schools, province, rank, track, admissionIndex = null, options = {}) {
+  const targetProvinces = new Set(options.targetProvinces || []);
   const matches = schools
+    .filter((school) => !targetProvinces.size || targetProvinces.has(school.province))
     .flatMap((school) => programCandidatesForSchool(school, province, track, admissionIndex))
     .filter((item) => item.requiredRank >= rank)
     .sort(

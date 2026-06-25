@@ -248,7 +248,7 @@ function buildSchoolRequests(schoolData, providerPayload) {
   }
 
   const candidatesByProviderId = new Map();
-  for (const school of schoolData.schools) {
+  for (const school of schoolData.schools.filter((school) => String(school.level || "").includes("本科"))) {
     const exactMatches = providerByName.get(normalizeName(school.name)) || [];
     const overrideMatches = (providerNameOverrides[school.name] || []).flatMap(
       (name) => providerByName.get(normalizeName(name)) || []

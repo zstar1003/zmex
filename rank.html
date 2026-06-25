@@ -21,7 +21,7 @@
     <meta name="twitter:description" content="按省份、科类和全省排名查询大学专业录取位次参考。" />
     <title>择木而栖</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css?v=20260612-3" />
+    <link rel="stylesheet" href="./styles.css?v=20260625-1" />
   </head>
   <body class="subpage-body">
     <header class="site-header">
@@ -60,6 +60,17 @@
             <span>全省排名</span>
             <input id="rankInput" type="number" min="1" step="1" placeholder="例如 8000" required />
           </label>
+          <fieldset class="rank-target-province-field">
+            <legend>院校所在省份</legend>
+            <button class="target-province-toggle" id="targetProvinceToggle" type="button" aria-expanded="false" aria-controls="targetProvincePanel">不限院校省份</button>
+            <div class="target-province-panel" id="targetProvincePanel" hidden>
+              <div class="target-province-actions">
+                <span>可多选，不选则不限</span>
+                <button id="targetProvinceClear" type="button">清空</button>
+              </div>
+              <div class="target-province-list" id="targetProvinceList"></div>
+            </div>
+          </fieldset>
           <button type="submit">查询可报专业</button>
         </form>
         <div class="model-note">
@@ -82,6 +93,6 @@
     </main>
 
     <footer class="page-footer">录取规则、选科限制和招生计划以各省考试院当年公布内容为准。</footer>
-    <script type="module" src="./rank-page.js?v=20260611-2"></script>
+    <script type="module" src="./rank-page.js?v=20260625-1"></script>
   </body>
 </html>

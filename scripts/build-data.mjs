@@ -219,6 +219,20 @@ const majorTemplates = {
   农林: ["农学", "林学", "园艺", "动物医学", "植物保护", "农业资源与环境"],
 };
 
+const vocationalMajorTemplates = {
+  综合: ["大数据技术", "电子商务", "现代物流管理", "商务英语", "旅游管理", "学前教育"],
+  理工: ["软件技术", "机电一体化技术", "电气自动化技术", "建筑工程技术", "新能源汽车技术", "工业机器人技术"],
+  医药: ["护理", "药学", "医学检验技术", "康复治疗技术", "口腔医学技术", "医学影像技术"],
+  师范: ["小学教育", "学前教育", "早期教育", "小学语文教育", "小学数学教育", "现代教育技术"],
+  财经: ["大数据与会计", "金融服务与管理", "市场营销", "电子商务", "财税大数据应用", "国际经济与贸易"],
+  政法: ["法律事务", "司法警务", "安全防范技术", "社区管理与服务", "行政管理", "民事执行"],
+  艺术: ["视觉传达设计", "数字媒体艺术设计", "环境艺术设计", "音乐表演", "舞蹈表演", "动漫设计"],
+  体育: ["体育教育", "运动训练", "社会体育", "体育运营与管理", "运动防护", "健身指导与管理"],
+  民族: ["民族传统技艺", "旅游管理", "现代文秘", "电子商务", "学前教育", "社会工作"],
+  语言: ["商务英语", "应用英语", "应用日语", "旅游英语", "中文", "现代文秘"],
+  农林: ["园林技术", "畜牧兽医", "现代农业技术", "园艺技术", "动物医学", "食品检验检测技术"],
+};
+
 const schoolMajorOverrides = {
   北京大学: ["数学与应用数学", "物理学", "临床医学", "法学", "经济学", "计算机科学与技术"],
   清华大学: ["计算机科学与技术", "人工智能", "自动化", "建筑学", "电子信息工程", "机械工程"],
@@ -261,6 +275,7 @@ function recommendationScore({ school, category, is985, is211, isDoubleFirstClas
   else if (is211) score += 24;
   else if (isDoubleFirstClass) score += 18;
 
+  if (String(school.level || "").includes("专科")) score -= 16;
   if (adminLevel === "中央部委") score += 6;
   if (nature === "公办") score += 5;
   if (nature === "民办") score -= 8;
@@ -276,7 +291,7 @@ function recommendationBand(score) {
   if (score >= 92) return "顶尖冲刺";
   if (score >= 82) return "重点优选";
   if (score >= 70) return "区域强校";
-  if (score >= 58) return "稳妥本科";
+  if (score >= 58) return "稳妥参考";
   return "保底参考";
 }
 
@@ -289,7 +304,9 @@ function majorGrade(rank) {
 }
 
 function majorRankingsForSchool(school, category, score) {
-  const majors = schoolMajorOverrides[school.name] || majorTemplates[category] || majorTemplates.综合;
+  const isJuniorCollege = String(school.level || "").includes("专科");
+  const templates = isJuniorCollege ? vocationalMajorTemplates : majorTemplates;
+  const majors = schoolMajorOverrides[school.name] || templates[category] || templates.综合;
   const categoryBoost = school.name.includes(category === "理工" ? "科技" : category) ? 8 : 0;
   const visibleMajorCount = schoolMajorOverrides[school.name] ? 8 : 6;
   return majors.slice(0, visibleMajorCount).map((major, index) => {
@@ -298,7 +315,7 @@ function majorRankingsForSchool(school, category, score) {
       name: major,
       estimatedRank,
       grade: majorGrade(estimatedRank),
-      basis: schoolMajorOverrides[school.name] ? "重点高校学科倾向" : `${category}类院校常见优势专业`,
+      basis: schoolMajorOverrides[school.name] ? "重点高校学科倾向" : `${category}类院校常见专业方向`,
     };
   });
 }
@@ -364,7 +381,8 @@ for (const row of rows) {
   }
 
   if (typeof row[0] !== "number") continue;
-  if (!cleanName(row[5]).includes("本科")) continue;
+  const level = cleanName(row[5]);
+  if (!["本科", "专科"].includes(level)) continue;
 
   rawSchools.push({
     sourceIndex: row[0],
@@ -372,7 +390,7 @@ for (const row of rows) {
     code: cleanName(row[2]),
     department: cleanName(row[3]),
     city: cleanName(row[4]),
-    level: cleanName(row[5]),
+    level,
     note: cleanName(row[6]),
     province: currentProvince,
   });
@@ -400,6 +418,8 @@ const schools = rawSchools.map((school) => {
   const nature = school.note.includes("民办") ? "民办" : "公办";
   const adminLevel = nature === "民办" ? "民办" : centralDepartments.has(school.department) ? "中央部委" : "地方";
   const category = schoolCategory(school.name);
+  const isUndergraduate = school.level.includes("本科");
+  const isJuniorCollege = school.level.includes("专科");
   const score = recommendationScore({
     school,
     category,
@@ -444,7 +464,10 @@ const schools = rawSchools.map((school) => {
       is985,
       is211,
       doubleFirstClass: isDoubleFirstClass,
-      vocationalUndergrad: /职业|技术大学/.test(school.name),
+      undergraduate: isUndergraduate,
+      juniorCollege: isJuniorCollege,
+      vocationalUndergrad: isUndergraduate && /职业|技术大学/.test(school.name),
+      vocationalCollege: isJuniorCollege,
     },
     coord: cityPoint ? [Number((cityPoint[0] + dx).toFixed(6)), Number((cityPoint[1] + dy).toFixed(6))] : null,
     cityCenter: cityPoint || null,
@@ -457,6 +480,8 @@ const provinceStats = Object.values(
     acc[school.province] ||= {
       name: school.province,
       count: 0,
+      undergraduateCount: 0,
+      juniorCollegeCount: 0,
       publicCount: 0,
       privateCount: 0,
       eliteCount: 0,
@@ -466,6 +491,8 @@ const provinceStats = Object.values(
     };
     const stat = acc[school.province];
     stat.count += 1;
+    if (school.tags.undergraduate) stat.undergraduateCount += 1;
+    if (school.tags.juniorCollege) stat.juniorCollegeCount += 1;
     stat.cities.add(school.city);
     if (school.nature === "民办") stat.privateCount += 1;
     else stat.publicCount += 1;
@@ -485,18 +512,29 @@ const cityStats = Object.values(
       name: school.city,
       province: school.province,
       count: 0,
+      undergraduateCount: 0,
+      juniorCollegeCount: 0,
       privateCount: 0,
       publicCount: 0,
       doubleFirstClassCount: 0,
       coord: school.cityCenter,
     };
     acc[key].count += 1;
+    if (school.tags.undergraduate) acc[key].undergraduateCount += 1;
+    if (school.tags.juniorCollege) acc[key].juniorCollegeCount += 1;
     if (school.nature === "民办") acc[key].privateCount += 1;
     else acc[key].publicCount += 1;
     if (school.tags.doubleFirstClass) acc[key].doubleFirstClassCount += 1;
     return acc;
   }, {}),
 ).sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "zh-CN"));
+
+const levelCounts = Object.fromEntries(
+  [...schools.reduce((acc, school) => {
+    acc.set(school.level, (acc.get(school.level) || 0) + 1);
+    return acc;
+  }, new Map())].sort((a, b) => a[0].localeCompare(b[0], "zh-CN")),
+);
 
 const payload = {
   meta: {
@@ -505,8 +543,11 @@ const payload = {
     sourceUrl: "https://www.moe.gov.cn/jyb_xxgk/s5743/s5744/A03/202506/t20250627_1195683.html",
     sourceDate: "2025-06-20",
     publishedDate: "2025-06-27",
-    scope: "普通本科院校，不含港澳台地区高等学校及军事院校",
-    totalUndergraduateSchools: schools.length,
+    scope: "普通本科院校和高职（专科）院校，不含港澳台地区高等学校及军事院校",
+    totalSchools: schools.length,
+    totalUndergraduateSchools: schools.filter((school) => school.tags.undergraduate).length,
+    totalJuniorCollegeSchools: schools.filter((school) => school.tags.juniorCollege).length,
+    levelCounts,
     recommendationSource:
       "院校推荐、专业优势和位次匹配为本项目估算模型，依据学校层次、主管部门、办学性质、院校类型和名称学科倾向生成；不替代各省一分一段表、招生计划和投档线。",
     majorRankingReference:
@@ -526,7 +567,7 @@ const payload = {
 
 fs.writeFileSync(outPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
 
-console.log(`Wrote ${schools.length} undergraduate schools to ${path.relative(root, outPath)}`);
+console.log(`Wrote ${schools.length} schools to ${path.relative(root, outPath)}`);
 console.log(`Province stats: ${provinceStats.length}; city stats: ${cityStats.length}`);
 if (missingCoordinates.size) {
   console.warn(`Missing coordinates: ${[...missingCoordinates].join(", ")}`);

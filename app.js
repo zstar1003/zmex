@@ -7,6 +7,7 @@ const state = {
   filters: {
     query: "",
     province: "",
+    levels: new Set(),
     natures: new Set(),
     tags: new Set(),
     categories: new Set(),
@@ -24,6 +25,7 @@ const state = {
 const els = {
   searchInput: document.querySelector("#searchInput"),
   provinceSelect: document.querySelector("#provinceSelect"),
+  levelChecks: document.querySelector("#levelChecks"),
   natureChecks: document.querySelector("#natureChecks"),
   tagChecks: document.querySelector("#tagChecks"),
   categoryChips: document.querySelector("#categoryChips"),
@@ -31,6 +33,8 @@ const els = {
   schoolCount: document.querySelector("#schoolCount"),
   provinceCount: document.querySelector("#provinceCount"),
   cityCount: document.querySelector("#cityCount"),
+  undergraduateCount: document.querySelector("#undergraduateCount"),
+  juniorCollegeCount: document.querySelector("#juniorCollegeCount"),
   publicCount: document.querySelector("#publicCount"),
   privateCount: document.querySelector("#privateCount"),
   mapChart: document.querySelector("#mapChart"),
@@ -64,6 +68,7 @@ function getTagLabels(school) {
   if (school.tags.doubleFirstClass) labels.push(["双一流", "hot"]);
   if (school.tags.is985) labels.push(["985", "blue"]);
   if (school.tags.is211) labels.push(["211", "blue"]);
+  if (school.tags.juniorCollege) labels.push(["专科", ""]);
   if (school.tags.vocationalUndergrad) labels.push(["职业本科", "green"]);
   labels.push([school.nature, school.nature === "民办" ? "" : "green"]);
   labels.push([school.category, ""]);
@@ -99,6 +104,14 @@ function initControls() {
     state.filters.province = event.target.value;
     state.visibleRows = 160;
     applyFilters();
+  });
+
+  els.levelChecks.addEventListener("change", (event) => {
+    if (event.target.matches("input")) {
+      updateSetFromCheckbox(state.filters.levels, event.target);
+      state.visibleRows = 160;
+      applyFilters();
+    }
   });
 
   els.natureChecks.addEventListener("change", (event) => {
@@ -147,6 +160,7 @@ function updateSetFromCheckbox(set, checkbox) {
 function resetFilters() {
   state.filters.query = "";
   state.filters.province = "";
+  state.filters.levels.clear();
   state.filters.natures.clear();
   state.filters.tags.clear();
   state.filters.categories.clear();
@@ -165,12 +179,13 @@ function resetFilters() {
 }
 
 function applyFilters() {
-  const { query, province, natures, tags, categories } = state.filters;
+  const { query, province, levels, natures, tags, categories } = state.filters;
   const normalizedQuery = query.toLowerCase();
 
   state.filtered = state.data.schools
     .filter((school) => {
       if (province && school.province !== province) return false;
+      if (levels.size && !levels.has(school.level)) return false;
       if (natures.size && !natures.has(school.nature)) return false;
       if (categories.size && !categories.has(school.category)) return false;
       for (const tag of tags) {
@@ -202,16 +217,22 @@ function summarizeSchools(schools) {
   const citySet = new Set();
   let publicCount = 0;
   let privateCount = 0;
+  let undergraduateCount = 0;
+  let juniorCollegeCount = 0;
   for (const school of schools) {
     provinceSet.add(school.province);
     citySet.add(`${school.province}/${school.city}`);
     if (school.nature === "民办") privateCount += 1;
     else publicCount += 1;
+    if (school.tags.undergraduate) undergraduateCount += 1;
+    if (school.tags.juniorCollege) juniorCollegeCount += 1;
   }
   return {
     total: schools.length,
     provinceCount: provinceSet.size,
     cityCount: citySet.size,
+    undergraduateCount,
+    juniorCollegeCount,
     publicCount,
     privateCount,
   };
@@ -222,6 +243,8 @@ function renderStats() {
   els.schoolCount.textContent = formatNumber.format(summary.total);
   els.provinceCount.textContent = formatNumber.format(summary.provinceCount);
   els.cityCount.textContent = formatNumber.format(summary.cityCount);
+  els.undergraduateCount.textContent = formatNumber.format(summary.undergraduateCount);
+  els.juniorCollegeCount.textContent = formatNumber.format(summary.juniorCollegeCount);
   els.publicCount.textContent = formatNumber.format(summary.publicCount);
   els.privateCount.textContent = formatNumber.format(summary.privateCount);
 
@@ -233,10 +256,14 @@ function aggregateByProvince(schools) {
       acc[school.province] ||= {
         name: school.province,
         count: 0,
+        undergraduateCount: 0,
+        juniorCollegeCount: 0,
         privateCount: 0,
         eliteCount: 0,
       };
       acc[school.province].count += 1;
+      if (school.tags.undergraduate) acc[school.province].undergraduateCount += 1;
+      if (school.tags.juniorCollege) acc[school.province].juniorCollegeCount += 1;
       if (school.nature === "民办") acc[school.province].privateCount += 1;
       if (school.tags.doubleFirstClass || school.tags.is985 || school.tags.is211) acc[school.province].eliteCount += 1;
       return acc;
@@ -277,6 +304,8 @@ function aggregateByCity(schools) {
         province: school.province,
         coord: school.cityCenter || school.coord,
         count: 0,
+        undergraduateCount: 0,
+        juniorCollegeCount: 0,
         publicCount: 0,
         privateCount: 0,
         eliteCount: 0,
@@ -288,6 +317,8 @@ function aggregateByCity(schools) {
       city.count += 1;
       city.schools.push(school);
       city.categories[school.category] = (city.categories[school.category] || 0) + 1;
+      if (school.tags.undergraduate) city.undergraduateCount += 1;
+      if (school.tags.juniorCollege) city.juniorCollegeCount += 1;
       if (school.nature === "民办") city.privateCount += 1;
       else city.publicCount += 1;
       if (school.tags.doubleFirstClass || school.tags.is985 || school.tags.is211) city.eliteCount += 1;
@@ -363,7 +394,7 @@ function renderSelectedDetail() {
     els.detailCard.innerHTML = `
       <span class="detail-kicker">院校详情</span>
       <h2>从右侧列表选择院校</h2>
-      <p>当前显示 ${formatNumber.format(state.filtered.length)} 所本科院校，点击省份可筛选地区。</p>
+      <p>当前显示 ${formatNumber.format(state.filtered.length)} 所院校，点击省份可筛选地区。</p>
     `;
     return;
   }
@@ -478,8 +509,8 @@ function renderCityDetail(city) {
   els.detailCard.innerHTML = `
     <a class="detail-close" href="./index.html" aria-label="关闭城市详情">×</a>
     <span class="detail-kicker">${city.province}</span>
-    <h2>${city.name} · ${city.count} 所本科</h2>
-    <p>公办 ${city.publicCount} 所 · 民办 ${city.privateCount} 所 · 重点标签 ${city.eliteCount} 所<br/>${topCategories || "暂无类型统计"}</p>
+    <h2>${city.name} · ${city.count} 所院校</h2>
+    <p>本科 ${city.undergraduateCount} 所 · 专科 ${city.juniorCollegeCount} 所 · 公办 ${city.publicCount} 所 · 民办 ${city.privateCount} 所<br/>${topCategories || "暂无类型统计"}</p>
     <div class="city-school-list">${topSchools}</div>
     <div class="detail-actions">
       <button class="primary-action" id="filterCityProvince">${city.province}</button>

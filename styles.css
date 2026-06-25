@@ -954,7 +954,7 @@ h2 {
   box-shadow: 0 0 0 3px rgba(183, 95, 100, 0.12);
 }
 
-.rank-page-form button,
+.rank-page-form > button,
 .assessment-submit {
   min-height: 43px;
   border: 1px solid var(--blue);
@@ -963,6 +963,125 @@ h2 {
   color: white;
   font-size: 13px;
   font-weight: 900;
+}
+
+.rank-target-province-field {
+  position: relative;
+  min-width: 0;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.rank-target-province-field legend {
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.target-province-toggle {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #fffdfd;
+  color: var(--ink);
+  padding: 0 11px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.target-province-toggle::after {
+  content: "";
+  float: right;
+  width: 7px;
+  height: 7px;
+  margin-top: 14px;
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+  transform: rotate(45deg);
+}
+
+.target-province-toggle:focus-visible {
+  outline: 0;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(183, 95, 100, 0.12);
+}
+
+.target-province-panel {
+  margin-top: 6px;
+  border: 1px solid rgba(183, 95, 100, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 253, 253, 0.98);
+  box-shadow: 0 16px 34px rgba(65, 35, 38, 0.14);
+  padding: 10px;
+}
+
+.target-province-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 9px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.target-province-actions button {
+  border: 0;
+  background: transparent;
+  color: var(--blue-deep);
+  padding: 0;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.target-province-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  max-height: 220px;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.target-province-list label {
+  position: relative;
+  display: block;
+}
+
+.target-province-list input {
+  position: absolute;
+  opacity: 0;
+}
+
+.target-province-list span {
+  display: block;
+  overflow: hidden;
+  min-height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #fff;
+  color: var(--muted);
+  padding: 7px 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.target-province-list input:checked + span {
+  border-color: rgba(183, 95, 100, 0.42);
+  background: rgba(183, 95, 100, 0.1);
+  color: var(--ink);
+}
+
+.target-province-list input:focus-visible + span {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(183, 95, 100, 0.12);
 }
 
 .model-note {

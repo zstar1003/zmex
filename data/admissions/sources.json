@@ -187,7 +187,49 @@
       ]
     },
     {"province": "河南省", "authority": "河南省教育考试院", "authorityUrl": "https://www.haeea.cn/", "status": "pending"},
-    {"province": "湖北省", "authority": "湖北省教育考试院", "authorityUrl": "https://www.hbea.edu.cn/", "status": "pending"},
+    {
+      "province": "湖北省",
+      "authority": "湖北省教育考试院",
+      "authorityUrl": "https://www.hbea.edu.cn/",
+      "status": "official-reference-discovered",
+      "sources": [
+        {
+          "id": "hubei-2025-undergraduate-physics-group",
+          "year": 2025,
+          "batch": "本科普通批平行志愿",
+          "track": "physics",
+          "granularity": "院校/院校专业组",
+          "pageUrl": "https://www.hbksw.com/info/6/1871.html",
+          "format": "html-images",
+          "status": "reference-only",
+          "note": "湖北省招办公布的是院校或院校专业组投档分数线图片，暂不能直接替代具体专业录取位次表。",
+          "fallbackAllowed": false
+        },
+        {
+          "id": "hubei-2025-undergraduate-history-group",
+          "year": 2025,
+          "batch": "本科普通批平行志愿",
+          "track": "history",
+          "granularity": "院校/院校专业组",
+          "pageUrl": "https://www.hbksw.com/info/6/1872.html",
+          "format": "html-images",
+          "status": "reference-only",
+          "note": "湖北省招办公布的是院校或院校专业组投档分数线图片，暂不能直接替代具体专业录取位次表。",
+          "fallbackAllowed": false
+        },
+        {
+          "id": "hubei-2025-undergraduate-coop-group",
+          "year": 2025,
+          "batch": "本科普通批中外合作办学平行志愿",
+          "granularity": "院校专业组",
+          "pageUrl": "https://www.hbksw.com/info/6/1875.html",
+          "format": "html-images",
+          "status": "reference-only",
+          "note": "湖北省招办微信公众平台/湖北招生考试网公布的是院校专业组投档分数线图片，暂不能直接替代具体专业录取位次表。",
+          "fallbackAllowed": false
+        }
+      ]
+    },
     {"province": "湖南省", "authority": "湖南省教育考试院", "authorityUrl": "https://www.hneeb.cn/", "status": "pending"},
     {"province": "广东省", "authority": "广东省教育考试院", "authorityUrl": "https://eea.gd.gov.cn/", "status": "pending"},
     {"province": "广西壮族自治区", "authority": "广西招生考试院", "authorityUrl": "https://www.gxeea.cn/", "status": "pending"},

@@ -203,6 +203,26 @@ check(
   "Chongqing data does not include Xidian University"
 );
 
+const hubeiEntry = index.provinces.find((province) => province.province === "湖北省");
+const hubeiPayload = await Bun.file(path.join(root, hubeiEntry.dataUrl.replace("./", ""))).json();
+const hubeiShaanxiMatches = rankAdvisorMatches(
+  allSchools,
+  "湖北省",
+  8000,
+  "physics",
+  buildAdmissionIndex(hubeiPayload, index),
+  { targetProvinces: ["陕西省"] }
+);
+check(hubeiShaanxiMatches.length > 0, "Hubei rank 8000 Shaanxi filter returned no results");
+check(
+  hubeiShaanxiMatches.every((item) => item.school.province === "陕西省"),
+  "Hubei rank 8000 Shaanxi filter returned a non-Shaanxi school"
+);
+check(
+  hubeiShaanxiMatches.some((item) => item.school.name === "西安电子科技大学"),
+  "Hubei rank 8000 Shaanxi filter does not include Xidian University"
+);
+
 const beijingEntry = index.provinces.find((province) => province.province === "北京市");
 if (beijingEntry?.dataUrl) {
   const beijingPayload = await Bun.file(path.join(root, beijingEntry.dataUrl.replace("./", ""))).json();

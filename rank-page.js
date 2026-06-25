@@ -9,6 +9,10 @@ const form = document.querySelector("#rankForm");
 const provinceSelect = document.querySelector("#rankProvinceSelect");
 const trackSelect = document.querySelector("#rankTrackSelect");
 const rankInput = document.querySelector("#rankInput");
+const targetProvinceToggle = document.querySelector("#targetProvinceToggle");
+const targetProvincePanel = document.querySelector("#targetProvincePanel");
+const targetProvinceList = document.querySelector("#targetProvinceList");
+const targetProvinceClear = document.querySelector("#targetProvinceClear");
 const summary = document.querySelector("#rankSummary");
 const results = document.querySelector("#rankResults");
 const resultTitle = document.querySelector("#rankResultTitle");
@@ -19,8 +23,51 @@ let admissionCatalog = null;
 let admissionIndex = buildAdmissionIndex();
 const admissionPayloads = new Map();
 
-function renderResults(province, rank, track) {
-  const matches = rankAdvisorMatches(schools, province, rank, track, admissionIndex);
+function selectedTargetProvinces() {
+  return new Set(
+    [...targetProvinceList.querySelectorAll('input[type="checkbox"]:checked')].map(
+      (checkbox) => checkbox.value,
+    ),
+  );
+}
+
+function formatTargetProvinceSelection(targetProvinces) {
+  const selected = [...targetProvinces];
+  if (!selected.length) return "不限院校省份";
+  if (selected.length === 1) return selected[0];
+  return `${selected[0]}等 ${selected.length} 地`;
+}
+
+function updateTargetProvinceToggle() {
+  const targetProvinces = selectedTargetProvinces();
+  targetProvinceToggle.textContent = formatTargetProvinceSelection(targetProvinces);
+}
+
+function closeTargetProvincePanel() {
+  targetProvincePanel.hidden = true;
+  targetProvinceToggle.setAttribute("aria-expanded", "false");
+}
+
+function renderTargetProvinceOptions() {
+  const provinceNames = [...new Set(schools.map((school) => school.province).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b, "zh-CN"));
+  targetProvinceList.innerHTML = provinceNames
+    .map(
+      (province) => `
+        <label>
+          <input type="checkbox" value="${province}" />
+          <span>${province}</span>
+        </label>
+      `,
+    )
+    .join("");
+  updateTargetProvinceToggle();
+}
+
+function renderResults(province, rank, track, targetProvinces = new Set()) {
+  const matches = rankAdvisorMatches(schools, province, rank, track, admissionIndex, {
+    targetProvinces: [...targetProvinces],
+  });
   const coverage = admissionCoverageForProvince(admissionIndex, province);
   const usesCumulativeRank = coverage?.sources?.some(
     (source) => String(source.rankMethod || "").includes("cumulative"),
@@ -44,10 +91,16 @@ function renderResults(province, rank, track) {
     : usesCumulativeRank
       ? "同分位次上限或最低位次"
       : "最低位次";
+  const targetProvinceText = targetProvinces.size
+    ? `，院校所在地限定为${formatTargetProvinceSelection(targetProvinces)}`
+    : "";
+  const latestReferenceText = coverage?.latestOfficialReference
+    ? `；另已找到${coverage.latestOfficialReference.year}年${coverage.latestOfficialReference.granularity}投档线，暂不混入专业粒度排序`
+    : "";
   summary.textContent = matches.length
-    ? `已读取 ${sourceParts.join("及")}，结果按${sortBasis}排序。`
+    ? `已读取 ${sourceParts.join("及")}，结果按${sortBasis}排序${targetProvinceText}${latestReferenceText}。`
     : coverage?.recordCount
-      ? "现有可追溯数据中暂未匹配到符合当前排名的专业。"
+      ? `现有可追溯数据中暂未匹配到符合当前排名${targetProvinces.size ? "和院校所在地" : ""}的专业${latestReferenceText}。`
       : "该省专业录取数据仍在检索，暂不使用未经核实的估算值。";
 
   results.innerHTML = matches
@@ -108,7 +161,7 @@ form.addEventListener("submit", async (event) => {
   summary.textContent = "正在读取该省专业录取数据…";
   try {
     await loadProvinceAdmissions(province);
-    renderResults(province, rank, track);
+    renderResults(province, rank, track, selectedTargetProvinces());
   } catch (error) {
     console.error(error);
     resultTitle.textContent = "录取数据读取失败";
@@ -129,7 +182,31 @@ async function init() {
   const provinces = [...data.provinceStats].sort((a, b) => a.name.localeCompare(b.name, "zh-CN"));
   provinceSelect.innerHTML = provinces.map((province) => `<option value="${province.name}">${province.name}</option>`).join("");
   provinceSelect.value = "浙江省";
+  renderTargetProvinceOptions();
 }
+
+targetProvinceToggle.addEventListener("click", () => {
+  const isOpen = !targetProvincePanel.hidden;
+  targetProvincePanel.hidden = isOpen;
+  targetProvinceToggle.setAttribute("aria-expanded", String(!isOpen));
+});
+
+targetProvinceList.addEventListener("change", updateTargetProvinceToggle);
+
+targetProvinceClear.addEventListener("click", () => {
+  for (const checkbox of targetProvinceList.querySelectorAll('input[type="checkbox"]')) {
+    checkbox.checked = false;
+  }
+  updateTargetProvinceToggle();
+});
+
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".rank-target-province-field")) closeTargetProvincePanel();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") closeTargetProvincePanel();
+});
 
 init().catch((error) => {
   console.error(error);

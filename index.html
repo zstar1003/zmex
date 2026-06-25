@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="择木而栖提供全国本科院校分布地图、专业录取位次参考和专业倾向测评，帮助高考考生按省份、院校与专业逐步筛选志愿。" />
-    <meta name="keywords" content="高考志愿,本科院校地图,大学查询,专业录取位次,志愿填报" />
+    <meta name="description" content="择木而栖提供全国本科和专科院校分布地图、专业录取位次参考和专业倾向测评，帮助高考考生按省份、院校与专业逐步筛选志愿。" />
+    <meta name="keywords" content="高考志愿,院校地图,本科院校,专科院校,大学查询,专业录取位次,志愿填报" />
     <meta name="robots" content="index,follow" />
     <meta name="author" content="择木而栖" />
     <meta name="format-detection" content="telephone=no" />
@@ -15,13 +15,13 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="择木而栖" />
     <meta property="og:title" content="择木而栖" />
-    <meta property="og:description" content="查看全国本科院校分布，按专业录取位次筛选志愿范围。" />
+    <meta property="og:description" content="查看全国本科和专科院校分布，按专业录取位次筛选志愿范围。" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="择木而栖" />
-    <meta name="twitter:description" content="查看全国本科院校分布，按专业录取位次筛选志愿范围。" />
+    <meta name="twitter:description" content="查看全国本科和专科院校分布，按专业录取位次筛选志愿范围。" />
     <title>择木而栖</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css?v=20260612-3" />
+    <link rel="stylesheet" href="./styles.css?v=20260625-2" />
   </head>
   <body class="home-page">
     <header class="site-header">
@@ -60,6 +60,14 @@
           </label>
 
           <div class="field">
+            <span>办学层次</span>
+            <div class="check-grid" id="levelChecks">
+              <label><input type="checkbox" value="本科" /> 本科</label>
+              <label><input type="checkbox" value="专科" /> 专科</label>
+            </div>
+          </div>
+
+          <div class="field">
             <span>学校性质</span>
             <div class="check-grid" id="natureChecks">
               <label><input type="checkbox" value="公办" /> 公办</label>
@@ -86,26 +94,28 @@
         <section class="panel stats-panel">
           <div class="metric-main">
             <span id="schoolCount">0</span>
-            <small>所本科院校</small>
+            <small>所院校</small>
           </div>
           <div class="metric-inline">
             <span><strong id="provinceCount">0</strong>省份</span>
             <span><strong id="cityCount">0</strong>城市</span>
+            <span><strong id="undergraduateCount">0</strong>本科</span>
+            <span><strong id="juniorCollegeCount">0</strong>专科</span>
             <span><strong id="publicCount">0</strong>公办</span>
             <span><strong id="privateCount">0</strong>民办</span>
           </div>
         </section>
       </aside>
 
-      <section class="map-stage" aria-label="全国本科院校省级数量地图">
+      <section class="map-stage" aria-label="全国院校省级数量地图">
         <div class="map-controls" aria-label="地图控制">
           <button id="zoomInMap" type="button" title="放大" aria-label="放大">+</button>
           <button id="zoomOutMap" type="button" title="缩小" aria-label="缩小">−</button>
           <button id="fullscreenMap" type="button" title="全屏查看" aria-label="全屏查看">⛶</button>
         </div>
-        <div id="mapChart" class="map-chart" role="img" aria-label="可拖动、缩放的中国本科院校省级数量地图"></div>
+        <div id="mapChart" class="map-chart" role="img" aria-label="可拖动、缩放的中国院校省级数量地图"></div>
         <div class="legend-card" id="legendCard">
-          <span class="legend-title">本科院校数</span>
+          <span class="legend-title">院校数</span>
           <div class="legend-ramp" aria-hidden="true"></div>
           <div class="legend-row">
             <span>少</span>
@@ -115,7 +125,7 @@
         <article class="detail-card empty" id="detailCard">
           <span class="detail-kicker">院校详情</span>
           <h2>从右侧列表选择院校</h2>
-          <p>点击省份可筛选该地区的本科院校。</p>
+          <p>点击省份可筛选该地区的院校。</p>
         </article>
       </section>
 
@@ -138,6 +148,6 @@
       <span class="visit-counter">累计访问次数 <strong id="visitCount">--</strong></span>
     </footer>
 
-    <script type="module" src="./app.js?v=20260612-4"></script>
+    <script type="module" src="./app.js?v=20260625-1"></script>
   </body>
 </html>

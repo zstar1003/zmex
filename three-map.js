@@ -465,7 +465,7 @@ export class ThreeChinaMap {
 
   showProvinceTooltip(name, event) {
     const stat = this.provinceStats.get(name);
-    this.showTooltip(name, `本科院校 ${stat?.count || 0} 所 · 点击筛选`, event);
+    this.showTooltip(name, `院校 ${stat?.count || 0} 所 · 点击筛选`, event);
   }
 
   showTooltip(title, detail, event) {
