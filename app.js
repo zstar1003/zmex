@@ -19,6 +19,8 @@ const state = {
   visibleRows: 160,
   detailContext: null,
   admissionIndex: buildAdmissionIndex(),
+  majorAdmissionIndex: null,
+  majorAdmissionIndexPromise: null,
   selectedMajorName: "",
   detailDismissed: false,
 };
@@ -116,21 +118,54 @@ function majorMatchScore(majorName, terms) {
   return best;
 }
 
-function matchedMajorForSchool(school, query = state.filters.major) {
+function trackLabel(track) {
+  return {
+    physics: "物理类",
+    history: "历史类",
+    general: "综合",
+  }[track] || track || "综合";
+}
+
+function dataTypeLabel(dataType) {
+  return dataType === "official" ? "官方" : "公开";
+}
+
+async function ensureMajorAdmissionIndex() {
+  if (state.majorAdmissionIndex) return state.majorAdmissionIndex;
+  if (!state.majorAdmissionIndexPromise) {
+    state.majorAdmissionIndexPromise = fetch("./data/admissions/major-index.json")
+      .then((response) => {
+        if (!response.ok) throw new Error(`专业录取位次索引加载失败：${response.status}`);
+        return response.json();
+      })
+      .then((payload) => {
+        state.majorAdmissionIndex = payload;
+        return payload;
+      });
+  }
+  return state.majorAdmissionIndexPromise;
+}
+
+function actualMajorLinesForSchool(school, query = state.filters.major) {
   const terms = majorSearchTerms(query);
-  if (!terms.length) return null;
-  return [...(school.majorRankings || [])]
-    .map((major) => ({
-      ...major,
-      matchScore: majorMatchScore(major.name, terms),
+  if (!terms.length || !state.majorAdmissionIndex) return [];
+  return [...(state.majorAdmissionIndex.schools?.[school.id] || [])]
+    .map((line) => ({
+      ...line,
+      matchScore: majorMatchScore(line.n, terms),
     }))
-    .filter((major) => major.matchScore > 0)
+    .filter((line) => line.matchScore > 0)
     .sort(
       (a, b) =>
         b.matchScore - a.matchScore ||
-        (a.estimatedRank || Number.POSITIVE_INFINITY) - (b.estimatedRank || Number.POSITIVE_INFINITY) ||
-        a.name.localeCompare(b.name, "zh-CN"),
-    )[0] || null;
+        a.r - b.r ||
+        b.y - a.y ||
+        a.n.localeCompare(b.n, "zh-CN"),
+    );
+}
+
+function actualMajorLineForSchool(school, query = state.filters.major) {
+  return actualMajorLinesForSchool(school, query)[0] || null;
 }
 
 function initControls() {
@@ -155,10 +190,13 @@ function initControls() {
 
   els.majorInput.addEventListener(
     "input",
-    debounce((event) => {
+    debounce(async (event) => {
       state.filters.major = event.target.value.trim();
       state.selectedMajorName = state.filters.major;
       state.visibleRows = 160;
+      const requestedMajor = state.filters.major;
+      if (requestedMajor) await ensureMajorAdmissionIndex();
+      if (requestedMajor !== state.filters.major) return;
       applyFilters();
     }),
   );
@@ -253,7 +291,7 @@ function applyFilters() {
       if (levels.size && !levels.has(school.level)) return false;
       if (natures.size && !natures.has(school.nature)) return false;
       if (categories.size && !categories.has(school.category)) return false;
-      if (major && !matchedMajorForSchool(school, major)) return false;
+      if (major && !actualMajorLineForSchool(school, major)) return false;
       for (const tag of tags) {
         if (!school.tags[tag]) return false;
       }
@@ -362,12 +400,12 @@ function compareSchools(a, b) {
 
 function compareFilteredSchools(a, b) {
   if (state.filters.major) {
-    const aMajor = matchedMajorForSchool(a);
-    const bMajor = matchedMajorForSchool(b);
+    const aMajor = actualMajorLineForSchool(a);
+    const bMajor = actualMajorLineForSchool(b);
     return (
-      (aMajor?.estimatedRank || Number.POSITIVE_INFINITY) -
-        (bMajor?.estimatedRank || Number.POSITIVE_INFINITY) ||
+      (aMajor?.r || Number.POSITIVE_INFINITY) - (bMajor?.r || Number.POSITIVE_INFINITY) ||
       (bMajor?.matchScore || 0) - (aMajor?.matchScore || 0) ||
+      (bMajor?.y || 0) - (aMajor?.y || 0) ||
       compareSchools(a, b)
     );
   }
@@ -426,7 +464,7 @@ function renderList() {
   els.listCount.textContent = formatNumber.format(state.filtered.length);
   els.schoolList.innerHTML = visible
     .map((school) => {
-      const matchedMajor = matchedMajorForSchool(school);
+      const matchedMajor = actualMajorLineForSchool(school);
       const tags = getTagLabels(school)
         .slice(0, 4)
         .map(([label, tone]) => `<span class="tag ${tone}">${label}</span>`)
@@ -434,14 +472,14 @@ function renderList() {
       const majorMatch = matchedMajor
         ? `
           <div class="school-major-match">
-            <span>${matchedMajor.name}</span>
-            <strong>专业约第 ${formatNumber.format(matchedMajor.estimatedRank)} 名</strong>
-            <em>${matchedMajor.grade} · ${matchedMajor.basis}</em>
+            <span>${matchedMajor.n}</span>
+            <strong>${matchedMajor.p} ${formatNumber.format(matchedMajor.r)}名</strong>
+            <em>${matchedMajor.y} ${trackLabel(matchedMajor.t)} · ${dataTypeLabel(matchedMajor.d)}数据 · ${matchedMajor.l}</em>
           </div>
         `
         : "";
       return `
-        <article class="school-row ${school.id === state.selectedId ? "active" : ""}" data-school-id="${school.id}" data-major-name="${matchedMajor?.name || ""}">
+        <article class="school-row ${school.id === state.selectedId ? "active" : ""}" data-school-id="${school.id}" data-major-name="${matchedMajor?.n || ""}">
           <strong>${school.name}</strong>
           <div class="school-row-meta">
             <span>${school.province}</span>
@@ -495,7 +533,7 @@ function renderSelectedDetail() {
     .join("");
   const selectedMajorName =
     state.selectedMajorName ||
-    matchedMajorForSchool(school, state.filters.major)?.name ||
+    actualMajorLineForSchool(school, state.filters.major)?.n ||
     state.filters.major;
   const majors = (school.majorRankings || [])
     .map(
@@ -503,11 +541,39 @@ function renderSelectedDetail() {
         <div class="major-row ${sameMajorName(major.name, selectedMajorName) ? "selected" : ""}">
           <span>${major.name}</span>
           <strong>${major.grade}</strong>
-          <em>约第 ${major.estimatedRank} 名</em>
+          <em>${major.basis}</em>
         </div>
       `,
     )
     .join("");
+  const actualMajorLines = state.filters.major ? actualMajorLinesForSchool(school, state.filters.major) : [];
+  const actualMajorAdmissions = actualMajorLines.length
+    ? `
+      <div class="program-lines">
+        <div class="major-head">
+          <strong>专业实际录取位次</strong>
+          <span>真实数据</span>
+        </div>
+        ${actualMajorLines
+          .slice(0, 8)
+          .map(
+            (line) => `
+              <div class="line-row ${sameMajorName(line.n, selectedMajorName) ? "selected" : ""}">
+                <span>${line.n}</span>
+                <strong>${formatNumber.format(line.r)}名</strong>
+                <em>${line.y} ${line.p} ${trackLabel(line.t)}${line.s ? ` · ${line.s}分` : ""} · ${dataTypeLabel(line.d)}数据 · ${line.l}</em>
+              </div>
+            `,
+          )
+          .join("")}
+      </div>
+      ${
+        actualMajorLines[0].u
+          ? `<a class="admission-source-link" href="${actualMajorLines[0].u}" target="_blank" rel="noreferrer">查看${actualMajorLines[0].l}数据来源</a>`
+          : ""
+      }
+    `
+    : "";
   const verifiedLines = verifiedLinesForSchool(
     school,
     state.detailContext?.province,
@@ -556,11 +622,12 @@ function renderSelectedDetail() {
     <div class="tag-row">${tags}</div>
     <div class="major-ranking">
       <div class="major-head">
-        <strong>专业排名参考</strong>
-        <span>估算</span>
+        <strong>专业方向参考</strong>
+        <span>非位次</span>
       </div>
       ${majors}
     </div>
+    ${actualMajorAdmissions}
     ${admissionLines}
     <div class="detail-actions">
       <button class="primary-action" id="filterCityDetail">${school.city}</button>
@@ -644,7 +711,7 @@ function selectSchool(id, majorName = "") {
   const school = allSchools().find((item) => item.id === id);
   state.selectedCityKey = school ? cityKeyOf(school) : null;
   if (!majorName && school && state.filters.major) {
-    state.selectedMajorName = matchedMajorForSchool(school)?.name || state.filters.major;
+    state.selectedMajorName = actualMajorLineForSchool(school)?.n || state.filters.major;
   }
   renderSelectedDetail();
   renderList();
@@ -709,6 +776,7 @@ async function init() {
     state.filters.major = linkedMajor;
     state.selectedMajorName = linkedMajor;
     els.majorInput.value = linkedMajor;
+    await ensureMajorAdmissionIndex();
   }
   if (linkedSchool) {
     const school = allSchools().find((item) => item.id === linkedSchool);

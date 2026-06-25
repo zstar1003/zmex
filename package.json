@@ -14,6 +14,7 @@
     "build:data": "bun run scripts/build-data.mjs",
     "sync:admissions": "bun run scripts/sync-admissions.mjs",
     "sync:aggregated": "bun run scripts/sync-gaokao-cn.mjs",
+    "build:major-index": "bun run scripts/build-major-admission-index.mjs",
     "parse:xinjiang-ranks": "python3 scripts/parse-xinjiang-ranks.py",
     "verify:admissions": "bun run scripts/verify-admissions.mjs",
     "vendor:three": "bun run scripts/vendor-three.mjs"
