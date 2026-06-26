@@ -17,12 +17,25 @@ const summary = document.querySelector("#rankSummary");
 const results = document.querySelector("#rankResults");
 const resultTitle = document.querySelector("#rankResultTitle");
 const resultCount = document.querySelector("#rankResultCount");
+const dataCacheVersion = "20260626-2025-admissions-2";
 
 let schools = [];
 let admissionCatalog = null;
 let admissionIndex = buildAdmissionIndex();
 const admissionPayloads = new Map();
 let querySerial = 0;
+
+function dataUrl(path) {
+  const url = new URL(path, window.location.href);
+  url.searchParams.set("v", dataCacheVersion);
+  return url;
+}
+
+async function fetchJson(path) {
+  const response = await fetch(dataUrl(path), { cache: "no-store" });
+  if (!response.ok) throw new Error(`${path} failed: HTTP ${response.status}`);
+  return response.json();
+}
 
 function selectedTargetProvinces() {
   return new Set(
@@ -150,7 +163,7 @@ async function loadProvinceAdmissions(province) {
     return;
   }
   if (!admissionPayloads.has(province)) {
-    admissionPayloads.set(province, await fetch(entry.dataUrl).then((response) => response.json()));
+    admissionPayloads.set(province, await fetchJson(entry.dataUrl));
   }
   admissionIndex = buildAdmissionIndex(admissionPayloads.get(province), admissionCatalog);
 }
@@ -190,8 +203,8 @@ form.addEventListener("submit", async (event) => {
 
 async function init() {
   const [data, catalog] = await Promise.all([
-    fetch("./data/schools.json").then((response) => response.json()),
-    fetch("./data/admissions/index.json").then((response) => response.json()),
+    fetchJson("./data/schools.json"),
+    fetchJson("./data/admissions/index.json"),
   ]);
   schools = [...data.schools, ...(data.admissionSchools || [])];
   admissionCatalog = catalog;

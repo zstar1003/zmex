@@ -54,6 +54,7 @@ const els = {
 };
 
 const formatNumber = new Intl.NumberFormat("zh-CN");
+const dataCacheVersion = "20260626-2025-admissions-2";
 const majorAliasMap = {
   数据科学: ["数据科学与大数据技术", "大数据技术", "计算机科学与技术"],
   新闻传播学: ["新闻学", "传播学", "广告学"],
@@ -62,6 +63,18 @@ const majorAliasMap = {
   广告学: ["新闻学", "视觉传达设计"],
   信息管理与信息系统: ["工商管理", "电子商务", "大数据技术"],
 };
+
+function dataUrl(path) {
+  const url = new URL(path, window.location.href);
+  url.searchParams.set("v", dataCacheVersion);
+  return url;
+}
+
+async function fetchJson(path) {
+  const response = await fetch(dataUrl(path), { cache: "no-store" });
+  if (!response.ok) throw new Error(`${path} failed: HTTP ${response.status}`);
+  return response.json();
+}
 
 function allSchools() {
   return [...(state.data?.schools || []), ...(state.data?.admissionSchools || [])];
@@ -133,11 +146,7 @@ function dataTypeLabel(dataType) {
 async function ensureMajorAdmissionIndex() {
   if (state.majorAdmissionIndex) return state.majorAdmissionIndex;
   if (!state.majorAdmissionIndexPromise) {
-    state.majorAdmissionIndexPromise = fetch("./data/admissions/major-index.json")
-      .then((response) => {
-        if (!response.ok) throw new Error(`专业录取位次索引加载失败：${response.status}`);
-        return response.json();
-      })
+    state.majorAdmissionIndexPromise = fetchJson("./data/admissions/major-index.json")
       .then((payload) => {
         state.majorAdmissionIndex = payload;
         return payload;
@@ -748,13 +757,13 @@ async function init() {
   const params = new URLSearchParams(window.location.search);
   const linkedProvince = params.get("province") || "";
   const [data, china, admissionCatalog] = await Promise.all([
-    fetch("./data/schools.json").then((res) => res.json()),
-    fetch("./data/china.json").then((res) => res.json()),
-    fetch("./data/admissions/index.json").then((res) => res.json()),
+    fetchJson("./data/schools.json"),
+    fetchJson("./data/china.json"),
+    fetchJson("./data/admissions/index.json"),
   ]);
   const provinceAdmissionEntry = admissionCatalog.provinces.find((entry) => entry.province === linkedProvince);
   const provinceAdmissionData = provinceAdmissionEntry?.dataUrl
-    ? await fetch(provinceAdmissionEntry.dataUrl).then((res) => res.json())
+    ? await fetchJson(provinceAdmissionEntry.dataUrl)
     : null;
   state.data = data;
   state.admissionIndex = buildAdmissionIndex(provinceAdmissionData, admissionCatalog);
