@@ -1,0 +1,118 @@
+<!doctype html>
+<html class="subpage-root" lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="择木而栖提供高校专业招生/录取人数和最低位次变化分析，辅助比较近年录取趋势。" />
+    <meta name="keywords" content="高考录取趋势,专业招生人数,专业录取人数,最低位次变化,高校专业分析" />
+    <meta name="robots" content="index,follow" />
+    <meta name="author" content="择木而栖" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="application-name" content="择木而栖" />
+    <meta name="apple-mobile-web-app-title" content="择木而栖" />
+    <meta name="theme-color" content="#3b2426" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="择木而栖" />
+    <meta property="og:title" content="择木而栖" />
+    <meta property="og:description" content="查看高校专业招生/录取人数和最低位次的近年变化。" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="择木而栖" />
+    <meta name="twitter:description" content="查看高校专业招生/录取人数和最低位次的近年变化。" />
+    <title>择木而栖</title>
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css?v=20260626-6" />
+  </head>
+  <body class="subpage-body">
+    <header class="site-header">
+      <a class="site-wordmark" href="./index.html" aria-label="择木而栖首页">
+        <img src="./assets/logo-mark.svg" alt="" aria-hidden="true" />
+        <strong>择木而栖</strong>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="./index.html">首页</a>
+        <a href="./rank.html">排名估算</a>
+        <a href="./assessment.html">专业倾向测评</a>
+        <a class="active" href="./analysis.html">数据分析</a>
+        <a href="./about.html">关于</a>
+      </nav>
+    </header>
+
+    <main class="subpage-shell analysis-shell">
+      <aside class="panel analysis-query-panel">
+        <div class="subpage-heading">
+          <span>近年走势</span>
+          <h1>数据分析</h1>
+          <p>按学校、专业和生源省份查看招生/录取人数与最低位次变化。</p>
+        </div>
+        <form class="analysis-form" id="analysisForm">
+          <label>
+            <span>生源省份</span>
+            <select id="analysisProvince"></select>
+          </label>
+          <label>
+            <span>学校</span>
+            <input id="analysisSchool" list="analysisSchoolList" type="search" autocomplete="off" placeholder="输入学校名称" required />
+            <datalist id="analysisSchoolList"></datalist>
+          </label>
+          <label>
+            <span>专业</span>
+            <input id="analysisMajor" type="search" autocomplete="off" placeholder="专业关键词，可留空" />
+          </label>
+          <label>
+            <span>科类</span>
+            <select id="analysisTrack">
+              <option value="">全部</option>
+              <option value="physics">物理/理科/综合</option>
+              <option value="history">历史/文科</option>
+              <option value="general">综合</option>
+            </select>
+          </label>
+          <button type="submit">生成图表</button>
+        </form>
+        <div class="analysis-source-note" id="analysisSourceNote">等待选择学校。</div>
+      </aside>
+
+      <section class="analysis-output" aria-live="polite">
+        <header class="rank-output-head">
+          <div>
+            <span>趋势结果</span>
+            <h2 id="analysisTitle">未查询</h2>
+          </div>
+          <strong id="analysisCount">0</strong>
+        </header>
+        <div class="rank-page-summary" id="analysisSummary">选择条件后生成图表。</div>
+        <div class="analysis-chart-grid">
+          <div class="analysis-chart-panel">
+            <h3>最低位次</h3>
+            <div id="rankTrendChart" class="analysis-chart"></div>
+          </div>
+          <div class="analysis-chart-panel">
+            <h3>人数趋势</h3>
+            <div id="planTrendChart" class="analysis-chart"></div>
+          </div>
+        </div>
+        <div class="analysis-table-wrap">
+          <table class="analysis-table">
+            <thead>
+              <tr>
+                <th>年份</th>
+                <th>专业/专业组</th>
+                <th>科类</th>
+                <th>最低位次</th>
+                <th>最低分</th>
+                <th>人数</th>
+                <th>批次</th>
+              </tr>
+            </thead>
+            <tbody id="analysisTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="page-footer">人数优先使用录取结果；缺失时使用同年招生计划源。</footer>
+    <script src="./data/vendor/echarts.min.js"></script>
+    <script type="module" src="./analysis.js?v=20260626-2"></script>
+  </body>
+</html>
