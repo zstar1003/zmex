@@ -212,7 +212,20 @@ const majorTemplates = {
   师范: ["汉语言文学", "数学与应用数学", "英语", "教育学", "学前教育", "物理学"],
   财经: ["金融学", "会计学", "经济学", "财务管理", "国际经济与贸易", "工商管理"],
   政法: ["法学", "公安学", "政治学与行政学", "社会工作", "侦查学", "行政管理"],
-  艺术: ["视觉传达设计", "音乐表演", "美术学", "戏剧影视文学", "动画", "舞蹈表演"],
+  艺术: [
+    "视觉传达设计",
+    "美术学",
+    "绘画",
+    "数字媒体艺术",
+    "动画",
+    "音乐表演",
+    "舞蹈表演",
+    "戏剧影视文学",
+    "播音与主持艺术",
+    "广播电视编导",
+    "书法学",
+    "艺术管理",
+  ],
   体育: ["体育教育", "运动训练", "社会体育指导与管理", "运动康复", "武术与民族传统体育"],
   民族: ["民族学", "汉语言文学", "社会学", "法学", "旅游管理", "经济学"],
   语言: ["英语", "翻译", "商务英语", "汉语国际教育", "日语", "俄语"],
@@ -226,7 +239,16 @@ const vocationalMajorTemplates = {
   师范: ["小学教育", "学前教育", "早期教育", "小学语文教育", "小学数学教育", "现代教育技术"],
   财经: ["大数据与会计", "金融服务与管理", "市场营销", "电子商务", "财税大数据应用", "国际经济与贸易"],
   政法: ["法律事务", "司法警务", "安全防范技术", "社区管理与服务", "行政管理", "民事执行"],
-  艺术: ["视觉传达设计", "数字媒体艺术设计", "环境艺术设计", "音乐表演", "舞蹈表演", "动漫设计"],
+  艺术: [
+    "视觉传达设计",
+    "数字媒体艺术设计",
+    "环境艺术设计",
+    "音乐表演",
+    "舞蹈表演",
+    "动漫设计",
+    "书画艺术",
+    "播音与主持",
+  ],
   体育: ["体育教育", "运动训练", "社会体育", "体育运营与管理", "运动防护", "健身指导与管理"],
   民族: ["民族传统技艺", "旅游管理", "现代文秘", "电子商务", "学前教育", "社会工作"],
   语言: ["商务英语", "应用英语", "应用日语", "旅游英语", "中文", "现代文秘"],
@@ -264,6 +286,87 @@ const schoolMajorOverrides = {
     "数学类(数学、统计与信息、计算机科学深度融合培养)",
   ],
 };
+
+const artMajorProfiles = [
+  {
+    rule: /美术|工艺美术/,
+    basis: "美术类院校常见专业方向",
+    majors: ["美术学", "绘画", "中国画", "雕塑", "书法学", "视觉传达设计", "环境设计", "艺术史论"],
+  },
+  {
+    rule: /音乐/,
+    basis: "音乐类院校常见专业方向",
+    majors: ["音乐表演", "音乐学", "作曲与作曲技术理论", "录音艺术", "音乐教育", "音乐治疗", "音乐剧", "艺术管理"],
+  },
+  {
+    rule: /舞蹈/,
+    basis: "舞蹈类院校常见专业方向",
+    majors: ["舞蹈表演", "舞蹈学", "舞蹈编导", "音乐表演", "表演", "艺术管理", "戏剧影视美术设计", "播音与主持艺术"],
+  },
+  {
+    rule: /戏剧|戏曲/,
+    basis: "戏剧戏曲类院校常见专业方向",
+    majors: ["表演", "戏剧影视文学", "戏剧影视导演", "戏剧影视美术设计", "播音与主持艺术", "录音艺术", "艺术管理", "戏剧教育"],
+  },
+  {
+    rule: /电影|影视/,
+    basis: "电影影视类院校常见专业方向",
+    majors: ["戏剧影视文学", "电影学", "影视摄影与制作", "表演", "戏剧影视导演", "动画", "录音艺术", "数字媒体艺术"],
+  },
+  {
+    rule: /传媒|广播|播音/,
+    basis: "传媒艺术类院校常见专业方向",
+    majors: ["播音与主持艺术", "广播电视编导", "戏剧影视文学", "数字媒体艺术", "动画", "录音艺术", "影视摄影与制作", "视觉传达设计"],
+  },
+  {
+    rule: /服装/,
+    basis: "服装与设计类院校常见专业方向",
+    majors: ["服装与服饰设计", "服装设计与工程", "视觉传达设计", "产品设计", "环境设计", "数字媒体艺术", "表演", "艺术与科技"],
+  },
+  {
+    rule: /视觉|设计/,
+    basis: "设计类院校常见专业方向",
+    majors: ["视觉传达设计", "环境设计", "产品设计", "数字媒体艺术", "动画", "艺术与科技", "工艺美术", "公共艺术"],
+  },
+];
+
+const vocationalArtMajorProfiles = [
+  {
+    rule: /美术|工艺美术/,
+    basis: "美术设计类高职专业方向",
+    majors: ["艺术设计", "视觉传达设计", "数字媒体艺术设计", "环境艺术设计", "书画艺术", "美术教育", "产品艺术设计", "工艺美术品设计"],
+  },
+  {
+    rule: /音乐/,
+    basis: "音乐类高职专业方向",
+    majors: ["音乐表演", "现代流行音乐", "音乐教育", "录音技术与艺术", "表演艺术", "舞台艺术设计与制作", "艺术设计", "文化创意与策划"],
+  },
+  {
+    rule: /舞蹈/,
+    basis: "舞蹈类高职专业方向",
+    majors: ["舞蹈表演", "舞蹈编导", "国际标准舞", "表演艺术", "音乐表演", "舞台艺术设计与制作", "播音与主持", "艺术设计"],
+  },
+  {
+    rule: /戏剧|戏曲|电影|影视/,
+    basis: "影视戏剧类高职专业方向",
+    majors: ["戏剧影视表演", "影视编导", "播音与主持", "影视动画", "摄影摄像技术", "录音技术与艺术", "舞台艺术设计与制作", "人物形象设计"],
+  },
+  {
+    rule: /传媒|广播|播音/,
+    basis: "传媒艺术类高职专业方向",
+    majors: ["播音与主持", "影视编导", "传播与策划", "网络新闻与传播", "数字媒体艺术设计", "摄影摄像技术", "动漫设计", "录音技术与艺术"],
+  },
+  {
+    rule: /服装/,
+    basis: "服装设计类高职专业方向",
+    majors: ["服装与服饰设计", "服装设计与工艺", "人物形象设计", "视觉传达设计", "产品艺术设计", "数字媒体艺术设计", "艺术设计", "文化创意与策划"],
+  },
+  {
+    rule: /视觉|设计/,
+    basis: "设计类高职专业方向",
+    majors: ["视觉传达设计", "数字媒体艺术设计", "环境艺术设计", "产品艺术设计", "动漫设计", "游戏艺术设计", "广告艺术设计", "艺术设计"],
+  },
+];
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
@@ -303,19 +406,42 @@ function majorGrade(rank) {
   return "B-";
 }
 
+function majorProfileForSchool(school, category, isJuniorCollege) {
+  if (schoolMajorOverrides[school.name]) {
+    return {
+      majors: schoolMajorOverrides[school.name],
+      basis: "重点高校学科倾向",
+      hasOverride: true,
+    };
+  }
+
+  if (category === "艺术") {
+    const profiles = isJuniorCollege ? vocationalArtMajorProfiles : artMajorProfiles;
+    const profile = profiles.find((item) => item.rule.test(school.name));
+    if (profile) return profile;
+  }
+
+  const templates = isJuniorCollege ? vocationalMajorTemplates : majorTemplates;
+  return {
+    majors: templates[category] || templates.综合,
+    basis: `${category}类院校常见专业方向`,
+    hasOverride: false,
+  };
+}
+
 function majorRankingsForSchool(school, category, score) {
   const isJuniorCollege = String(school.level || "").includes("专科");
-  const templates = isJuniorCollege ? vocationalMajorTemplates : majorTemplates;
-  const majors = schoolMajorOverrides[school.name] || templates[category] || templates.综合;
+  const profile = majorProfileForSchool(school, category, isJuniorCollege);
+  const majors = profile.majors;
   const categoryBoost = school.name.includes(category === "理工" ? "科技" : category) ? 8 : 0;
-  const visibleMajorCount = schoolMajorOverrides[school.name] ? 8 : 6;
+  const visibleMajorCount = profile.hasOverride || category === "艺术" ? 8 : 6;
   return majors.slice(0, visibleMajorCount).map((major, index) => {
     const estimatedRank = Math.max(1, Math.round((100 - score) * 2.2 + index * 11 - categoryBoost));
     return {
       name: major,
       estimatedRank,
       grade: majorGrade(estimatedRank),
-      basis: schoolMajorOverrides[school.name] ? "重点高校学科倾向" : `${category}类院校常见专业方向`,
+      basis: profile.basis,
     };
   });
 }

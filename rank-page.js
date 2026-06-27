@@ -23,7 +23,7 @@ const nextPageButton = document.querySelector("#rankNextPage");
 const lastPageButton = document.querySelector("#rankLastPage");
 const resultTitle = document.querySelector("#rankResultTitle");
 const resultCount = document.querySelector("#rankResultCount");
-const dataCacheVersion = "20260626-2025-admissions-2";
+const dataCacheVersion = "20260627-art-majors-1";
 const pageSize = 50;
 
 let schools = [];

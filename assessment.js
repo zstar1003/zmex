@@ -3,8 +3,10 @@ const questions = [
   { text: "我愿意长时间观察数据、规律或实验现象。", axis: "technology" },
   { text: "我对人的情绪、关系和成长过程比较敏感。", axis: "people" },
   { text: "我喜欢阅读、表达、讨论观点或解释社会现象。", axis: "people" },
-  { text: "我经常关注画面、空间、声音或产品使用感受。", axis: "creative" },
-  { text: "比起标准答案，我更享受提出新想法并反复打磨。", axis: "creative" },
+  { text: "我经常关注画面、空间、色彩或产品使用感受。", axis: "visualArts" },
+  { text: "比起标准答案，我更享受提出视觉方案并反复打磨作品。", axis: "visualArts" },
+  { text: "我愿意通过声音、动作、镜头或舞台完成表达。", axis: "performingArts" },
+  { text: "我能接受反复排练、体能训练或镜头前的表达训练。", axis: "performingArts" },
   { text: "我擅长协调任务、设定目标并推动事情完成。", axis: "business" },
   { text: "我对市场、资源配置、规则和组织如何运行有兴趣。", axis: "business" },
 ];
@@ -22,11 +24,17 @@ const directions = {
     majors: ["法学", "汉语言文学", "心理学", "新闻学", "社会学"],
     subjects: "重点观察语文、英语、历史和社会议题写作中的优势。",
   },
-  creative: {
-    title: "设计与表达",
-    description: "重视体验、审美和原创表达，适合通过作品与项目判断是否愿意长期训练。",
-    majors: ["视觉传达设计", "动画", "美术学", "戏剧影视文学", "音乐表演"],
-    subjects: "重点观察美术、技术、空间想象和作品迭代过程。",
+  visualArts: {
+    title: "美术与设计",
+    description: "重视审美、画面、空间和作品完成度，适合用作品集和长期训练判断方向。",
+    majors: ["美术学", "绘画", "视觉传达设计", "环境设计", "数字媒体艺术", "动画", "书法学"],
+    subjects: "重点观察美术、设计基础、空间想象和作品迭代过程。",
+  },
+  performingArts: {
+    title: "音乐舞蹈与影像",
+    description: "更愿意用声音、身体、镜头或舞台表达，适合通过排练强度和专业训练体验判断方向。",
+    majors: ["舞蹈表演", "舞蹈学", "音乐表演", "音乐学", "表演", "播音与主持艺术", "广播电视编导"],
+    subjects: "重点观察专业统考项目、舞台表现、节奏感、镜头表达和持续训练状态。",
   },
   business: {
     title: "商业与组织",
@@ -76,7 +84,7 @@ questionList.innerHTML = questions
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   const data = new FormData(form);
-  const scores = { technology: 0, people: 0, creative: 0, business: 0 };
+  const scores = Object.fromEntries(Object.keys(directions).map((key) => [key, 0]));
   questions.forEach((question, index) => {
     scores[question.axis] += Number(data.get(`question-${index}`));
   });

@@ -54,7 +54,7 @@ const els = {
 };
 
 const formatNumber = new Intl.NumberFormat("zh-CN");
-const dataCacheVersion = "20260626-2025-admissions-2";
+const dataCacheVersion = "20260627-art-majors-1";
 const majorAliasMap = {
   数据科学: ["数据科学与大数据技术", "大数据技术", "计算机科学与技术"],
   新闻传播学: ["新闻学", "传播学", "广告学"],
@@ -62,6 +62,17 @@ const majorAliasMap = {
   数字媒体艺术: ["数字媒体艺术设计", "视觉传达设计", "动画"],
   广告学: ["新闻学", "视觉传达设计"],
   信息管理与信息系统: ["工商管理", "电子商务", "大数据技术"],
+  美术: ["美术学", "绘画", "中国画", "雕塑", "书法学"],
+  美术类: ["美术学", "绘画", "中国画", "雕塑", "书法学"],
+  艺术设计: ["视觉传达设计", "环境设计", "产品设计", "数字媒体艺术", "艺术与科技"],
+  舞蹈: ["舞蹈表演", "舞蹈学", "舞蹈编导"],
+  舞蹈类: ["舞蹈表演", "舞蹈学", "舞蹈编导"],
+  音乐: ["音乐表演", "音乐学", "作曲与作曲技术理论", "录音艺术"],
+  音乐类: ["音乐表演", "音乐学", "作曲与作曲技术理论", "录音艺术"],
+  影视: ["戏剧影视文学", "影视摄影与制作", "电影学", "动画", "广播电视编导"],
+  编导: ["广播电视编导", "戏剧影视文学", "影视摄影与制作"],
+  播音: ["播音与主持艺术", "播音与主持"],
+  表演: ["表演", "戏剧影视导演", "舞蹈表演", "音乐表演"],
 };
 
 function dataUrl(path) {
@@ -126,7 +137,7 @@ function majorMatchScore(majorName, terms) {
   for (const term of terms) {
     if (normalizedName === term) best = Math.max(best, 100);
     else if (normalizedName.includes(term)) best = Math.max(best, 80);
-    else if (term.includes(normalizedName)) best = Math.max(best, 64);
+    else if (normalizedName.length >= 4 && term.includes(normalizedName)) best = Math.max(best, 64);
   }
   return best;
 }
@@ -175,6 +186,33 @@ function actualMajorLinesForSchool(school, query = state.filters.major) {
 
 function actualMajorLineForSchool(school, query = state.filters.major) {
   return actualMajorLinesForSchool(school, query)[0] || null;
+}
+
+function profileMajorLinesForSchool(school, query = state.filters.major) {
+  const terms = majorSearchTerms(query);
+  if (!terms.length) return [];
+  return (school.majorRankings || [])
+    .map((major) => ({
+      ...major,
+      n: major.name,
+      isProfile: true,
+      matchScore: majorMatchScore(major.name, terms),
+    }))
+    .filter((major) => major.matchScore > 0)
+    .sort(
+      (a, b) =>
+        b.matchScore - a.matchScore ||
+        a.estimatedRank - b.estimatedRank ||
+        a.name.localeCompare(b.name, "zh-CN"),
+    );
+}
+
+function profileMajorLineForSchool(school, query = state.filters.major) {
+  return profileMajorLinesForSchool(school, query)[0] || null;
+}
+
+function bestMajorLineForSchool(school, query = state.filters.major) {
+  return actualMajorLineForSchool(school, query) || profileMajorLineForSchool(school, query);
 }
 
 function initControls() {
@@ -300,7 +338,7 @@ function applyFilters() {
       if (levels.size && !levels.has(school.level)) return false;
       if (natures.size && !natures.has(school.nature)) return false;
       if (categories.size && !categories.has(school.category)) return false;
-      if (major && !actualMajorLineForSchool(school, major)) return false;
+      if (major && !bestMajorLineForSchool(school, major)) return false;
       for (const tag of tags) {
         if (!school.tags[tag]) return false;
       }
@@ -411,6 +449,15 @@ function compareFilteredSchools(a, b) {
   if (state.filters.major) {
     const aMajor = actualMajorLineForSchool(a);
     const bMajor = actualMajorLineForSchool(b);
+    if (!aMajor || !bMajor) {
+      const aProfile = profileMajorLineForSchool(a);
+      const bProfile = profileMajorLineForSchool(b);
+      return (
+        Number(Boolean(bMajor)) - Number(Boolean(aMajor)) ||
+        (bProfile?.matchScore || 0) - (aProfile?.matchScore || 0) ||
+        compareSchools(a, b)
+      );
+    }
     return (
       (aMajor?.r || Number.POSITIVE_INFINITY) - (bMajor?.r || Number.POSITIVE_INFINITY) ||
       (bMajor?.matchScore || 0) - (aMajor?.matchScore || 0) ||
@@ -473,13 +520,21 @@ function renderList() {
   els.listCount.textContent = formatNumber.format(state.filtered.length);
   els.schoolList.innerHTML = visible
     .map((school) => {
-      const matchedMajor = actualMajorLineForSchool(school);
+      const matchedMajor = bestMajorLineForSchool(school);
       const tags = getTagLabels(school)
         .slice(0, 4)
         .map(([label, tone]) => `<span class="tag ${tone}">${label}</span>`)
         .join("");
       const majorMatch = matchedMajor
-        ? `
+        ? matchedMajor.isProfile
+          ? `
+          <div class="school-major-match">
+            <span>${matchedMajor.n}</span>
+            <strong>专业方向</strong>
+            <em>${matchedMajor.basis} · 录取位次以考试院专业线为准</em>
+          </div>
+        `
+          : `
           <div class="school-major-match">
             <span>${matchedMajor.n}</span>
             <strong>${matchedMajor.p} ${formatNumber.format(matchedMajor.r)}名</strong>
