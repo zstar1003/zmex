@@ -1178,6 +1178,45 @@ h2 {
   text-decoration: none;
 }
 
+.rank-pagination {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(74px, auto)) minmax(180px, 1fr) repeat(2, minmax(74px, auto));
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.rank-pagination[hidden] {
+  display: none;
+}
+
+.rank-pagination button {
+  min-height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #fffdfd;
+  color: var(--blue-deep);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.rank-pagination button:not(:disabled):hover {
+  border-color: var(--blue);
+  background: var(--blue-soft);
+}
+
+.rank-pagination button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.rank-pagination span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+  text-align: center;
+}
+
 .program-rank-line {
   display: flex;
   align-items: end;
@@ -1811,6 +1850,14 @@ body.about-page {
   .rank-page-results,
   .result-direction-grid {
     grid-template-columns: 1fr;
+  }
+
+  .rank-pagination {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .rank-pagination span {
+    grid-column: 1 / -1;
   }
 
   .rank-query-panel,

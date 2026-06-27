@@ -15,15 +15,28 @@ const targetProvinceList = document.querySelector("#targetProvinceList");
 const targetProvinceClear = document.querySelector("#targetProvinceClear");
 const summary = document.querySelector("#rankSummary");
 const results = document.querySelector("#rankResults");
+const pagination = document.querySelector("#rankPagination");
+const firstPageButton = document.querySelector("#rankFirstPage");
+const prevPageButton = document.querySelector("#rankPrevPage");
+const pageStatus = document.querySelector("#rankPageStatus");
+const nextPageButton = document.querySelector("#rankNextPage");
+const lastPageButton = document.querySelector("#rankLastPage");
 const resultTitle = document.querySelector("#rankResultTitle");
 const resultCount = document.querySelector("#rankResultCount");
 const dataCacheVersion = "20260626-2025-admissions-2";
+const pageSize = 50;
 
 let schools = [];
 let admissionCatalog = null;
 let admissionIndex = buildAdmissionIndex();
 const admissionPayloads = new Map();
 let querySerial = 0;
+const resultState = {
+  matches: [],
+  page: 1,
+  province: "",
+  track: "",
+};
 
 function dataUrl(path) {
   const url = new URL(path, window.location.href);
@@ -86,6 +99,67 @@ function renderTargetProvinceOptions() {
   updateTargetProvinceToggle();
 }
 
+function resetResultState() {
+  resultState.matches = [];
+  resultState.page = 1;
+  resultState.province = "";
+  resultState.track = "";
+  pagination.hidden = true;
+  results.innerHTML = "";
+}
+
+function resultCardHtml({ school, major, requiredRank, lineScore, sourceYear, sourceLabel, subject, batch, isVerified, rankMethod, dataType }) {
+  const href = new URL("./index.html", window.location.href);
+  href.searchParams.set("school", school.id);
+  href.searchParams.set("major", major.name);
+  href.searchParams.set("province", resultState.province);
+  href.searchParams.set("track", resultState.track);
+  const rankLabel = !isVerified
+    ? "估算位次"
+    : dataType === "aggregated"
+      ? rankMethod === "aggregated-score-cumulative"
+        ? "公开数据同分位次上限"
+        : "公开数据最低位次"
+      : rankMethod === "official-score-cumulative"
+        ? "官方同分位次上限"
+        : "官方最低位次";
+  return `
+    <a class="program-card rank-page-card" href="${href.pathname}${href.search}">
+      <span class="program-school">${school.name}</span>
+      <strong>${major.name}</strong>
+      <span>${school.province} · ${school.city}</span>
+      <div class="program-rank-line">
+        <b>${rankLabel} ${formatNumber.format(requiredRank)} 名</b>
+        <em>${sourceYear ? `${sourceYear}${lineScore ? ` · ${lineScore}分` : ""} · ${sourceLabel}` : `${sourceLabel} · 位次参考`}<br/>${batch || subject}</em>
+      </div>
+    </a>
+  `;
+}
+
+function renderCurrentPage() {
+  const total = resultState.matches.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  resultState.page = Math.max(1, Math.min(resultState.page, totalPages));
+  const startIndex = (resultState.page - 1) * pageSize;
+  const pageItems = resultState.matches.slice(startIndex, startIndex + pageSize);
+  results.innerHTML = pageItems.map(resultCardHtml).join("");
+
+  pagination.hidden = total <= pageSize;
+  if (total <= pageSize) return;
+
+  const endIndex = startIndex + pageItems.length;
+  pageStatus.textContent = `第 ${formatNumber.format(resultState.page)} / ${formatNumber.format(totalPages)} 页 · ${formatNumber.format(startIndex + 1)}-${formatNumber.format(endIndex)} / ${formatNumber.format(total)}`;
+  firstPageButton.disabled = resultState.page === 1;
+  prevPageButton.disabled = resultState.page === 1;
+  nextPageButton.disabled = resultState.page === totalPages;
+  lastPageButton.disabled = resultState.page === totalPages;
+}
+
+function setResultPage(page) {
+  resultState.page = page;
+  renderCurrentPage();
+}
+
 function renderResults(province, rank, track, targetProvinces = new Set()) {
   const matches = rankAdvisorMatches(schools, province, rank, track, admissionIndex, {
     targetProvinces: [...targetProvinces],
@@ -125,35 +199,11 @@ function renderResults(province, rank, track, targetProvinces = new Set()) {
       ? `现有可追溯数据中暂未匹配到符合当前排名${targetProvinces.size ? "和院校所在地" : ""}的专业${latestReferenceText}。`
       : "该省专业录取数据仍在检索，暂不使用未经核实的估算值。";
 
-  results.innerHTML = matches
-    .map(({ school, major, requiredRank, lineScore, sourceYear, sourceLabel, subject, batch, isVerified, rankMethod, dataType }) => {
-      const href = new URL("./index.html", window.location.href);
-      href.searchParams.set("school", school.id);
-      href.searchParams.set("major", major.name);
-      href.searchParams.set("province", province);
-      href.searchParams.set("track", track);
-      const rankLabel = !isVerified
-        ? "估算位次"
-        : dataType === "aggregated"
-          ? rankMethod === "aggregated-score-cumulative"
-            ? "公开数据同分位次上限"
-            : "公开数据最低位次"
-          : rankMethod === "official-score-cumulative"
-            ? "官方同分位次上限"
-            : "官方最低位次";
-      return `
-        <a class="program-card rank-page-card" href="${href.pathname}${href.search}">
-          <span class="program-school">${school.name}</span>
-          <strong>${major.name}</strong>
-          <span>${school.province} · ${school.city}</span>
-          <div class="program-rank-line">
-            <b>${rankLabel} ${formatNumber.format(requiredRank)} 名</b>
-            <em>${sourceYear ? `${sourceYear}${lineScore ? ` · ${lineScore}分` : ""} · ${sourceLabel}` : `${sourceLabel} · 位次参考`}<br/>${batch || subject}</em>
-          </div>
-        </a>
-      `;
-    })
-    .join("");
+  resultState.matches = matches;
+  resultState.page = 1;
+  resultState.province = province;
+  resultState.track = track;
+  renderCurrentPage();
 }
 
 async function loadProvinceAdmissions(province) {
@@ -175,7 +225,7 @@ async function runRankQuery({ showInvalid = true } = {}) {
     resultTitle.textContent = "排名无效";
     resultCount.textContent = "0";
     summary.textContent = "请输入大于 0 的全省排名。";
-    results.innerHTML = "";
+    resetResultState();
     return;
   }
 
@@ -192,7 +242,7 @@ async function runRankQuery({ showInvalid = true } = {}) {
     resultTitle.textContent = "录取数据读取失败";
     resultCount.textContent = "0";
     summary.textContent = "数据文件读取失败，本次不返回估算结果，请稍后重试。";
-    results.innerHTML = "";
+    resetResultState();
   }
 }
 
@@ -234,6 +284,16 @@ targetProvinceClear.addEventListener("click", () => {
   runRankQuery({ showInvalid: false });
 });
 
+firstPageButton.addEventListener("click", () => setResultPage(1));
+
+prevPageButton.addEventListener("click", () => setResultPage(resultState.page - 1));
+
+nextPageButton.addEventListener("click", () => setResultPage(resultState.page + 1));
+
+lastPageButton.addEventListener("click", () =>
+  setResultPage(Math.ceil(resultState.matches.length / pageSize)),
+);
+
 document.addEventListener("click", (event) => {
   if (!event.target.closest(".rank-target-province-field")) closeTargetProvincePanel();
 });
@@ -246,4 +306,5 @@ init().catch((error) => {
   console.error(error);
   resultTitle.textContent = "数据加载失败";
   summary.textContent = error.message;
+  resetResultState();
 });

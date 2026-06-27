@@ -297,26 +297,25 @@ function programCandidatesForSchool(school, province, track, admissionIndex) {
   });
 }
 
-function limitSchoolRepetition(items, limit) {
+function prioritizeSchoolRepetition(items) {
   const selected = [];
   const used = new Set();
   const schoolCounts = new Map();
 
   for (const item of items) {
     const key = `${item.school.id}::${item.major.name}`;
+    if (used.has(key)) continue;
     const count = schoolCounts.get(item.school.id) || 0;
     if (count >= 2) continue;
     selected.push(item);
     used.add(key);
     schoolCounts.set(item.school.id, count + 1);
-    if (selected.length >= limit) return selected;
   }
 
   for (const item of items) {
     const key = `${item.school.id}::${item.major.name}`;
     if (used.has(key)) continue;
     selected.push(item);
-    if (selected.length >= limit) break;
   }
 
   return selected;
@@ -335,5 +334,5 @@ export function rankAdvisorMatches(schools, province, rank, track, admissionInde
         a.major.name.localeCompare(b.major.name, "zh-CN"),
     );
 
-  return limitSchoolRepetition(matches, 320);
+  return prioritizeSchoolRepetition(matches);
 }

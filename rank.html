@@ -21,7 +21,7 @@
     <meta name="twitter:description" content="按省份、科类和全省排名查询大学专业录取位次参考。" />
     <title>择木而栖</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css?v=20260626-6" />
+    <link rel="stylesheet" href="./styles.css?v=20260627-1" />
   </head>
   <body class="subpage-body">
     <header class="site-header">
@@ -90,10 +90,24 @@
         </header>
         <div class="rank-page-summary" id="rankSummary">选择省份、科类并输入全省排名。</div>
         <div class="rank-page-results" id="rankResults"></div>
+        <nav class="rank-pagination" id="rankPagination" aria-label="查询结果分页" hidden>
+          <button id="rankFirstPage" type="button">首页</button>
+          <button id="rankPrevPage" type="button">上一页</button>
+          <span id="rankPageStatus">第 1 / 1 页</span>
+          <button id="rankNextPage" type="button">下一页</button>
+          <button id="rankLastPage" type="button">末页</button>
+        </nav>
       </section>
     </main>
 
     <footer class="page-footer">录取规则、选科限制和招生计划以各省考试院当年公布内容为准。</footer>
-    <script type="module" src="./rank-page.js?v=20260626-2"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "./rank-engine.js": "./rank-engine.js?v=20260627-1"
+        }
+      }
+    </script>
+    <script type="module" src="./rank-page.js?v=20260627-1"></script>
   </body>
 </html>
