@@ -1175,7 +1175,13 @@ h2 {
 
 .rank-page-card {
   min-height: 144px;
+  cursor: default;
   text-decoration: none;
+}
+
+.rank-page-card:hover {
+  border-color: var(--line);
+  background: #fbfcf8;
 }
 
 .rank-pagination {

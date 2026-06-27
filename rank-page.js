@@ -34,8 +34,6 @@ let querySerial = 0;
 const resultState = {
   matches: [],
   page: 1,
-  province: "",
-  track: "",
 };
 
 function dataUrl(path) {
@@ -102,18 +100,11 @@ function renderTargetProvinceOptions() {
 function resetResultState() {
   resultState.matches = [];
   resultState.page = 1;
-  resultState.province = "";
-  resultState.track = "";
   pagination.hidden = true;
   results.innerHTML = "";
 }
 
 function resultCardHtml({ school, major, requiredRank, lineScore, sourceYear, sourceLabel, subject, batch, isVerified, rankMethod, dataType }) {
-  const href = new URL("./index.html", window.location.href);
-  href.searchParams.set("school", school.id);
-  href.searchParams.set("major", major.name);
-  href.searchParams.set("province", resultState.province);
-  href.searchParams.set("track", resultState.track);
   const rankLabel = !isVerified
     ? "估算位次"
     : dataType === "aggregated"
@@ -124,7 +115,7 @@ function resultCardHtml({ school, major, requiredRank, lineScore, sourceYear, so
         ? "官方同分位次上限"
         : "官方最低位次";
   return `
-    <a class="program-card rank-page-card" href="${href.pathname}${href.search}">
+    <article class="program-card rank-page-card">
       <span class="program-school">${school.name}</span>
       <strong>${major.name}</strong>
       <span>${school.province} · ${school.city}</span>
@@ -132,7 +123,7 @@ function resultCardHtml({ school, major, requiredRank, lineScore, sourceYear, so
         <b>${rankLabel} ${formatNumber.format(requiredRank)} 名</b>
         <em>${sourceYear ? `${sourceYear}${lineScore ? ` · ${lineScore}分` : ""} · ${sourceLabel}` : `${sourceLabel} · 位次参考`}<br/>${batch || subject}</em>
       </div>
-    </a>
+    </article>
   `;
 }
 
@@ -201,8 +192,6 @@ function renderResults(province, rank, track, targetProvinces = new Set()) {
 
   resultState.matches = matches;
   resultState.page = 1;
-  resultState.province = province;
-  resultState.track = track;
   renderCurrentPage();
 }
 
