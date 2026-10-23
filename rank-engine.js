@@ -297,28 +297,31 @@ function programCandidatesForSchool(school, province, track, admissionIndex) {
   });
 }
 
-function prioritizeSchoolRepetition(items) {
-  const selected = [];
+function compareAdmissionMatches(a, b) {
+  const aHasScore = Number.isFinite(a.lineScore);
+  const bHasScore = Number.isFinite(b.lineScore);
+  if (aHasScore !== bHasScore) return aHasScore ? -1 : 1;
+
+  return (
+    (aHasScore ? b.lineScore - a.lineScore : 0) ||
+    a.requiredRank - b.requiredRank ||
+    compareSchools(a.school, b.school) ||
+    a.major.name.localeCompare(b.major.name, "zh-CN") ||
+    String(a.school.id).localeCompare(String(b.school.id))
+  );
+}
+
+function uniqueAdmissionMatches(items) {
   const used = new Set();
-  const schoolCounts = new Map();
 
-  for (const item of items) {
+  // Keep the global score order: moving each school's first two programs to
+  // the front makes later results restart at higher scores.
+  return items.filter((item) => {
     const key = `${item.school.id}::${item.major.name}`;
-    if (used.has(key)) continue;
-    const count = schoolCounts.get(item.school.id) || 0;
-    if (count >= 2) continue;
-    selected.push(item);
+    if (used.has(key)) return false;
     used.add(key);
-    schoolCounts.set(item.school.id, count + 1);
-  }
-
-  for (const item of items) {
-    const key = `${item.school.id}::${item.major.name}`;
-    if (used.has(key)) continue;
-    selected.push(item);
-  }
-
-  return selected;
+    return true;
+  });
 }
 
 export function rankAdvisorMatches(schools, province, rank, track, admissionIndex = null, options = {}) {
@@ -327,12 +330,7 @@ export function rankAdvisorMatches(schools, province, rank, track, admissionInde
     .filter((school) => !targetProvinces.size || targetProvinces.has(school.province))
     .flatMap((school) => programCandidatesForSchool(school, province, track, admissionIndex))
     .filter((item) => item.requiredRank >= rank)
-    .sort(
-      (a, b) =>
-        a.requiredRank - b.requiredRank ||
-        compareSchools(a.school, b.school) ||
-        a.major.name.localeCompare(b.major.name, "zh-CN"),
-    );
+    .sort(compareAdmissionMatches);
 
-  return prioritizeSchoolRepetition(matches);
+  return uniqueAdmissionMatches(matches);
 }
