@@ -82,7 +82,8 @@ for (const dir of provinceDirs) {
         y: year,
         t: record.track || "general",
         r: minRank,
-        s: Number.isFinite(Number(record.minScore)) ? Number(record.minScore) : null,
+        s: record.minScore != null && record.minScore !== "" && Number.isFinite(Number(record.minScore))
+          ? Number(record.minScore) : null,
         b: record.batch || "",
         q: record.subjectRequirement || "",
         d: record.dataType,

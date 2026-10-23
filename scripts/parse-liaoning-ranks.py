@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import json
 from pathlib import Path
 
@@ -7,7 +8,10 @@ import pdfplumber
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "data" / "admissions" / "raw"
-OUTPUT_PATH = ROOT / "data" / "admissions" / "reference" / "liaoning-2025-score-ranks.json"
+arg_parser = argparse.ArgumentParser()
+arg_parser.add_argument("--year", type=int, choices=(2025, 2026), default=2025)
+YEAR = arg_parser.parse_args().year
+OUTPUT_PATH = ROOT / "data" / "admissions" / "reference" / f"liaoning-{YEAR}-score-ranks.json"
 
 TRACKS = {
     "physics": {
@@ -21,6 +25,15 @@ TRACKS = {
         "sourceUrl": "https://www.lnzsks.com/lnzkbfiles/2025/2025gk1f1d0624ls002.pdf",
     },
 }
+
+if YEAR == 2026:
+    page_url = "https://www.lnzsks.com/newsinfo/IMS_20260624_46117_xCuXJ7lN6W.htm"
+    for track, suffix in (("physics", "ptll01"), ("history", "ptlw02")):
+        TRACKS[track] = {
+            "path": RAW_DIR / f"liaoning-2026-score-ranks-{track}.pdf",
+            "pageUrl": page_url,
+            "sourceUrl": f"https://www.lnzsks.com/lnzkbfiles/2026/lns2026gkcjtjb0624clh{suffix}.pdf",
+        }
 
 # The PDF repeats four score/count/cumulative groups on each line. Filtering to
 # the embedded Arial font removes the diagonal official watermark characters.
@@ -91,7 +104,7 @@ rank_maps = {
 payload = {
     "meta": {
         "province": "辽宁省",
-        "year": 2025,
+        "year": YEAR,
         "authority": "辽宁招生考试之窗",
         "pageUrl": TRACKS["physics"]["pageUrl"],
         "physicsSourceUrl": TRACKS["physics"]["sourceUrl"],

@@ -1,13 +1,32 @@
 {
   "schemaVersion": 1,
   "policy": {
-    "preferredYears": [2025, 2024, 2023],
+    "preferredYears": [
+      2026,
+      2025,
+      2024,
+      2023
+    ],
     "fallbackRule": "仅当省考试院、高校本科招生网和阳光高考均完成检索且没有可用位次时，才允许估算。",
-    "officialPriority": ["省级教育考试机构", "高校本科招生网", "阳光高考"]
+    "officialPriority": [
+      "省级教育考试机构",
+      "高校本科招生网",
+      "阳光高考"
+    ]
   },
   "provinces": [
-    {"province": "北京市", "authority": "北京教育考试院", "authorityUrl": "https://www.bjeea.cn/", "status": "pending"},
-    {"province": "天津市", "authority": "天津市教育招生考试院", "authorityUrl": "https://www.zhaokao.net/", "status": "pending"},
+    {
+      "province": "北京市",
+      "authority": "北京教育考试院",
+      "authorityUrl": "https://www.bjeea.cn/",
+      "status": "pending"
+    },
+    {
+      "province": "天津市",
+      "authority": "天津市教育招生考试院",
+      "authorityUrl": "https://www.zhaokao.net/",
+      "status": "pending"
+    },
     {
       "province": "河北省",
       "authority": "河北省教育考试院",
@@ -49,11 +68,57 @@
           "rankMapPath": "data/admissions/reference/hebei-2025-score-ranks.json",
           "status": "available",
           "fallbackAllowed": false
+        },
+        {
+          "id": "hebei-2026-undergraduate-history",
+          "year": 2026,
+          "batch": "本科批平行志愿",
+          "track": "history",
+          "granularity": "专业",
+          "pageUrl": "https://www.hebeea.edu.cn/c/2026-07-22/493236.html",
+          "downloadUrl": "https://file.hebeea.edu.cn/upload/resources/file/2026/09/09/27410.xlsx",
+          "format": "xlsx",
+          "parser": "hebei-major-scores",
+          "rankMethod": "official-score-cumulative",
+          "rankTableId": "hebei-2026-score-ranks",
+          "rankTablePageUrl": "https://www.hebeea.edu.cn/c/2026-06-24/493215.html",
+          "rankTableDownloadUrl": "https://file.hebeea.edu.cn/upload/resources/file/2026/06/24/27144.pdf",
+          "rankMapPath": "data/admissions/reference/hebei-2026-score-ranks.json",
+          "status": "available",
+          "fallbackAllowed": false
+        },
+        {
+          "id": "hebei-2026-undergraduate-physics",
+          "year": 2026,
+          "batch": "本科批平行志愿",
+          "track": "physics",
+          "granularity": "专业",
+          "pageUrl": "https://www.hebeea.edu.cn/c/2026-07-22/493236.html",
+          "downloadUrl": "https://file.hebeea.edu.cn/upload/resources/file/2026/09/09/27409.xlsx",
+          "format": "xlsx",
+          "parser": "hebei-major-scores",
+          "rankMethod": "official-score-cumulative",
+          "rankTableId": "hebei-2026-score-ranks",
+          "rankTablePageUrl": "https://www.hebeea.edu.cn/c/2026-06-24/493215.html",
+          "rankTableDownloadUrl": "https://file.hebeea.edu.cn/upload/resources/file/2026/06/24/27144.pdf",
+          "rankMapPath": "data/admissions/reference/hebei-2026-score-ranks.json",
+          "status": "available",
+          "fallbackAllowed": false
         }
       ]
     },
-    {"province": "山西省", "authority": "山西招生考试网", "authorityUrl": "https://www.sxkszx.cn/", "status": "pending"},
-    {"province": "内蒙古自治区", "authority": "内蒙古招生考试信息网", "authorityUrl": "https://www.nm.zsks.cn/", "status": "pending"},
+    {
+      "province": "山西省",
+      "authority": "山西招生考试网",
+      "authorityUrl": "https://www.sxkszx.cn/",
+      "status": "pending"
+    },
+    {
+      "province": "内蒙古自治区",
+      "authority": "内蒙古招生考试信息网",
+      "authorityUrl": "https://www.nm.zsks.cn/",
+      "status": "pending"
+    },
     {
       "province": "辽宁省",
       "authority": "辽宁招生考试之窗",
@@ -99,13 +164,69 @@
           "rankMapPath": "data/admissions/reference/liaoning-2025-score-ranks.json",
           "status": "available",
           "fallbackAllowed": false
+        },
+        {
+          "id": "liaoning-2026-undergraduate-history",
+          "year": 2026,
+          "batch": "普通类本科批",
+          "track": "history",
+          "granularity": "专业",
+          "pageUrl": "https://www.lnzsks.com/newsinfo/IMS_20260721_46231_UeWXLvA8x6.htm",
+          "downloadUrl": "https://www.lnzsks.com/lnzkbfiles/2026/2026gklubkfsz0721w.xlsx",
+          "format": "xlsx",
+          "parser": "liaoning-major-scores",
+          "rankMethod": "official-score-cumulative",
+          "rankTableId": "liaoning-2026-score-ranks-history",
+          "rankTablePageUrl": "https://www.lnzsks.com/newsinfo/IMS_20260624_46117_xCuXJ7lN6W.htm",
+          "rankTableDownloadUrl": "https://www.lnzsks.com/lnzkbfiles/2026/lns2026gkcjtjb0624clhptlw02.pdf",
+          "rankMapPath": "data/admissions/reference/liaoning-2026-score-ranks.json",
+          "status": "available",
+          "fallbackAllowed": false
+        },
+        {
+          "id": "liaoning-2026-undergraduate-physics",
+          "year": 2026,
+          "batch": "普通类本科批",
+          "track": "physics",
+          "granularity": "专业",
+          "pageUrl": "https://www.lnzsks.com/newsinfo/IMS_20260721_46231_UeWXLvA8x6.htm",
+          "downloadUrl": "https://www.lnzsks.com/lnzkbfiles/2026/2026gklubkfsz0721l.xlsx",
+          "format": "xlsx",
+          "parser": "liaoning-major-scores",
+          "rankMethod": "official-score-cumulative",
+          "rankTableId": "liaoning-2026-score-ranks-physics",
+          "rankTablePageUrl": "https://www.lnzsks.com/newsinfo/IMS_20260624_46117_xCuXJ7lN6W.htm",
+          "rankTableDownloadUrl": "https://www.lnzsks.com/lnzkbfiles/2026/lns2026gkcjtjb0624clhptll01.pdf",
+          "rankMapPath": "data/admissions/reference/liaoning-2026-score-ranks.json",
+          "status": "available",
+          "fallbackAllowed": false
         }
       ]
     },
-    {"province": "吉林省", "authority": "吉林省教育考试院", "authorityUrl": "https://www.jleea.com.cn/", "status": "pending"},
-    {"province": "黑龙江省", "authority": "黑龙江省招生考试信息港", "authorityUrl": "https://www.lzk.hl.cn/", "status": "pending"},
-    {"province": "上海市", "authority": "上海市教育考试院", "authorityUrl": "https://www.shmeea.edu.cn/", "status": "pending"},
-    {"province": "江苏省", "authority": "江苏省教育考试院", "authorityUrl": "https://www.jseea.cn/", "status": "pending"},
+    {
+      "province": "吉林省",
+      "authority": "吉林省教育考试院",
+      "authorityUrl": "https://www.jleea.com.cn/",
+      "status": "pending"
+    },
+    {
+      "province": "黑龙江省",
+      "authority": "黑龙江省招生考试信息港",
+      "authorityUrl": "https://www.lzk.hl.cn/",
+      "status": "pending"
+    },
+    {
+      "province": "上海市",
+      "authority": "上海市教育考试院",
+      "authorityUrl": "https://www.shmeea.edu.cn/",
+      "status": "pending"
+    },
+    {
+      "province": "江苏省",
+      "authority": "江苏省教育考试院",
+      "authorityUrl": "https://www.jseea.cn/",
+      "status": "pending"
+    },
     {
       "province": "浙江省",
       "authority": "浙江省教育考试院",
@@ -135,12 +256,51 @@
           "parser": "zhejiang-major-lines",
           "status": "available",
           "fallbackAllowed": false
+        },
+        {
+          "id": "zhejiang-2026-general-first",
+          "year": 2026,
+          "batch": "普通类第一段平行投档",
+          "granularity": "专业",
+          "pageUrl": "https://www.zjzs.net/art/2026/7/21/art_155_12551.html",
+          "downloadUrl": "https://www.zjzs.net/module/download/downfile.jsp?classid=0&showname=%E6%B5%99%E6%B1%9F%E7%9C%812026%E5%B9%B4%E6%99%AE%E9%80%9A%E9%AB%98%E6%A0%A1%E6%8B%9B%E7%94%9F%E6%99%AE%E9%80%9A%E7%B1%BB%E7%AC%AC%E4%B8%80%E6%AE%B5%E5%B9%B3%E8%A1%8C%E6%8A%95%E6%A1%A3%E5%88%86%E6%95%B0%E7%BA%BF%E8%A1%A8.xls&filename=22238acf41fe4b17b534e4c1f258846d.xls",
+          "format": "xls",
+          "parser": "zhejiang-major-lines",
+          "status": "available",
+          "fallbackAllowed": false
+        },
+        {
+          "id": "zhejiang-2026-general-second",
+          "year": 2026,
+          "batch": "普通类第二段平行投档",
+          "granularity": "专业",
+          "pageUrl": "https://www.zjzs.net/art/2026/7/30/art_45_12588.html",
+          "downloadUrl": "https://www.zjzs.net/module/download/downfile.jsp?classid=0&showname=%E6%B5%99%E6%B1%9F%E7%9C%812026%E5%B9%B4%E6%99%AE%E9%80%9A%E9%AB%98%E6%A0%A1%E6%8B%9B%E7%94%9F%E6%99%AE%E9%80%9A%E7%B1%BB%E7%AC%AC%E4%BA%8C%E6%AE%B5%E5%B9%B3%E8%A1%8C%E6%8A%95%E6%A1%A3%E5%88%86%E6%95%B0%E7%BA%BF.XLS&filename=35717ef769ac465f80794e479a4e6e29.xls",
+          "format": "xls",
+          "parser": "zhejiang-major-lines",
+          "status": "available",
+          "fallbackAllowed": false
         }
       ]
     },
-    {"province": "安徽省", "authority": "安徽省教育招生考试院", "authorityUrl": "https://www.ahzsks.cn/", "status": "pending"},
-    {"province": "福建省", "authority": "福建省教育考试院", "authorityUrl": "https://www.eeafj.cn/", "status": "pending"},
-    {"province": "江西省", "authority": "江西省教育考试院", "authorityUrl": "https://www.jxeea.cn/", "status": "pending"},
+    {
+      "province": "安徽省",
+      "authority": "安徽省教育招生考试院",
+      "authorityUrl": "https://www.ahzsks.cn/",
+      "status": "pending"
+    },
+    {
+      "province": "福建省",
+      "authority": "福建省教育考试院",
+      "authorityUrl": "https://www.eeafj.cn/",
+      "status": "pending"
+    },
+    {
+      "province": "江西省",
+      "authority": "江西省教育考试院",
+      "authorityUrl": "https://www.jxeea.cn/",
+      "status": "pending"
+    },
     {
       "province": "山东省",
       "authority": "山东省教育招生考试院",
@@ -183,10 +343,39 @@
           "status": "discovered",
           "note": "原表未提供本科/专科层次列，需与第3次志愿计划表交叉核验后再导入。",
           "fallbackAllowed": false
+        },
+        {
+          "id": "shandong-2026-general-first",
+          "year": 2026,
+          "batch": "普通类常规批第1次志愿",
+          "granularity": "专业",
+          "pageUrl": "https://www.sdzk.cn/NewsInfo.aspx?NewsID=7312",
+          "downloadUrl": "https://www.sdzk.cn/Floadup/file/20260719/6392007688153010366643145.xls",
+          "format": "xls",
+          "parser": "shandong-major-lines",
+          "status": "available",
+          "fallbackAllowed": false
+        },
+        {
+          "id": "shandong-2026-general-second",
+          "year": 2026,
+          "batch": "普通类常规批第2次志愿",
+          "granularity": "专业",
+          "pageUrl": "https://www.sdzk.cn/NewsInfo.aspx?NewsID=7323",
+          "downloadUrl": "https://www.sdzk.cn/Floadup/file/20260728/6392082211335674579853112.xls",
+          "format": "xls",
+          "parser": "shandong-major-lines",
+          "status": "available",
+          "fallbackAllowed": false
         }
       ]
     },
-    {"province": "河南省", "authority": "河南省教育考试院", "authorityUrl": "https://www.haeea.cn/", "status": "pending"},
+    {
+      "province": "河南省",
+      "authority": "河南省教育考试院",
+      "authorityUrl": "https://www.haeea.cn/",
+      "status": "pending"
+    },
     {
       "province": "湖北省",
       "authority": "湖北省教育考试院",
@@ -247,13 +436,120 @@
           "status": "reference-only",
           "note": "湖北省招办微信公众平台/湖北招生考试网公布的是院校专业组投档分数线图片，暂不能直接替代具体专业录取位次表。",
           "fallbackAllowed": false
+        },
+        {
+          "id": "ncwu-2026-hubei-major",
+          "title": "我校2026年湖北各专业录取分数表",
+          "schoolName": "华北水利水电大学",
+          "schoolId": "4141010078",
+          "authority": "华北水利水电大学招生办公室",
+          "province": "湖北省",
+          "year": 2026,
+          "publishedAt": "2026-07-24",
+          "batch": "本科批",
+          "granularity": "专业",
+          "pageUrl": "https://www2.ncwu.edu.cn/zhaoshengwang/info/1134/3042.htm",
+          "downloadUrl": "https://www2.ncwu.edu.cn/zhaoshengwang/info/1134/3042.htm",
+          "format": "html",
+          "rawPath": "data/admissions/raw/ncwu-2026-hubei-major.html",
+          "sha256": "7a773a587ecd5dbfc91408ab57b6a70344a528cab40c88fbd0ed4ea8635a925f",
+          "parsePath": "data/admissions/extracted/ncwu-2026-hubei-major.json",
+          "parseFormat": "json",
+          "parser": "normalized-major-lines",
+          "rankMethod": "official-min-rank",
+          "hasReportedRank": true,
+          "fields": [
+            "批次",
+            "科类",
+            "专业",
+            "计划人数",
+            "录取人数",
+            "录取最高分",
+            "录取最低分",
+            "平均分",
+            "省控线",
+            "最低分分差",
+            "最低分位次"
+          ],
+          "expectedRecords": 14,
+          "status": "available",
+          "fallbackAllowed": false,
+          "parseNote": "HTML 表格含批次与科类跨14行合并单元格；展开 rowspan 后读取14个专业，含3个中外合作办学专业；原表未提供再选科目。"
+        },
+        {
+          "id": "hubei-2026-undergraduate-physics-group",
+          "authority": "湖北省教育厅招生办公室",
+          "year": 2026,
+          "publishedAt": "2026-07-21",
+          "batch": "本科普通批平行志愿",
+          "track": "physics",
+          "granularity": "院校/院校专业组",
+          "pageUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zszy/zsfw/202607/t20260727_5983787.shtml",
+          "downloadUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zszy/zsfw/202607/P020260727343410906036.pdf",
+          "format": "pdf",
+          "rawPath": "data/admissions/raw/hubei-2026-undergraduate-physics-group.pdf",
+          "sha256": "21fa14bc10e78ede254bcff5dc180b106161fa20b42752426065f00674697906",
+          "parsePath": "data/admissions/extracted/hubei-2026-undergraduate-physics-group.json",
+          "parseFormat": "json",
+          "parser": "hubei-group-scores",
+          "rankMethod": "official-score-cumulative",
+          "rankTablePageUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zkyw/202606/t20260625_5964816.shtml",
+          "rankMapPath": "data/admissions/reference/hubei-2026-score-ranks.json",
+          "ordinaryOnly": true,
+          "status": "available",
+          "fallbackAllowed": false,
+          "parseNote": "按2026年官方PDF网格提取院校专业组最低分，过滤旋转水印；保留原备注供普通组资格过滤；用同年官方一分一段累计人数换算同分位次上限。"
+        },
+        {
+          "id": "hubei-2026-undergraduate-history-group",
+          "authority": "湖北省教育厅招生办公室",
+          "year": 2026,
+          "publishedAt": "2026-07-21",
+          "batch": "本科普通批平行志愿",
+          "track": "history",
+          "granularity": "院校/院校专业组",
+          "pageUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zszy/zsfw/202607/t20260727_5983788.shtml",
+          "downloadUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zszy/zsfw/202607/P020260727344124945247.pdf",
+          "format": "pdf",
+          "rawPath": "data/admissions/raw/hubei-2026-undergraduate-history-group.pdf",
+          "sha256": "6ec092a34c6fedc1b5b67ae375168a553d8a86cc7d535eef17730e03f9ab3be7",
+          "parsePath": "data/admissions/extracted/hubei-2026-undergraduate-history-group.json",
+          "parseFormat": "json",
+          "parser": "hubei-group-scores",
+          "rankMethod": "official-score-cumulative",
+          "rankTablePageUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zkyw/202606/t20260625_5964816.shtml",
+          "rankMapPath": "data/admissions/reference/hubei-2026-score-ranks.json",
+          "ordinaryOnly": true,
+          "status": "available",
+          "fallbackAllowed": false,
+          "parseNote": "按2026年官方PDF网格提取院校专业组最低分，过滤旋转水印；保留原备注供普通组资格过滤；用同年官方一分一段累计人数换算同分位次上限。"
         }
       ]
     },
-    {"province": "湖南省", "authority": "湖南省教育考试院", "authorityUrl": "https://www.hneeb.cn/", "status": "pending"},
-    {"province": "广东省", "authority": "广东省教育考试院", "authorityUrl": "https://eea.gd.gov.cn/", "status": "pending"},
-    {"province": "广西壮族自治区", "authority": "广西招生考试院", "authorityUrl": "https://www.gxeea.cn/", "status": "pending"},
-    {"province": "海南省", "authority": "海南省考试局", "authorityUrl": "https://ea.hainan.gov.cn/", "status": "pending"},
+    {
+      "province": "湖南省",
+      "authority": "湖南省教育考试院",
+      "authorityUrl": "https://www.hneeb.cn/",
+      "status": "pending"
+    },
+    {
+      "province": "广东省",
+      "authority": "广东省教育考试院",
+      "authorityUrl": "https://eea.gd.gov.cn/",
+      "status": "pending"
+    },
+    {
+      "province": "广西壮族自治区",
+      "authority": "广西招生考试院",
+      "authorityUrl": "https://www.gxeea.cn/",
+      "status": "pending"
+    },
+    {
+      "province": "海南省",
+      "authority": "海南省考试局",
+      "authorityUrl": "https://ea.hainan.gov.cn/",
+      "status": "pending"
+    },
     {
       "province": "重庆市",
       "authority": "重庆市教育考试院",
@@ -306,14 +602,59 @@
         }
       ]
     },
-    {"province": "四川省", "authority": "四川省教育考试院", "authorityUrl": "https://www.sceea.cn/", "status": "pending"},
-    {"province": "贵州省", "authority": "贵州省招生考试院", "authorityUrl": "https://zsksy.guizhou.gov.cn/", "status": "pending"},
-    {"province": "云南省", "authority": "云南省招生考试院", "authorityUrl": "https://www.ynzs.cn/", "status": "pending"},
-    {"province": "西藏自治区", "authority": "西藏自治区教育考试院", "authorityUrl": "https://zsks.edu.xizang.gov.cn/", "status": "pending"},
-    {"province": "陕西省", "authority": "陕西省教育考试院", "authorityUrl": "https://www.sneea.cn/", "status": "pending"},
-    {"province": "甘肃省", "authority": "甘肃省教育考试院", "authorityUrl": "https://www.ganseea.cn/", "status": "pending"},
-    {"province": "青海省", "authority": "青海省教育考试网", "authorityUrl": "https://www.qhjyks.com/", "status": "pending"},
-    {"province": "宁夏回族自治区", "authority": "宁夏教育考试院", "authorityUrl": "https://www.nxjyks.cn/", "status": "pending"},
-    {"province": "新疆维吾尔自治区", "authority": "新疆教育考试院", "authorityUrl": "https://www.xjzk.gov.cn/", "status": "pending"}
+    {
+      "province": "四川省",
+      "authority": "四川省教育考试院",
+      "authorityUrl": "https://www.sceea.cn/",
+      "status": "pending"
+    },
+    {
+      "province": "贵州省",
+      "authority": "贵州省招生考试院",
+      "authorityUrl": "https://zsksy.guizhou.gov.cn/",
+      "status": "pending"
+    },
+    {
+      "province": "云南省",
+      "authority": "云南省招生考试院",
+      "authorityUrl": "https://www.ynzs.cn/",
+      "status": "pending"
+    },
+    {
+      "province": "西藏自治区",
+      "authority": "西藏自治区教育考试院",
+      "authorityUrl": "https://zsks.edu.xizang.gov.cn/",
+      "status": "pending"
+    },
+    {
+      "province": "陕西省",
+      "authority": "陕西省教育考试院",
+      "authorityUrl": "https://www.sneea.cn/",
+      "status": "pending"
+    },
+    {
+      "province": "甘肃省",
+      "authority": "甘肃省教育考试院",
+      "authorityUrl": "https://www.ganseea.cn/",
+      "status": "pending"
+    },
+    {
+      "province": "青海省",
+      "authority": "青海省教育考试网",
+      "authorityUrl": "https://www.qhjyks.com/",
+      "status": "pending"
+    },
+    {
+      "province": "宁夏回族自治区",
+      "authority": "宁夏教育考试院",
+      "authorityUrl": "https://www.nxjyks.cn/",
+      "status": "pending"
+    },
+    {
+      "province": "新疆维吾尔自治区",
+      "authority": "新疆教育考试院",
+      "authorityUrl": "https://www.xjzk.gov.cn/",
+      "status": "pending"
+    }
   ]
 }

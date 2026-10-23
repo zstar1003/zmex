@@ -1,0 +1,227 @@
+{
+  "meta": {
+    "schemaVersion": 1,
+    "province": "湖北省",
+    "year": 2026,
+    "checkedAt": "2026-10-24"
+  },
+  "sources": [
+    {
+      "id": "hubei-2026-undergraduate-physics-group",
+      "authority": "湖北省教育厅招生办公室",
+      "year": 2026,
+      "publishedAt": "2026-07-21",
+      "batch": "本科普通批平行志愿",
+      "track": "physics",
+      "granularity": "院校/院校专业组",
+      "pageUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zszy/zsfw/202607/t20260727_5983787.shtml",
+      "downloadUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zszy/zsfw/202607/P020260727343410906036.pdf",
+      "format": "pdf",
+      "rawPath": "data/admissions/raw/hubei-2026-undergraduate-physics-group.pdf",
+      "sha256": "21fa14bc10e78ede254bcff5dc180b106161fa20b42752426065f00674697906",
+      "parsePath": "data/admissions/extracted/hubei-2026-undergraduate-physics-group.json",
+      "parseFormat": "json",
+      "parser": "hubei-group-scores",
+      "rankMethod": "official-score-cumulative",
+      "rankTablePageUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zkyw/202606/t20260625_5964816.shtml",
+      "rankMapPath": "data/admissions/reference/hubei-2026-score-ranks.json",
+      "ordinaryOnly": true,
+      "status": "available",
+      "fallbackAllowed": false,
+      "parseNote": "按2026年官方PDF网格提取院校专业组最低分，过滤旋转水印；保留原备注供普通组资格过滤；用同年官方一分一段累计人数换算同分位次上限。"
+    },
+    {
+      "id": "hubei-2026-undergraduate-history-group",
+      "authority": "湖北省教育厅招生办公室",
+      "year": 2026,
+      "publishedAt": "2026-07-21",
+      "batch": "本科普通批平行志愿",
+      "track": "history",
+      "granularity": "院校/院校专业组",
+      "pageUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zszy/zsfw/202607/t20260727_5983788.shtml",
+      "downloadUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zszy/zsfw/202607/P020260727344124945247.pdf",
+      "format": "pdf",
+      "rawPath": "data/admissions/raw/hubei-2026-undergraduate-history-group.pdf",
+      "sha256": "6ec092a34c6fedc1b5b67ae375168a553d8a86cc7d535eef17730e03f9ab3be7",
+      "parsePath": "data/admissions/extracted/hubei-2026-undergraduate-history-group.json",
+      "parseFormat": "json",
+      "parser": "hubei-group-scores",
+      "rankMethod": "official-score-cumulative",
+      "rankTablePageUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zkyw/202606/t20260625_5964816.shtml",
+      "rankMapPath": "data/admissions/reference/hubei-2026-score-ranks.json",
+      "ordinaryOnly": true,
+      "status": "available",
+      "fallbackAllowed": false,
+      "parseNote": "按2026年官方PDF网格提取院校专业组最低分，过滤旋转水印；保留原备注供普通组资格过滤；用同年官方一分一段累计人数换算同分位次上限。"
+    }
+  ],
+  "rankTable": {
+    "pageUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zkyw/202606/t20260625_5964816.shtml",
+    "publishedAt": "2026-06-25",
+    "outputPath": "data/admissions/reference/hubei-2026-score-ranks.json",
+    "images": [
+      {
+        "track": "physics",
+        "page": 1,
+        "sourceUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zkyw/202606/W020260625574021103461.jpg",
+        "path": "data/admissions/raw/hubei-2026-score-ranks-physics-1.jpg",
+        "sha256": "aef914976506d4105d8cbca0279fadec218e8d11fb006ec89a51afc882a2558d",
+        "blockRowCounts": [
+          38,
+          38,
+          38
+        ]
+      },
+      {
+        "track": "physics",
+        "page": 2,
+        "sourceUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zkyw/202606/W020260625574023993790.jpg",
+        "path": "data/admissions/raw/hubei-2026-score-ranks-physics-2.jpg",
+        "sha256": "3a11e446f3d004af446da83a2a875d7009912a5c7fe6d106ad8c785eb84689db",
+        "blockRowCounts": [
+          42,
+          42,
+          42
+        ]
+      },
+      {
+        "track": "physics",
+        "page": 3,
+        "sourceUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zkyw/202606/W020260625574026315709.jpg",
+        "path": "data/admissions/raw/hubei-2026-score-ranks-physics-3.jpg",
+        "sha256": "37eb04083c27a5951680466c4348abac9d26c7b869094d6e0a64021ab7fad132",
+        "blockRowCounts": [
+          42,
+          42,
+          42
+        ]
+      },
+      {
+        "track": "physics",
+        "page": 4,
+        "sourceUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zkyw/202606/W020260625574028815403.jpg",
+        "path": "data/admissions/raw/hubei-2026-score-ranks-physics-4.jpg",
+        "sha256": "91894c242272d07e8017139d00838e77be177059793226ca6b597c62e1e9a02c",
+        "blockRowCounts": [
+          42,
+          42,
+          42
+        ]
+      },
+      {
+        "track": "physics",
+        "page": 5,
+        "sourceUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zkyw/202606/W020260625574031347662.jpg",
+        "path": "data/admissions/raw/hubei-2026-score-ranks-physics-5.jpg",
+        "sha256": "1980f915ae06eed17ba79b33e76f928a921da52d6e71b956ade118554e9730ac",
+        "blockRowCounts": [
+          21,
+          21,
+          19
+        ]
+      },
+      {
+        "track": "history",
+        "page": 1,
+        "sourceUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zkyw/202606/W020260625574033188837.jpg",
+        "path": "data/admissions/raw/hubei-2026-score-ranks-history-1.jpg",
+        "sha256": "1a94d5f556ba9f3248e39167a9c8b755b5a59942859c9d543b6dff9ecde386f2",
+        "blockRowCounts": [
+          38,
+          38,
+          38
+        ]
+      },
+      {
+        "track": "history",
+        "page": 2,
+        "sourceUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zkyw/202606/W020260625574035654748.jpg",
+        "path": "data/admissions/raw/hubei-2026-score-ranks-history-2.jpg",
+        "sha256": "b6a71be62f34f8586327d06a3d71f098aeba1926dde92e4df36b9fff941c2352",
+        "blockRowCounts": [
+          42,
+          42,
+          42
+        ]
+      },
+      {
+        "track": "history",
+        "page": 3,
+        "sourceUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zkyw/202606/W020260625574038009149.jpg",
+        "path": "data/admissions/raw/hubei-2026-score-ranks-history-3.jpg",
+        "sha256": "92be800b823d34991a6e90c3d30aa76cebf8c9eb146a1b8565cb9d41f298325c",
+        "blockRowCounts": [
+          42,
+          42,
+          42
+        ]
+      },
+      {
+        "track": "history",
+        "page": 4,
+        "sourceUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zkyw/202606/W020260625574040372366.jpg",
+        "path": "data/admissions/raw/hubei-2026-score-ranks-history-4.jpg",
+        "sha256": "4c402dca2ed1ce6a7cf8cc7a4474d99135a8bd8ffd0c7a14f090d3a882d605fc",
+        "blockRowCounts": [
+          42,
+          42,
+          42
+        ]
+      },
+      {
+        "track": "history",
+        "page": 5,
+        "sourceUrl": "https://jyt.hubei.gov.cn/bmdt/ztzl/gxzs/zkyw/202606/W020260625574042729628.jpg",
+        "path": "data/admissions/raw/hubei-2026-score-ranks-history-5.jpg",
+        "sha256": "c4c5074463938bbffb3d5f17ebc8695426de49cd5200bbb13cd98ef48d288351",
+        "blockRowCounts": [
+          12,
+          12,
+          10
+        ]
+      }
+    ],
+    "reviewedOcrCorrections": [
+      {
+        "track": "physics",
+        "page": 1,
+        "block": 0,
+        "row": 23,
+        "score": 679,
+        "field": "cumulative",
+        "value": 573,
+        "evidence": "人工逐格核对对应官方原图；block、row从0计数，仅用于纠正OCR遗漏，不通过差值推测数字。"
+      },
+      {
+        "track": "history",
+        "page": 1,
+        "block": 1,
+        "row": 6,
+        "score": 631,
+        "field": "count",
+        "value": 44,
+        "evidence": "人工逐格核对对应官方原图；block、row从0计数，仅用于纠正OCR遗漏，不通过差值推测数字。"
+      },
+      {
+        "track": "history",
+        "page": 1,
+        "block": 1,
+        "row": 8,
+        "score": 629,
+        "field": "cumulative",
+        "value": 791,
+        "evidence": "人工逐格核对对应官方原图；block、row从0计数，仅用于纠正OCR遗漏，不通过差值推测数字。"
+      },
+      {
+        "track": "history",
+        "page": 4,
+        "block": 2,
+        "row": 12,
+        "score": 213,
+        "field": "count",
+        "value": 72,
+        "evidence": "人工逐格核对对应官方原图；block、row从0计数，仅用于纠正OCR遗漏，不通过差值推测数字。"
+      }
+    ]
+  }
+}

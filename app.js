@@ -1,5 +1,5 @@
 import { ThreeChinaMap } from "./three-map.js?v=20260626-1";
-import { buildAdmissionIndex, verifiedLinesForSchool } from "./rank-engine.js";
+import { buildAdmissionIndex, verifiedLinesForSchool } from "./rank-engine.js?v=20261024-2";
 
 const state = {
   data: null,
@@ -54,7 +54,7 @@ const els = {
 };
 
 const formatNumber = new Intl.NumberFormat("zh-CN");
-const dataCacheVersion = "20260627-art-majors-1";
+const dataCacheVersion = "20261024-admissions-2026";
 const majorAliasMap = {
   数据科学: ["数据科学与大数据技术", "大数据技术", "计算机科学与技术"],
   新闻传播学: ["新闻学", "传播学", "广告学"],

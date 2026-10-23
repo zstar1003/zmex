@@ -153,12 +153,12 @@ export function verifiedLinesForSchool(school, province = "", track = "", admiss
       const sourceFile = admissionIndex.sourceFilesById
         ?.get(record.sourceId)
         ?.get(String(record.providerSchoolId || record.schoolCode || ""));
-      const rankNote = {
+      const rankNote = record.rankNote || {
         "official-score-cumulative": "由官方最低分与一分一段表对应，为同分考生位次上限。",
         "aggregated-min-rank": "公开专业录取数据中的最低位次。",
-        "aggregated-score-cumulative": "由公开最低分与同年一分一段表对应，为同分考生位次上限。",
+        "aggregated-score-cumulative": source?.rankMap?.note || "由公开最低分与已收录的一分一段表对应，为同分考生位次上限。",
         "estimated-from-score": source?.rankEstimate?.note || "由公开最低分估算，误差可能较大。",
-      }[record.rankMethod] || record.rankNote || "";
+      }[record.rankMethod] || "";
       return {
         name: record.majorName,
         minScore: record.minScore,

@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "schemaVersion": 1,
+    "checkedAt": "2026-10-24",
+    "province": "湖北省",
+    "policy": "只将可核对的同年实际专业录取结果列为 available；招生计划、专业组线和缺少位次的数据均不直接进入专业位次筛选。"
+  },
+  "sources": [
+    {
+      "id": "ncwu-2026-hubei-major",
+      "title": "我校2026年湖北各专业录取分数表",
+      "schoolName": "华北水利水电大学",
+      "schoolId": "4141010078",
+      "authority": "华北水利水电大学招生办公室",
+      "province": "湖北省",
+      "year": 2026,
+      "publishedAt": "2026-07-24",
+      "batch": "本科批",
+      "granularity": "专业",
+      "pageUrl": "https://www2.ncwu.edu.cn/zhaoshengwang/info/1134/3042.htm",
+      "downloadUrl": "https://www2.ncwu.edu.cn/zhaoshengwang/info/1134/3042.htm",
+      "format": "html",
+      "rawPath": "data/admissions/raw/ncwu-2026-hubei-major.html",
+      "sha256": "7a773a587ecd5dbfc91408ab57b6a70344a528cab40c88fbd0ed4ea8635a925f",
+      "parsePath": "data/admissions/extracted/ncwu-2026-hubei-major.json",
+      "parseFormat": "json",
+      "parser": "normalized-major-lines",
+      "rankMethod": "official-min-rank",
+      "hasReportedRank": true,
+      "fields": ["批次", "科类", "专业", "计划人数", "录取人数", "录取最高分", "录取最低分", "平均分", "省控线", "最低分分差", "最低分位次"],
+      "expectedRecords": 14,
+      "status": "available",
+      "fallbackAllowed": false,
+      "parseNote": "HTML 表格含批次与科类跨14行合并单元格；展开 rowspan 后读取14个专业，含3个中外合作办学专业；原表未提供再选科目。"
+    }
+  ],
+  "referenceOnlySources": [
+    {
+      "schoolName": "河南城建学院",
+      "title": "2026年外省本科录取情况",
+      "year": 2026,
+      "publishedAt": "2026-08-14",
+      "pageUrl": "https://zs.huuc.edu.cn/info/1179/4818.htm",
+      "rawPath": "data/admissions/raw/huuc-2026-outside-henan-majors.html",
+      "sha256": "7481e40d42bfdeba11a71968af39c758deb8e0cbe455e05fb22ed98b22b32b4f",
+      "granularity": "专业",
+      "hasReportedRank": false,
+      "fields": ["科类", "控制线", "专业", "最高分", "最低分", "线差", "平均分"],
+      "note": "湖北表含7个物理类专业；没有最低位次，需配套2026湖北官方一分一段表后再考虑导入。"
+    },
+    {
+      "schoolName": "内蒙古工业大学",
+      "title": "内蒙古工业大学2026年分省分专业实际录取分数统计表",
+      "year": 2026,
+      "publishedAt": "2026-08-20",
+      "pageUrl": "https://zsb.imut.edu.cn/info/1034/1741.htm",
+      "rawPath": "data/admissions/raw/imut-2026-province-majors.html",
+      "sha256": "be553b058b62d74ac4287fc925f8ad0c885470bc49da9ef94a24b5ad0ca94fbc",
+      "granularity": "专业",
+      "hasReportedRank": false,
+      "fields": ["专业名称", "最高分", "最低分", "平均分", "备注"],
+      "note": "含湖北本科批实际专业录取分数；没有最低位次，暂不导入。"
+    },
+    {
+      "schoolName": "华东理工大学",
+      "title": "华东理工大学2026年分省分专业录取分数",
+      "year": 2026,
+      "publishedAt": "2026-09-29",
+      "pageUrl": "https://zsb.ecust.edu.cn/2026/0929/c2308a193875/page.htm",
+      "downloadUrl": "https://zsb.ecust.edu.cn/_upload/article/files/52/3a/544d26b249bd93540a7499b496fe/78276bde-5458-4e4c-a1d7-b609d00a1dcc.pdf",
+      "granularity": "专业",
+      "hasReportedRank": false,
+      "fields": ["年份", "省市", "批次", "科类", "选考科目要求", "专业", "最高分", "最低分", "平均分", "特控线"],
+      "note": "湖北PDF共3页，含普通批、专项、民族班与艺术类；没有最低位次，暂不导入。"
+    }
+  ],
+  "hubeiUniversityChecks": [
+    {
+      "schoolName": "湖北工程学院",
+      "latestVerifiedAdmissionYear": 2025,
+      "publishedAt": "2026-04-22",
+      "pageUrl": "https://zs.hbeu.edu.cn/info/1045/9394.htm",
+      "listingUrl": "https://zs.hbeu.edu.cn/bkzn.htm",
+      "note": "2026年最新列表有招生计划和简章，但已验证的湖北物理/历史录取线仍为2025年。"
+    },
+    {
+      "schoolName": "湖北科技学院",
+      "latestVerifiedAdmissionYear": 2025,
+      "publishedAt": "2026-04-29",
+      "pageUrl": "https://zsjy.hbust.edu.cn/info/1188/2197.htm",
+      "listingUrl": "https://zsjy.hbust.edu.cn/lnfscx/hb.htm",
+      "note": "湖北分专业录取分数官方列表最新为2025年；未核实到2026实际专业结果。"
+    },
+    {
+      "schoolName": "荆楚理工学院",
+      "latestVerifiedAdmissionYear": 2025,
+      "publishedAt": "2025-08-21",
+      "pageUrl": "https://zsxx.jcut.edu.cn/info/1055/2206.htm",
+      "listingUrl": "https://zsxx.jcut.edu.cn/index.htm",
+      "note": "官网首页最新分专业录取线为2025年，表内有专业最低位次；2026项目主要是招生计划，不能据此声称2026专业录取线已更新。"
+    }
+  ]
+}

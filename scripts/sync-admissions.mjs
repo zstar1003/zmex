@@ -6,12 +6,15 @@ import XLSX from "xlsx";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const admissionsDir = path.join(root, "data", "admissions");
+const outputDirOption = process.argv.find((arg) => arg.startsWith("--output-dir="))?.slice("--output-dir=".length);
+if (outputDirOption !== undefined && !outputDirOption.trim()) throw new Error("--output-dir 不能为空");
+const outputDir = outputDirOption ? path.resolve(outputDirOption) : admissionsDir;
 const rawDir = path.join(admissionsDir, "raw");
-const provinceDir = path.join(admissionsDir, "provinces");
+const provinceDir = path.join(outputDir, "provinces");
 const sourcesPath = path.join(admissionsDir, "sources.json");
 const aggregatedIndexPath = path.join(admissionsDir, "aggregated", "index.json");
-const indexPath = path.join(admissionsDir, "index.json");
-const coveragePath = path.join(admissionsDir, "coverage.json");
+const indexPath = path.join(outputDir, "index.json");
+const coveragePath = path.join(outputDir, "coverage.json");
 const schoolDataPath = path.join(root, "data", "schools.json");
 
 const requestedProvince = process.argv.find((arg) => arg.startsWith("--province="))?.split("=")[1] || "";
@@ -21,6 +24,9 @@ await mkdir(rawDir, { recursive: true });
 await mkdir(provinceDir, { recursive: true });
 
 const sourceManifest = await Bun.file(sourcesPath).json();
+if (requestedProvince && !sourceManifest.provinces.some((entry) => entry.province === requestedProvince)) {
+  throw new Error(`Unknown province: ${requestedProvince}`);
+}
 const schoolData = await Bun.file(schoolDataPath).json();
 const aggregatedIndex = (await Bun.file(aggregatedIndexPath).exists())
   ? await Bun.file(aggregatedIndexPath).json()
@@ -136,6 +142,7 @@ function shandongSourceRecords(source, province, rows) {
   const schoolIndex = header.indexOf("院校代号及名称");
   const planIndex = header.indexOf("投档计划数");
   const rankIndex = header.indexOf("最低位次");
+  const subjectIndex = header.findIndex((cell) => String(cell || "").includes("选考科目"));
 
   return rows.slice(headerIndex + 1).flatMap((row) => {
     if (levelIndex >= 0 && String(row[levelIndex] || "").trim() !== "本科") return [];
@@ -168,7 +175,7 @@ function shandongSourceRecords(source, province, rows) {
         planCount: asPositiveNumber(row[planIndex]),
         minScore: null,
         minRank,
-        subjectRequirement: null
+        subjectRequirement: subjectIndex >= 0 ? String(row[subjectIndex] || "").trim() || null : null
       }
     ];
   });
@@ -176,6 +183,9 @@ function shandongSourceRecords(source, province, rows) {
 
 async function hebeiSourceRecords(source, province, rows) {
   const rankMapPayload = await Bun.file(path.join(root, source.rankMapPath)).json();
+  const topCodedBand = rankMapPayload.meta?.year === source.year
+    ? rankMapPayload.meta?.topCodedBands?.[source.track]
+    : null;
   const rankByScore = new Map(
     rankMapPayload.rows.map((entry) => [
       entry.score,
@@ -192,7 +202,11 @@ async function hebeiSourceRecords(source, province, rows) {
     const school = resolveSchool(schoolName);
     const majorName = String(row[3] || "").trim();
     const minScore = asPositiveNumber(row[4]);
-    const minRank = rankByScore.get(minScore);
+    const usesTopCodedBand = Boolean(
+      topCodedBand && asPositiveNumber(topCodedBand.minScore) &&
+      asPositiveNumber(topCodedBand.rank) && minScore >= topCodedBand.minScore
+    );
+    const minRank = usesTopCodedBand ? Number(topCodedBand.rank) : rankByScore.get(minScore);
     if (!school || !majorName || !minScore || !minRank) return [];
 
     return [
@@ -214,7 +228,9 @@ async function hebeiSourceRecords(source, province, rows) {
         minScore,
         minRank,
         rankMethod: "official-score-cumulative",
-        rankNote: "由河北省教育考试院最低分和官方成绩统计表累计人数对应，为同分考生位次上限。",
+        rankNote: usesTopCodedBand
+          ? `最低分 ${minScore} 分落在官方“${topCodedBand.minScore} 分及以上”合并档，采用该档累计 ${topCodedBand.rank} 人作为位次上限；该档未公布逐分位次。`
+          : "由河北省教育考试院最低分和官方成绩统计表累计人数对应，为同分考生位次上限。",
         subjectRequirement: source.track === "physics" ? "物理科目组合" : "历史科目组合"
       }
     ];
@@ -323,6 +339,7 @@ async function hubeiGroupSourceRecords(source, province, rows) {
   );
 
   return rows.flatMap((row) => {
+    if (source.ordinaryOnly && /专项|民族班|预科|定向|西藏班|新疆班|非西藏生定藏|公费师范|地方优师/.test(row.remarks || "")) return [];
     const groupCode = String(row.groupCode || "").trim();
     const groupName = String(row.groupName || "").trim();
     const rawSchoolName = String(row.schoolName || "").trim();
@@ -352,7 +369,7 @@ async function hubeiGroupSourceRecords(source, province, rows) {
         rankMethod: "official-score-cumulative",
         rankNote:
           "由湖北省教育考试院院校专业组投档最低分和官方一分一段表累计人数对应，为同分考生位次上限。",
-        subjectRequirement: row.subjectRequirement || "选科要求见招生计划",
+        subjectRequirement: [row.subjectRequirement || "选科要求见招生计划", row.remarks].filter(Boolean).join("；"),
         sourcePage: row.sourcePage || null
       }
     ];
@@ -360,6 +377,39 @@ async function hubeiGroupSourceRecords(source, province, rows) {
 }
 
 async function sourceRecords(source, province, rows) {
+  if (source.parser === "normalized-major-lines") {
+    return rows.map((row, index) => {
+      if ((row.year != null && row.year !== source.year) ||
+          (row.province != null && row.province !== province)) {
+        throw new Error(`${source.id}: university record year/province mismatch`);
+      }
+      const school = resolveSchool(row.schoolName);
+      if (!school || !row.majorName || !asPositiveNumber(row.minRank) ||
+          !asPositiveNumber(row.minScore) || !["physics", "history", "general"].includes(row.track)) {
+        throw new Error(`${source.id}: invalid university record ${index + 1}`);
+      }
+      return {
+        id: `${source.id}:${school.id}:${index + 1}`,
+        sourceId: source.id,
+        dataType: "official",
+        province,
+        year: source.year,
+        batch: row.batch || source.batch,
+        track: row.track,
+        schoolId: school.id,
+        schoolName: row.schoolName,
+        canonicalSchoolName: school.name,
+        schoolCode: row.schoolCode || "",
+        majorCode: row.majorCode || "",
+        majorName: row.majorName,
+        planCount: asPositiveNumber(row.planCount),
+        minScore: asPositiveNumber(row.minScore),
+        minRank: asPositiveNumber(row.minRank),
+        rankMethod: "official-min-rank",
+        subjectRequirement: row.subjectRequirement || null,
+      };
+    });
+  }
   if (source.parser === "zhejiang-major-lines") {
     return zhejiangSourceRecords(source, province, rows);
   }
@@ -382,6 +432,7 @@ async function sourceRecords(source, province, rows) {
 }
 
 function sourceDataRowCount(source, rows) {
+  if (source.parser === "normalized-major-lines") return rows.length;
   if (source.parser === "zhejiang-major-lines") {
     return rows.slice(1).filter((row) => row.some((cell) => cell !== null && cell !== "")).length;
   }
@@ -440,6 +491,20 @@ async function downloadRankTable(source) {
 const normalizedSources = [];
 const records = [];
 
+// A provincial refresh must not erase the other provinces from the national index.
+if (requestedProvince) {
+  const previousIndexPath = (await Bun.file(indexPath).exists()) ? indexPath : path.join(admissionsDir, "index.json");
+  const previousIndex = await Bun.file(previousIndexPath).json();
+  for (const entry of previousIndex.provinces) {
+    if (entry.province === requestedProvince || !entry.dataUrl) continue;
+    const stagedPath = path.join(outputDir, entry.dataUrl.replace(/^\.\/data\/admissions\//, ""));
+    const payloadPath = (await Bun.file(stagedPath).exists()) ? stagedPath : path.join(root, entry.dataUrl);
+    const payload = await Bun.file(payloadPath).json();
+    records.push(...payload.records);
+    normalizedSources.push(...(entry.sources || payload.sources));
+  }
+}
+
 for (const provinceEntry of sourceManifest.provinces) {
   if (requestedProvince && provinceEntry.province !== requestedProvince) continue;
   for (const source of provinceEntry.sources || []) {
@@ -457,7 +522,12 @@ for (const provinceEntry of sourceManifest.provinces) {
     const parseSha256 = createHash("sha256").update(Buffer.from(parseBytes)).digest("hex");
     let rows;
     if (source.parseFormat === "json") {
-      rows = (await Bun.file(parsePath).json()).records;
+      const parsed = await Bun.file(parsePath).json();
+      if (parsed.meta?.year !== source.year) throw new Error(`${source.id}: extracted data year mismatch`);
+      if (parsed.meta?.sourceSha256 && parsed.meta.sourceSha256 !== sha256) {
+        throw new Error(`${source.id}: extracted data does not match downloaded source`);
+      }
+      rows = parsed.records;
     } else {
       const workbook = XLSX.read(parseBytes, { type: "array" });
       const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -467,7 +537,15 @@ for (const provinceEntry of sourceManifest.provinces) {
         defval: null
       });
     }
+    if (source.rankMapPath) {
+      const rankMap = await Bun.file(path.join(root, source.rankMapPath)).json();
+      if (rankMap.meta?.year !== source.year) throw new Error(`${source.id}: rank table year mismatch`);
+    }
     const imported = await sourceRecords(source, provinceEntry.province, rows);
+    if (!imported.length) throw new Error(`${source.id}: no valid records; existing data has not been replaced`);
+    if (source.expectedRecords != null && imported.length !== source.expectedRecords) {
+      throw new Error(`${source.id}: expected ${source.expectedRecords} records, received ${imported.length}`);
+    }
     const sourceRows = sourceDataRowCount(source, rows);
     const rankMapBytes = source.rankMapPath
       ? await Bun.file(path.join(root, source.rankMapPath)).arrayBuffer()
@@ -476,8 +554,9 @@ for (const provinceEntry of sourceManifest.provinces) {
     normalizedSources.push({
       id: source.id,
       province: provinceEntry.province,
-      authority: provinceEntry.authority,
+      authority: source.authority || provinceEntry.authority,
       year: source.year,
+      publishedAt: source.publishedAt || null,
       batch: source.batch,
       granularity: source.granularity,
       pageUrl: source.pageUrl,

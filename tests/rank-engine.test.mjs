@@ -97,10 +97,12 @@ test("rank, track, and destination filters retain their original boundaries", ()
   assert.deepEqual(results.map((item) => item.major.name), ["恰好满足"]);
 });
 
-test("real Hubei rank 80000 query keeps all 576 results descending across pages", () => {
+test("historical 2025 Hubei rank 80000 query keeps all 576 results descending across pages", () => {
   const readJson = (path) => JSON.parse(readFileSync(new URL(path, import.meta.url), "utf8"));
   const data = readJson("../data/schools.json");
   const payload = readJson("../data/admissions/provinces/湖北省.json");
+  // Keep the original bug reproduction stable while newer admission years are added.
+  payload.records = payload.records.filter((record) => record.year === 2025);
   const catalog = readJson("../data/admissions/index.json");
   const results = rankAdvisorMatches(
     [...data.schools, ...(data.admissionSchools || [])],

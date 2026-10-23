@@ -1,0 +1,2811 @@
+{
+  "meta": {
+    "province": "辽宁省",
+    "year": 2026,
+    "authority": "辽宁招生考试之窗",
+    "pageUrl": "https://www.lnzsks.com/newsinfo/IMS_20260624_46117_xCuXJ7lN6W.htm",
+    "physicsSourceUrl": "https://www.lnzsks.com/lnzkbfiles/2026/lns2026gkcjtjb0624clhptll01.pdf",
+    "historySourceUrl": "https://www.lnzsks.com/lnzkbfiles/2026/lns2026gkcjtjb0624clhptlw02.pdf",
+    "rankDefinition": "对应分数档次的官方累计人数，作为同分考生位次上限",
+    "extraction": "按PDF内嵌表格坐标提取，并逐档校验人数差分与累计人数完全一致",
+    "physicsScoreBands": 558,
+    "historyScoreBands": 518
+  },
+  "rows": [
+    {
+      "score": 708,
+      "physicsRank": 10,
+      "historyRank": 0
+    },
+    {
+      "score": 707,
+      "physicsRank": 14,
+      "historyRank": 0
+    },
+    {
+      "score": 706,
+      "physicsRank": 16,
+      "historyRank": 0
+    },
+    {
+      "score": 705,
+      "physicsRank": 20,
+      "historyRank": 0
+    },
+    {
+      "score": 704,
+      "physicsRank": 26,
+      "historyRank": 0
+    },
+    {
+      "score": 703,
+      "physicsRank": 30,
+      "historyRank": 0
+    },
+    {
+      "score": 702,
+      "physicsRank": 37,
+      "historyRank": 0
+    },
+    {
+      "score": 701,
+      "physicsRank": 39,
+      "historyRank": 0
+    },
+    {
+      "score": 700,
+      "physicsRank": 41,
+      "historyRank": 0
+    },
+    {
+      "score": 699,
+      "physicsRank": 45,
+      "historyRank": 0
+    },
+    {
+      "score": 698,
+      "physicsRank": 49,
+      "historyRank": 0
+    },
+    {
+      "score": 697,
+      "physicsRank": 53,
+      "historyRank": 0
+    },
+    {
+      "score": 696,
+      "physicsRank": 62,
+      "historyRank": 0
+    },
+    {
+      "score": 695,
+      "physicsRank": 70,
+      "historyRank": 0
+    },
+    {
+      "score": 694,
+      "physicsRank": 76,
+      "historyRank": 0
+    },
+    {
+      "score": 693,
+      "physicsRank": 87,
+      "historyRank": 0
+    },
+    {
+      "score": 692,
+      "physicsRank": 111,
+      "historyRank": 0
+    },
+    {
+      "score": 691,
+      "physicsRank": 127,
+      "historyRank": 0
+    },
+    {
+      "score": 690,
+      "physicsRank": 143,
+      "historyRank": 0
+    },
+    {
+      "score": 689,
+      "physicsRank": 164,
+      "historyRank": 0
+    },
+    {
+      "score": 688,
+      "physicsRank": 183,
+      "historyRank": 0
+    },
+    {
+      "score": 687,
+      "physicsRank": 197,
+      "historyRank": 0
+    },
+    {
+      "score": 686,
+      "physicsRank": 220,
+      "historyRank": 0
+    },
+    {
+      "score": 685,
+      "physicsRank": 246,
+      "historyRank": 0
+    },
+    {
+      "score": 684,
+      "physicsRank": 277,
+      "historyRank": 0
+    },
+    {
+      "score": 683,
+      "physicsRank": 307,
+      "historyRank": 0
+    },
+    {
+      "score": 682,
+      "physicsRank": 344,
+      "historyRank": 0
+    },
+    {
+      "score": 681,
+      "physicsRank": 366,
+      "historyRank": 0
+    },
+    {
+      "score": 680,
+      "physicsRank": 404,
+      "historyRank": 0
+    },
+    {
+      "score": 679,
+      "physicsRank": 438,
+      "historyRank": 0
+    },
+    {
+      "score": 678,
+      "physicsRank": 475,
+      "historyRank": 0
+    },
+    {
+      "score": 677,
+      "physicsRank": 510,
+      "historyRank": 0
+    },
+    {
+      "score": 676,
+      "physicsRank": 542,
+      "historyRank": 0
+    },
+    {
+      "score": 675,
+      "physicsRank": 591,
+      "historyRank": 0
+    },
+    {
+      "score": 674,
+      "physicsRank": 635,
+      "historyRank": 0
+    },
+    {
+      "score": 673,
+      "physicsRank": 687,
+      "historyRank": 0
+    },
+    {
+      "score": 672,
+      "physicsRank": 745,
+      "historyRank": 12
+    },
+    {
+      "score": 671,
+      "physicsRank": 799,
+      "historyRank": 0
+    },
+    {
+      "score": 670,
+      "physicsRank": 861,
+      "historyRank": 0
+    },
+    {
+      "score": 669,
+      "physicsRank": 918,
+      "historyRank": 0
+    },
+    {
+      "score": 668,
+      "physicsRank": 999,
+      "historyRank": 14
+    },
+    {
+      "score": 667,
+      "physicsRank": 1078,
+      "historyRank": 16
+    },
+    {
+      "score": 666,
+      "physicsRank": 1159,
+      "historyRank": 18
+    },
+    {
+      "score": 665,
+      "physicsRank": 1226,
+      "historyRank": 22
+    },
+    {
+      "score": 664,
+      "physicsRank": 1309,
+      "historyRank": 27
+    },
+    {
+      "score": 663,
+      "physicsRank": 1389,
+      "historyRank": 28
+    },
+    {
+      "score": 662,
+      "physicsRank": 1487,
+      "historyRank": 37
+    },
+    {
+      "score": 661,
+      "physicsRank": 1592,
+      "historyRank": 42
+    },
+    {
+      "score": 660,
+      "physicsRank": 1692,
+      "historyRank": 44
+    },
+    {
+      "score": 659,
+      "physicsRank": 1789,
+      "historyRank": 53
+    },
+    {
+      "score": 658,
+      "physicsRank": 1892,
+      "historyRank": 58
+    },
+    {
+      "score": 657,
+      "physicsRank": 2005,
+      "historyRank": 65
+    },
+    {
+      "score": 656,
+      "physicsRank": 2106,
+      "historyRank": 73
+    },
+    {
+      "score": 655,
+      "physicsRank": 2223,
+      "historyRank": 80
+    },
+    {
+      "score": 654,
+      "physicsRank": 2346,
+      "historyRank": 89
+    },
+    {
+      "score": 653,
+      "physicsRank": 2451,
+      "historyRank": 101
+    },
+    {
+      "score": 652,
+      "physicsRank": 2589,
+      "historyRank": 113
+    },
+    {
+      "score": 651,
+      "physicsRank": 2712,
+      "historyRank": 126
+    },
+    {
+      "score": 650,
+      "physicsRank": 2867,
+      "historyRank": 141
+    },
+    {
+      "score": 649,
+      "physicsRank": 3011,
+      "historyRank": 156
+    },
+    {
+      "score": 648,
+      "physicsRank": 3148,
+      "historyRank": 172
+    },
+    {
+      "score": 647,
+      "physicsRank": 3291,
+      "historyRank": 182
+    },
+    {
+      "score": 646,
+      "physicsRank": 3432,
+      "historyRank": 199
+    },
+    {
+      "score": 645,
+      "physicsRank": 3581,
+      "historyRank": 220
+    },
+    {
+      "score": 644,
+      "physicsRank": 3749,
+      "historyRank": 240
+    },
+    {
+      "score": 643,
+      "physicsRank": 3919,
+      "historyRank": 263
+    },
+    {
+      "score": 642,
+      "physicsRank": 4087,
+      "historyRank": 282
+    },
+    {
+      "score": 641,
+      "physicsRank": 4265,
+      "historyRank": 303
+    },
+    {
+      "score": 640,
+      "physicsRank": 4435,
+      "historyRank": 326
+    },
+    {
+      "score": 639,
+      "physicsRank": 4666,
+      "historyRank": 352
+    },
+    {
+      "score": 638,
+      "physicsRank": 4847,
+      "historyRank": 374
+    },
+    {
+      "score": 637,
+      "physicsRank": 5026,
+      "historyRank": 398
+    },
+    {
+      "score": 636,
+      "physicsRank": 5239,
+      "historyRank": 424
+    },
+    {
+      "score": 635,
+      "physicsRank": 5436,
+      "historyRank": 451
+    },
+    {
+      "score": 634,
+      "physicsRank": 5615,
+      "historyRank": 483
+    },
+    {
+      "score": 633,
+      "physicsRank": 5843,
+      "historyRank": 511
+    },
+    {
+      "score": 632,
+      "physicsRank": 6028,
+      "historyRank": 548
+    },
+    {
+      "score": 631,
+      "physicsRank": 6245,
+      "historyRank": 585
+    },
+    {
+      "score": 630,
+      "physicsRank": 6460,
+      "historyRank": 616
+    },
+    {
+      "score": 629,
+      "physicsRank": 6673,
+      "historyRank": 651
+    },
+    {
+      "score": 628,
+      "physicsRank": 6903,
+      "historyRank": 685
+    },
+    {
+      "score": 627,
+      "physicsRank": 7126,
+      "historyRank": 728
+    },
+    {
+      "score": 626,
+      "physicsRank": 7367,
+      "historyRank": 774
+    },
+    {
+      "score": 625,
+      "physicsRank": 7602,
+      "historyRank": 817
+    },
+    {
+      "score": 624,
+      "physicsRank": 7843,
+      "historyRank": 865
+    },
+    {
+      "score": 623,
+      "physicsRank": 8049,
+      "historyRank": 906
+    },
+    {
+      "score": 622,
+      "physicsRank": 8324,
+      "historyRank": 955
+    },
+    {
+      "score": 621,
+      "physicsRank": 8571,
+      "historyRank": 1000
+    },
+    {
+      "score": 620,
+      "physicsRank": 8813,
+      "historyRank": 1042
+    },
+    {
+      "score": 619,
+      "physicsRank": 9085,
+      "historyRank": 1088
+    },
+    {
+      "score": 618,
+      "physicsRank": 9339,
+      "historyRank": 1137
+    },
+    {
+      "score": 617,
+      "physicsRank": 9612,
+      "historyRank": 1183
+    },
+    {
+      "score": 616,
+      "physicsRank": 9868,
+      "historyRank": 1235
+    },
+    {
+      "score": 615,
+      "physicsRank": 10145,
+      "historyRank": 1277
+    },
+    {
+      "score": 614,
+      "physicsRank": 10385,
+      "historyRank": 1337
+    },
+    {
+      "score": 613,
+      "physicsRank": 10657,
+      "historyRank": 1386
+    },
+    {
+      "score": 612,
+      "physicsRank": 10911,
+      "historyRank": 1445
+    },
+    {
+      "score": 611,
+      "physicsRank": 11178,
+      "historyRank": 1502
+    },
+    {
+      "score": 610,
+      "physicsRank": 11433,
+      "historyRank": 1558
+    },
+    {
+      "score": 609,
+      "physicsRank": 11677,
+      "historyRank": 1615
+    },
+    {
+      "score": 608,
+      "physicsRank": 11943,
+      "historyRank": 1701
+    },
+    {
+      "score": 607,
+      "physicsRank": 12218,
+      "historyRank": 1757
+    },
+    {
+      "score": 606,
+      "physicsRank": 12512,
+      "historyRank": 1814
+    },
+    {
+      "score": 605,
+      "physicsRank": 12790,
+      "historyRank": 1877
+    },
+    {
+      "score": 604,
+      "physicsRank": 13066,
+      "historyRank": 1939
+    },
+    {
+      "score": 603,
+      "physicsRank": 13337,
+      "historyRank": 2007
+    },
+    {
+      "score": 602,
+      "physicsRank": 13624,
+      "historyRank": 2073
+    },
+    {
+      "score": 601,
+      "physicsRank": 13928,
+      "historyRank": 2131
+    },
+    {
+      "score": 600,
+      "physicsRank": 14235,
+      "historyRank": 2200
+    },
+    {
+      "score": 599,
+      "physicsRank": 14512,
+      "historyRank": 2277
+    },
+    {
+      "score": 598,
+      "physicsRank": 14810,
+      "historyRank": 2353
+    },
+    {
+      "score": 597,
+      "physicsRank": 15095,
+      "historyRank": 2428
+    },
+    {
+      "score": 596,
+      "physicsRank": 15441,
+      "historyRank": 2515
+    },
+    {
+      "score": 595,
+      "physicsRank": 15711,
+      "historyRank": 2583
+    },
+    {
+      "score": 594,
+      "physicsRank": 16001,
+      "historyRank": 2660
+    },
+    {
+      "score": 593,
+      "physicsRank": 16342,
+      "historyRank": 2734
+    },
+    {
+      "score": 592,
+      "physicsRank": 16648,
+      "historyRank": 2807
+    },
+    {
+      "score": 591,
+      "physicsRank": 16997,
+      "historyRank": 2882
+    },
+    {
+      "score": 590,
+      "physicsRank": 17301,
+      "historyRank": 2963
+    },
+    {
+      "score": 589,
+      "physicsRank": 17617,
+      "historyRank": 3032
+    },
+    {
+      "score": 588,
+      "physicsRank": 17917,
+      "historyRank": 3126
+    },
+    {
+      "score": 587,
+      "physicsRank": 18245,
+      "historyRank": 3212
+    },
+    {
+      "score": 586,
+      "physicsRank": 18580,
+      "historyRank": 3292
+    },
+    {
+      "score": 585,
+      "physicsRank": 18922,
+      "historyRank": 3374
+    },
+    {
+      "score": 584,
+      "physicsRank": 19272,
+      "historyRank": 3446
+    },
+    {
+      "score": 583,
+      "physicsRank": 19611,
+      "historyRank": 3527
+    },
+    {
+      "score": 582,
+      "physicsRank": 19951,
+      "historyRank": 3619
+    },
+    {
+      "score": 581,
+      "physicsRank": 20312,
+      "historyRank": 3712
+    },
+    {
+      "score": 580,
+      "physicsRank": 20696,
+      "historyRank": 3802
+    },
+    {
+      "score": 579,
+      "physicsRank": 21051,
+      "historyRank": 3891
+    },
+    {
+      "score": 578,
+      "physicsRank": 21369,
+      "historyRank": 3985
+    },
+    {
+      "score": 577,
+      "physicsRank": 21680,
+      "historyRank": 4078
+    },
+    {
+      "score": 576,
+      "physicsRank": 22050,
+      "historyRank": 4179
+    },
+    {
+      "score": 575,
+      "physicsRank": 22366,
+      "historyRank": 4282
+    },
+    {
+      "score": 574,
+      "physicsRank": 22712,
+      "historyRank": 4388
+    },
+    {
+      "score": 573,
+      "physicsRank": 23076,
+      "historyRank": 4489
+    },
+    {
+      "score": 572,
+      "physicsRank": 23441,
+      "historyRank": 4579
+    },
+    {
+      "score": 571,
+      "physicsRank": 23787,
+      "historyRank": 4690
+    },
+    {
+      "score": 570,
+      "physicsRank": 24127,
+      "historyRank": 4792
+    },
+    {
+      "score": 569,
+      "physicsRank": 24475,
+      "historyRank": 4890
+    },
+    {
+      "score": 568,
+      "physicsRank": 24860,
+      "historyRank": 4996
+    },
+    {
+      "score": 567,
+      "physicsRank": 25221,
+      "historyRank": 5126
+    },
+    {
+      "score": 566,
+      "physicsRank": 25586,
+      "historyRank": 5230
+    },
+    {
+      "score": 565,
+      "physicsRank": 25945,
+      "historyRank": 5361
+    },
+    {
+      "score": 564,
+      "physicsRank": 26311,
+      "historyRank": 5459
+    },
+    {
+      "score": 563,
+      "physicsRank": 26682,
+      "historyRank": 5561
+    },
+    {
+      "score": 562,
+      "physicsRank": 27032,
+      "historyRank": 5670
+    },
+    {
+      "score": 561,
+      "physicsRank": 27422,
+      "historyRank": 5789
+    },
+    {
+      "score": 560,
+      "physicsRank": 27783,
+      "historyRank": 5894
+    },
+    {
+      "score": 559,
+      "physicsRank": 28129,
+      "historyRank": 6005
+    },
+    {
+      "score": 558,
+      "physicsRank": 28486,
+      "historyRank": 6133
+    },
+    {
+      "score": 557,
+      "physicsRank": 28884,
+      "historyRank": 6250
+    },
+    {
+      "score": 556,
+      "physicsRank": 29264,
+      "historyRank": 6351
+    },
+    {
+      "score": 555,
+      "physicsRank": 29685,
+      "historyRank": 6477
+    },
+    {
+      "score": 554,
+      "physicsRank": 30033,
+      "historyRank": 6604
+    },
+    {
+      "score": 553,
+      "physicsRank": 30473,
+      "historyRank": 6752
+    },
+    {
+      "score": 552,
+      "physicsRank": 30896,
+      "historyRank": 6865
+    },
+    {
+      "score": 551,
+      "physicsRank": 31268,
+      "historyRank": 6991
+    },
+    {
+      "score": 550,
+      "physicsRank": 31674,
+      "historyRank": 7108
+    },
+    {
+      "score": 549,
+      "physicsRank": 32101,
+      "historyRank": 7238
+    },
+    {
+      "score": 548,
+      "physicsRank": 32487,
+      "historyRank": 7360
+    },
+    {
+      "score": 547,
+      "physicsRank": 32913,
+      "historyRank": 7488
+    },
+    {
+      "score": 546,
+      "physicsRank": 33341,
+      "historyRank": 7632
+    },
+    {
+      "score": 545,
+      "physicsRank": 33791,
+      "historyRank": 7767
+    },
+    {
+      "score": 544,
+      "physicsRank": 34211,
+      "historyRank": 7867
+    },
+    {
+      "score": 543,
+      "physicsRank": 34614,
+      "historyRank": 7985
+    },
+    {
+      "score": 542,
+      "physicsRank": 35034,
+      "historyRank": 8124
+    },
+    {
+      "score": 541,
+      "physicsRank": 35456,
+      "historyRank": 8244
+    },
+    {
+      "score": 540,
+      "physicsRank": 35848,
+      "historyRank": 8383
+    },
+    {
+      "score": 539,
+      "physicsRank": 36294,
+      "historyRank": 8506
+    },
+    {
+      "score": 538,
+      "physicsRank": 36728,
+      "historyRank": 8626
+    },
+    {
+      "score": 537,
+      "physicsRank": 37124,
+      "historyRank": 8739
+    },
+    {
+      "score": 536,
+      "physicsRank": 37541,
+      "historyRank": 8856
+    },
+    {
+      "score": 535,
+      "physicsRank": 37976,
+      "historyRank": 8992
+    },
+    {
+      "score": 534,
+      "physicsRank": 38377,
+      "historyRank": 9121
+    },
+    {
+      "score": 533,
+      "physicsRank": 38814,
+      "historyRank": 9269
+    },
+    {
+      "score": 532,
+      "physicsRank": 39250,
+      "historyRank": 9419
+    },
+    {
+      "score": 531,
+      "physicsRank": 39691,
+      "historyRank": 9557
+    },
+    {
+      "score": 530,
+      "physicsRank": 40119,
+      "historyRank": 9714
+    },
+    {
+      "score": 529,
+      "physicsRank": 40561,
+      "historyRank": 9851
+    },
+    {
+      "score": 528,
+      "physicsRank": 40967,
+      "historyRank": 9974
+    },
+    {
+      "score": 527,
+      "physicsRank": 41379,
+      "historyRank": 10124
+    },
+    {
+      "score": 526,
+      "physicsRank": 41840,
+      "historyRank": 10233
+    },
+    {
+      "score": 525,
+      "physicsRank": 42238,
+      "historyRank": 10389
+    },
+    {
+      "score": 524,
+      "physicsRank": 42692,
+      "historyRank": 10548
+    },
+    {
+      "score": 523,
+      "physicsRank": 43147,
+      "historyRank": 10677
+    },
+    {
+      "score": 522,
+      "physicsRank": 43574,
+      "historyRank": 10816
+    },
+    {
+      "score": 521,
+      "physicsRank": 44033,
+      "historyRank": 10943
+    },
+    {
+      "score": 520,
+      "physicsRank": 44487,
+      "historyRank": 11096
+    },
+    {
+      "score": 519,
+      "physicsRank": 44924,
+      "historyRank": 11255
+    },
+    {
+      "score": 518,
+      "physicsRank": 45336,
+      "historyRank": 11397
+    },
+    {
+      "score": 517,
+      "physicsRank": 45794,
+      "historyRank": 11537
+    },
+    {
+      "score": 516,
+      "physicsRank": 46267,
+      "historyRank": 11691
+    },
+    {
+      "score": 515,
+      "physicsRank": 46698,
+      "historyRank": 11815
+    },
+    {
+      "score": 514,
+      "physicsRank": 47157,
+      "historyRank": 11969
+    },
+    {
+      "score": 513,
+      "physicsRank": 47618,
+      "historyRank": 12152
+    },
+    {
+      "score": 512,
+      "physicsRank": 48048,
+      "historyRank": 12306
+    },
+    {
+      "score": 511,
+      "physicsRank": 48480,
+      "historyRank": 12474
+    },
+    {
+      "score": 510,
+      "physicsRank": 48916,
+      "historyRank": 12623
+    },
+    {
+      "score": 509,
+      "physicsRank": 49373,
+      "historyRank": 12802
+    },
+    {
+      "score": 508,
+      "physicsRank": 49824,
+      "historyRank": 12944
+    },
+    {
+      "score": 507,
+      "physicsRank": 50289,
+      "historyRank": 13101
+    },
+    {
+      "score": 506,
+      "physicsRank": 50761,
+      "historyRank": 13264
+    },
+    {
+      "score": 505,
+      "physicsRank": 51208,
+      "historyRank": 13450
+    },
+    {
+      "score": 504,
+      "physicsRank": 51637,
+      "historyRank": 13609
+    },
+    {
+      "score": 503,
+      "physicsRank": 52086,
+      "historyRank": 13768
+    },
+    {
+      "score": 502,
+      "physicsRank": 52553,
+      "historyRank": 13962
+    },
+    {
+      "score": 501,
+      "physicsRank": 52987,
+      "historyRank": 14112
+    },
+    {
+      "score": 500,
+      "physicsRank": 53434,
+      "historyRank": 14278
+    },
+    {
+      "score": 499,
+      "physicsRank": 53926,
+      "historyRank": 14449
+    },
+    {
+      "score": 498,
+      "physicsRank": 54403,
+      "historyRank": 14612
+    },
+    {
+      "score": 497,
+      "physicsRank": 54846,
+      "historyRank": 14747
+    },
+    {
+      "score": 496,
+      "physicsRank": 55307,
+      "historyRank": 14918
+    },
+    {
+      "score": 495,
+      "physicsRank": 55772,
+      "historyRank": 15088
+    },
+    {
+      "score": 494,
+      "physicsRank": 56226,
+      "historyRank": 15259
+    },
+    {
+      "score": 493,
+      "physicsRank": 56659,
+      "historyRank": 15427
+    },
+    {
+      "score": 492,
+      "physicsRank": 57077,
+      "historyRank": 15605
+    },
+    {
+      "score": 491,
+      "physicsRank": 57539,
+      "historyRank": 15781
+    },
+    {
+      "score": 490,
+      "physicsRank": 57993,
+      "historyRank": 15957
+    },
+    {
+      "score": 489,
+      "physicsRank": 58459,
+      "historyRank": 16135
+    },
+    {
+      "score": 488,
+      "physicsRank": 58924,
+      "historyRank": 16294
+    },
+    {
+      "score": 487,
+      "physicsRank": 59419,
+      "historyRank": 16473
+    },
+    {
+      "score": 486,
+      "physicsRank": 59871,
+      "historyRank": 16652
+    },
+    {
+      "score": 485,
+      "physicsRank": 60315,
+      "historyRank": 16828
+    },
+    {
+      "score": 484,
+      "physicsRank": 60797,
+      "historyRank": 17002
+    },
+    {
+      "score": 483,
+      "physicsRank": 61285,
+      "historyRank": 17206
+    },
+    {
+      "score": 482,
+      "physicsRank": 61723,
+      "historyRank": 17386
+    },
+    {
+      "score": 481,
+      "physicsRank": 62204,
+      "historyRank": 17551
+    },
+    {
+      "score": 480,
+      "physicsRank": 62667,
+      "historyRank": 17702
+    },
+    {
+      "score": 479,
+      "physicsRank": 63156,
+      "historyRank": 17852
+    },
+    {
+      "score": 478,
+      "physicsRank": 63615,
+      "historyRank": 18009
+    },
+    {
+      "score": 477,
+      "physicsRank": 64093,
+      "historyRank": 18166
+    },
+    {
+      "score": 476,
+      "physicsRank": 64551,
+      "historyRank": 18317
+    },
+    {
+      "score": 475,
+      "physicsRank": 65012,
+      "historyRank": 18494
+    },
+    {
+      "score": 474,
+      "physicsRank": 65491,
+      "historyRank": 18657
+    },
+    {
+      "score": 473,
+      "physicsRank": 65960,
+      "historyRank": 18824
+    },
+    {
+      "score": 472,
+      "physicsRank": 66426,
+      "historyRank": 18995
+    },
+    {
+      "score": 471,
+      "physicsRank": 66916,
+      "historyRank": 19181
+    },
+    {
+      "score": 470,
+      "physicsRank": 67369,
+      "historyRank": 19359
+    },
+    {
+      "score": 469,
+      "physicsRank": 67830,
+      "historyRank": 19533
+    },
+    {
+      "score": 468,
+      "physicsRank": 68320,
+      "historyRank": 19701
+    },
+    {
+      "score": 467,
+      "physicsRank": 68750,
+      "historyRank": 19886
+    },
+    {
+      "score": 466,
+      "physicsRank": 69222,
+      "historyRank": 20061
+    },
+    {
+      "score": 465,
+      "physicsRank": 69714,
+      "historyRank": 20244
+    },
+    {
+      "score": 464,
+      "physicsRank": 70185,
+      "historyRank": 20399
+    },
+    {
+      "score": 463,
+      "physicsRank": 70644,
+      "historyRank": 20565
+    },
+    {
+      "score": 462,
+      "physicsRank": 71085,
+      "historyRank": 20768
+    },
+    {
+      "score": 461,
+      "physicsRank": 71554,
+      "historyRank": 20951
+    },
+    {
+      "score": 460,
+      "physicsRank": 71992,
+      "historyRank": 21113
+    },
+    {
+      "score": 459,
+      "physicsRank": 72461,
+      "historyRank": 21295
+    },
+    {
+      "score": 458,
+      "physicsRank": 72928,
+      "historyRank": 21477
+    },
+    {
+      "score": 457,
+      "physicsRank": 73393,
+      "historyRank": 21662
+    },
+    {
+      "score": 456,
+      "physicsRank": 73852,
+      "historyRank": 21852
+    },
+    {
+      "score": 455,
+      "physicsRank": 74327,
+      "historyRank": 22026
+    },
+    {
+      "score": 454,
+      "physicsRank": 74766,
+      "historyRank": 22200
+    },
+    {
+      "score": 453,
+      "physicsRank": 75214,
+      "historyRank": 22379
+    },
+    {
+      "score": 452,
+      "physicsRank": 75690,
+      "historyRank": 22546
+    },
+    {
+      "score": 451,
+      "physicsRank": 76170,
+      "historyRank": 22717
+    },
+    {
+      "score": 450,
+      "physicsRank": 76652,
+      "historyRank": 22887
+    },
+    {
+      "score": 449,
+      "physicsRank": 77081,
+      "historyRank": 23063
+    },
+    {
+      "score": 448,
+      "physicsRank": 77577,
+      "historyRank": 23247
+    },
+    {
+      "score": 447,
+      "physicsRank": 78059,
+      "historyRank": 23441
+    },
+    {
+      "score": 446,
+      "physicsRank": 78525,
+      "historyRank": 23634
+    },
+    {
+      "score": 445,
+      "physicsRank": 78967,
+      "historyRank": 23817
+    },
+    {
+      "score": 444,
+      "physicsRank": 79421,
+      "historyRank": 24023
+    },
+    {
+      "score": 443,
+      "physicsRank": 79831,
+      "historyRank": 24215
+    },
+    {
+      "score": 442,
+      "physicsRank": 80305,
+      "historyRank": 24410
+    },
+    {
+      "score": 441,
+      "physicsRank": 80765,
+      "historyRank": 24579
+    },
+    {
+      "score": 440,
+      "physicsRank": 81207,
+      "historyRank": 24741
+    },
+    {
+      "score": 439,
+      "physicsRank": 81652,
+      "historyRank": 24916
+    },
+    {
+      "score": 438,
+      "physicsRank": 82114,
+      "historyRank": 25097
+    },
+    {
+      "score": 437,
+      "physicsRank": 82572,
+      "historyRank": 25294
+    },
+    {
+      "score": 436,
+      "physicsRank": 83014,
+      "historyRank": 25484
+    },
+    {
+      "score": 435,
+      "physicsRank": 83472,
+      "historyRank": 25680
+    },
+    {
+      "score": 434,
+      "physicsRank": 83913,
+      "historyRank": 25856
+    },
+    {
+      "score": 433,
+      "physicsRank": 84359,
+      "historyRank": 26049
+    },
+    {
+      "score": 432,
+      "physicsRank": 84797,
+      "historyRank": 26215
+    },
+    {
+      "score": 431,
+      "physicsRank": 85226,
+      "historyRank": 26390
+    },
+    {
+      "score": 430,
+      "physicsRank": 85680,
+      "historyRank": 26566
+    },
+    {
+      "score": 429,
+      "physicsRank": 86112,
+      "historyRank": 26772
+    },
+    {
+      "score": 428,
+      "physicsRank": 86575,
+      "historyRank": 26951
+    },
+    {
+      "score": 427,
+      "physicsRank": 87013,
+      "historyRank": 27119
+    },
+    {
+      "score": 426,
+      "physicsRank": 87440,
+      "historyRank": 27285
+    },
+    {
+      "score": 425,
+      "physicsRank": 87899,
+      "historyRank": 27466
+    },
+    {
+      "score": 424,
+      "physicsRank": 88342,
+      "historyRank": 27666
+    },
+    {
+      "score": 423,
+      "physicsRank": 88791,
+      "historyRank": 27842
+    },
+    {
+      "score": 422,
+      "physicsRank": 89185,
+      "historyRank": 28021
+    },
+    {
+      "score": 421,
+      "physicsRank": 89629,
+      "historyRank": 28203
+    },
+    {
+      "score": 420,
+      "physicsRank": 90084,
+      "historyRank": 28370
+    },
+    {
+      "score": 419,
+      "physicsRank": 90530,
+      "historyRank": 28573
+    },
+    {
+      "score": 418,
+      "physicsRank": 90962,
+      "historyRank": 28765
+    },
+    {
+      "score": 417,
+      "physicsRank": 91440,
+      "historyRank": 28940
+    },
+    {
+      "score": 416,
+      "physicsRank": 91862,
+      "historyRank": 29122
+    },
+    {
+      "score": 415,
+      "physicsRank": 92292,
+      "historyRank": 29298
+    },
+    {
+      "score": 414,
+      "physicsRank": 92714,
+      "historyRank": 29488
+    },
+    {
+      "score": 413,
+      "physicsRank": 93170,
+      "historyRank": 29666
+    },
+    {
+      "score": 412,
+      "physicsRank": 93610,
+      "historyRank": 29856
+    },
+    {
+      "score": 411,
+      "physicsRank": 94018,
+      "historyRank": 30031
+    },
+    {
+      "score": 410,
+      "physicsRank": 94463,
+      "historyRank": 30231
+    },
+    {
+      "score": 409,
+      "physicsRank": 94854,
+      "historyRank": 30394
+    },
+    {
+      "score": 408,
+      "physicsRank": 95268,
+      "historyRank": 30579
+    },
+    {
+      "score": 407,
+      "physicsRank": 95648,
+      "historyRank": 30769
+    },
+    {
+      "score": 406,
+      "physicsRank": 96084,
+      "historyRank": 30956
+    },
+    {
+      "score": 405,
+      "physicsRank": 96504,
+      "historyRank": 31145
+    },
+    {
+      "score": 404,
+      "physicsRank": 96953,
+      "historyRank": 31313
+    },
+    {
+      "score": 403,
+      "physicsRank": 97367,
+      "historyRank": 31515
+    },
+    {
+      "score": 402,
+      "physicsRank": 97788,
+      "historyRank": 31668
+    },
+    {
+      "score": 401,
+      "physicsRank": 98199,
+      "historyRank": 31852
+    },
+    {
+      "score": 400,
+      "physicsRank": 98648,
+      "historyRank": 32053
+    },
+    {
+      "score": 399,
+      "physicsRank": 99057,
+      "historyRank": 32222
+    },
+    {
+      "score": 398,
+      "physicsRank": 99449,
+      "historyRank": 32402
+    },
+    {
+      "score": 397,
+      "physicsRank": 99865,
+      "historyRank": 32572
+    },
+    {
+      "score": 396,
+      "physicsRank": 100321,
+      "historyRank": 32740
+    },
+    {
+      "score": 395,
+      "physicsRank": 100712,
+      "historyRank": 32922
+    },
+    {
+      "score": 394,
+      "physicsRank": 101118,
+      "historyRank": 33102
+    },
+    {
+      "score": 393,
+      "physicsRank": 101519,
+      "historyRank": 33272
+    },
+    {
+      "score": 392,
+      "physicsRank": 101897,
+      "historyRank": 33479
+    },
+    {
+      "score": 391,
+      "physicsRank": 102277,
+      "historyRank": 33669
+    },
+    {
+      "score": 390,
+      "physicsRank": 102679,
+      "historyRank": 33823
+    },
+    {
+      "score": 389,
+      "physicsRank": 103064,
+      "historyRank": 34012
+    },
+    {
+      "score": 388,
+      "physicsRank": 103440,
+      "historyRank": 34200
+    },
+    {
+      "score": 387,
+      "physicsRank": 103849,
+      "historyRank": 34359
+    },
+    {
+      "score": 386,
+      "physicsRank": 104267,
+      "historyRank": 34539
+    },
+    {
+      "score": 385,
+      "physicsRank": 104648,
+      "historyRank": 34730
+    },
+    {
+      "score": 384,
+      "physicsRank": 105060,
+      "historyRank": 34905
+    },
+    {
+      "score": 383,
+      "physicsRank": 105452,
+      "historyRank": 35088
+    },
+    {
+      "score": 382,
+      "physicsRank": 105827,
+      "historyRank": 35248
+    },
+    {
+      "score": 381,
+      "physicsRank": 106228,
+      "historyRank": 35441
+    },
+    {
+      "score": 380,
+      "physicsRank": 106622,
+      "historyRank": 35614
+    },
+    {
+      "score": 379,
+      "physicsRank": 106965,
+      "historyRank": 35778
+    },
+    {
+      "score": 378,
+      "physicsRank": 107353,
+      "historyRank": 35946
+    },
+    {
+      "score": 377,
+      "physicsRank": 107698,
+      "historyRank": 36105
+    },
+    {
+      "score": 376,
+      "physicsRank": 108101,
+      "historyRank": 36278
+    },
+    {
+      "score": 375,
+      "physicsRank": 108481,
+      "historyRank": 36461
+    },
+    {
+      "score": 374,
+      "physicsRank": 108903,
+      "historyRank": 36602
+    },
+    {
+      "score": 373,
+      "physicsRank": 109310,
+      "historyRank": 36768
+    },
+    {
+      "score": 372,
+      "physicsRank": 109702,
+      "historyRank": 36936
+    },
+    {
+      "score": 371,
+      "physicsRank": 110101,
+      "historyRank": 37122
+    },
+    {
+      "score": 370,
+      "physicsRank": 110443,
+      "historyRank": 37309
+    },
+    {
+      "score": 369,
+      "physicsRank": 110811,
+      "historyRank": 37480
+    },
+    {
+      "score": 368,
+      "physicsRank": 111174,
+      "historyRank": 37647
+    },
+    {
+      "score": 367,
+      "physicsRank": 111545,
+      "historyRank": 37816
+    },
+    {
+      "score": 366,
+      "physicsRank": 111911,
+      "historyRank": 37978
+    },
+    {
+      "score": 365,
+      "physicsRank": 112282,
+      "historyRank": 38131
+    },
+    {
+      "score": 364,
+      "physicsRank": 112620,
+      "historyRank": 38293
+    },
+    {
+      "score": 363,
+      "physicsRank": 112956,
+      "historyRank": 38471
+    },
+    {
+      "score": 362,
+      "physicsRank": 113296,
+      "historyRank": 38614
+    },
+    {
+      "score": 361,
+      "physicsRank": 113650,
+      "historyRank": 38813
+    },
+    {
+      "score": 360,
+      "physicsRank": 113948,
+      "historyRank": 38971
+    },
+    {
+      "score": 359,
+      "physicsRank": 114290,
+      "historyRank": 39136
+    },
+    {
+      "score": 358,
+      "physicsRank": 114625,
+      "historyRank": 39293
+    },
+    {
+      "score": 357,
+      "physicsRank": 114961,
+      "historyRank": 39439
+    },
+    {
+      "score": 356,
+      "physicsRank": 115286,
+      "historyRank": 39587
+    },
+    {
+      "score": 355,
+      "physicsRank": 115632,
+      "historyRank": 39729
+    },
+    {
+      "score": 354,
+      "physicsRank": 115936,
+      "historyRank": 39898
+    },
+    {
+      "score": 353,
+      "physicsRank": 116249,
+      "historyRank": 40068
+    },
+    {
+      "score": 352,
+      "physicsRank": 116551,
+      "historyRank": 40235
+    },
+    {
+      "score": 351,
+      "physicsRank": 116895,
+      "historyRank": 40397
+    },
+    {
+      "score": 350,
+      "physicsRank": 117202,
+      "historyRank": 40531
+    },
+    {
+      "score": 349,
+      "physicsRank": 117528,
+      "historyRank": 40699
+    },
+    {
+      "score": 348,
+      "physicsRank": 117846,
+      "historyRank": 40843
+    },
+    {
+      "score": 347,
+      "physicsRank": 118160,
+      "historyRank": 40985
+    },
+    {
+      "score": 346,
+      "physicsRank": 118463,
+      "historyRank": 41137
+    },
+    {
+      "score": 345,
+      "physicsRank": 118765,
+      "historyRank": 41299
+    },
+    {
+      "score": 344,
+      "physicsRank": 119069,
+      "historyRank": 41438
+    },
+    {
+      "score": 343,
+      "physicsRank": 119379,
+      "historyRank": 41584
+    },
+    {
+      "score": 342,
+      "physicsRank": 119670,
+      "historyRank": 41737
+    },
+    {
+      "score": 341,
+      "physicsRank": 119964,
+      "historyRank": 41869
+    },
+    {
+      "score": 340,
+      "physicsRank": 120229,
+      "historyRank": 41987
+    },
+    {
+      "score": 339,
+      "physicsRank": 120529,
+      "historyRank": 42118
+    },
+    {
+      "score": 338,
+      "physicsRank": 120811,
+      "historyRank": 42244
+    },
+    {
+      "score": 337,
+      "physicsRank": 121087,
+      "historyRank": 42392
+    },
+    {
+      "score": 336,
+      "physicsRank": 121404,
+      "historyRank": 42504
+    },
+    {
+      "score": 335,
+      "physicsRank": 121693,
+      "historyRank": 42657
+    },
+    {
+      "score": 334,
+      "physicsRank": 121991,
+      "historyRank": 42778
+    },
+    {
+      "score": 333,
+      "physicsRank": 122276,
+      "historyRank": 42929
+    },
+    {
+      "score": 332,
+      "physicsRank": 122564,
+      "historyRank": 43060
+    },
+    {
+      "score": 331,
+      "physicsRank": 122836,
+      "historyRank": 43179
+    },
+    {
+      "score": 330,
+      "physicsRank": 123121,
+      "historyRank": 43312
+    },
+    {
+      "score": 329,
+      "physicsRank": 123379,
+      "historyRank": 43449
+    },
+    {
+      "score": 328,
+      "physicsRank": 123682,
+      "historyRank": 43562
+    },
+    {
+      "score": 327,
+      "physicsRank": 123950,
+      "historyRank": 43705
+    },
+    {
+      "score": 326,
+      "physicsRank": 124239,
+      "historyRank": 43844
+    },
+    {
+      "score": 325,
+      "physicsRank": 124486,
+      "historyRank": 44005
+    },
+    {
+      "score": 324,
+      "physicsRank": 124750,
+      "historyRank": 44124
+    },
+    {
+      "score": 323,
+      "physicsRank": 124996,
+      "historyRank": 44241
+    },
+    {
+      "score": 322,
+      "physicsRank": 125252,
+      "historyRank": 44356
+    },
+    {
+      "score": 321,
+      "physicsRank": 125481,
+      "historyRank": 44490
+    },
+    {
+      "score": 320,
+      "physicsRank": 125714,
+      "historyRank": 44619
+    },
+    {
+      "score": 319,
+      "physicsRank": 125966,
+      "historyRank": 44732
+    },
+    {
+      "score": 318,
+      "physicsRank": 126204,
+      "historyRank": 44860
+    },
+    {
+      "score": 317,
+      "physicsRank": 126428,
+      "historyRank": 44984
+    },
+    {
+      "score": 316,
+      "physicsRank": 126673,
+      "historyRank": 45094
+    },
+    {
+      "score": 315,
+      "physicsRank": 126899,
+      "historyRank": 45236
+    },
+    {
+      "score": 314,
+      "physicsRank": 127108,
+      "historyRank": 45358
+    },
+    {
+      "score": 313,
+      "physicsRank": 127321,
+      "historyRank": 45448
+    },
+    {
+      "score": 312,
+      "physicsRank": 127550,
+      "historyRank": 45570
+    },
+    {
+      "score": 311,
+      "physicsRank": 127784,
+      "historyRank": 45687
+    },
+    {
+      "score": 310,
+      "physicsRank": 127980,
+      "historyRank": 45793
+    },
+    {
+      "score": 309,
+      "physicsRank": 128204,
+      "historyRank": 45887
+    },
+    {
+      "score": 308,
+      "physicsRank": 128409,
+      "historyRank": 46013
+    },
+    {
+      "score": 307,
+      "physicsRank": 128642,
+      "historyRank": 46133
+    },
+    {
+      "score": 306,
+      "physicsRank": 128873,
+      "historyRank": 46227
+    },
+    {
+      "score": 305,
+      "physicsRank": 129074,
+      "historyRank": 46324
+    },
+    {
+      "score": 304,
+      "physicsRank": 129286,
+      "historyRank": 46439
+    },
+    {
+      "score": 303,
+      "physicsRank": 129524,
+      "historyRank": 46542
+    },
+    {
+      "score": 302,
+      "physicsRank": 129735,
+      "historyRank": 46640
+    },
+    {
+      "score": 301,
+      "physicsRank": 129928,
+      "historyRank": 46728
+    },
+    {
+      "score": 300,
+      "physicsRank": 130131,
+      "historyRank": 46839
+    },
+    {
+      "score": 299,
+      "physicsRank": 130314,
+      "historyRank": 46941
+    },
+    {
+      "score": 298,
+      "physicsRank": 130502,
+      "historyRank": 47055
+    },
+    {
+      "score": 297,
+      "physicsRank": 130692,
+      "historyRank": 47134
+    },
+    {
+      "score": 296,
+      "physicsRank": 130875,
+      "historyRank": 47240
+    },
+    {
+      "score": 295,
+      "physicsRank": 131070,
+      "historyRank": 47318
+    },
+    {
+      "score": 294,
+      "physicsRank": 131282,
+      "historyRank": 47410
+    },
+    {
+      "score": 293,
+      "physicsRank": 131466,
+      "historyRank": 47506
+    },
+    {
+      "score": 292,
+      "physicsRank": 131640,
+      "historyRank": 47607
+    },
+    {
+      "score": 291,
+      "physicsRank": 131813,
+      "historyRank": 47684
+    },
+    {
+      "score": 290,
+      "physicsRank": 131998,
+      "historyRank": 47781
+    },
+    {
+      "score": 289,
+      "physicsRank": 132168,
+      "historyRank": 47878
+    },
+    {
+      "score": 288,
+      "physicsRank": 132352,
+      "historyRank": 47961
+    },
+    {
+      "score": 287,
+      "physicsRank": 132540,
+      "historyRank": 48054
+    },
+    {
+      "score": 286,
+      "physicsRank": 132700,
+      "historyRank": 48157
+    },
+    {
+      "score": 285,
+      "physicsRank": 132864,
+      "historyRank": 48245
+    },
+    {
+      "score": 284,
+      "physicsRank": 133025,
+      "historyRank": 48336
+    },
+    {
+      "score": 283,
+      "physicsRank": 133201,
+      "historyRank": 48430
+    },
+    {
+      "score": 282,
+      "physicsRank": 133368,
+      "historyRank": 48505
+    },
+    {
+      "score": 281,
+      "physicsRank": 133532,
+      "historyRank": 48587
+    },
+    {
+      "score": 280,
+      "physicsRank": 133735,
+      "historyRank": 48662
+    },
+    {
+      "score": 279,
+      "physicsRank": 133908,
+      "historyRank": 48730
+    },
+    {
+      "score": 278,
+      "physicsRank": 134055,
+      "historyRank": 48806
+    },
+    {
+      "score": 277,
+      "physicsRank": 134198,
+      "historyRank": 48875
+    },
+    {
+      "score": 276,
+      "physicsRank": 134352,
+      "historyRank": 48946
+    },
+    {
+      "score": 275,
+      "physicsRank": 134506,
+      "historyRank": 49025
+    },
+    {
+      "score": 274,
+      "physicsRank": 134652,
+      "historyRank": 49100
+    },
+    {
+      "score": 273,
+      "physicsRank": 134792,
+      "historyRank": 49172
+    },
+    {
+      "score": 272,
+      "physicsRank": 134916,
+      "historyRank": 49243
+    },
+    {
+      "score": 271,
+      "physicsRank": 135049,
+      "historyRank": 49322
+    },
+    {
+      "score": 270,
+      "physicsRank": 135197,
+      "historyRank": 49388
+    },
+    {
+      "score": 269,
+      "physicsRank": 135351,
+      "historyRank": 49465
+    },
+    {
+      "score": 268,
+      "physicsRank": 135514,
+      "historyRank": 49530
+    },
+    {
+      "score": 267,
+      "physicsRank": 135662,
+      "historyRank": 49584
+    },
+    {
+      "score": 266,
+      "physicsRank": 135813,
+      "historyRank": 49663
+    },
+    {
+      "score": 265,
+      "physicsRank": 135942,
+      "historyRank": 49743
+    },
+    {
+      "score": 264,
+      "physicsRank": 136092,
+      "historyRank": 49806
+    },
+    {
+      "score": 263,
+      "physicsRank": 136204,
+      "historyRank": 49861
+    },
+    {
+      "score": 262,
+      "physicsRank": 136323,
+      "historyRank": 49917
+    },
+    {
+      "score": 261,
+      "physicsRank": 136453,
+      "historyRank": 50000
+    },
+    {
+      "score": 260,
+      "physicsRank": 136585,
+      "historyRank": 50058
+    },
+    {
+      "score": 259,
+      "physicsRank": 136719,
+      "historyRank": 50118
+    },
+    {
+      "score": 258,
+      "physicsRank": 136837,
+      "historyRank": 50162
+    },
+    {
+      "score": 257,
+      "physicsRank": 136959,
+      "historyRank": 50234
+    },
+    {
+      "score": 256,
+      "physicsRank": 137071,
+      "historyRank": 50287
+    },
+    {
+      "score": 255,
+      "physicsRank": 137183,
+      "historyRank": 50348
+    },
+    {
+      "score": 254,
+      "physicsRank": 137309,
+      "historyRank": 50405
+    },
+    {
+      "score": 253,
+      "physicsRank": 137412,
+      "historyRank": 50454
+    },
+    {
+      "score": 252,
+      "physicsRank": 137508,
+      "historyRank": 50504
+    },
+    {
+      "score": 251,
+      "physicsRank": 137631,
+      "historyRank": 50551
+    },
+    {
+      "score": 250,
+      "physicsRank": 137744,
+      "historyRank": 50609
+    },
+    {
+      "score": 249,
+      "physicsRank": 137866,
+      "historyRank": 50657
+    },
+    {
+      "score": 248,
+      "physicsRank": 137957,
+      "historyRank": 50709
+    },
+    {
+      "score": 247,
+      "physicsRank": 138081,
+      "historyRank": 50759
+    },
+    {
+      "score": 246,
+      "physicsRank": 138166,
+      "historyRank": 50798
+    },
+    {
+      "score": 245,
+      "physicsRank": 138251,
+      "historyRank": 50849
+    },
+    {
+      "score": 244,
+      "physicsRank": 138344,
+      "historyRank": 50881
+    },
+    {
+      "score": 243,
+      "physicsRank": 138433,
+      "historyRank": 50921
+    },
+    {
+      "score": 242,
+      "physicsRank": 138526,
+      "historyRank": 50962
+    },
+    {
+      "score": 241,
+      "physicsRank": 138632,
+      "historyRank": 51008
+    },
+    {
+      "score": 240,
+      "physicsRank": 138715,
+      "historyRank": 51051
+    },
+    {
+      "score": 239,
+      "physicsRank": 138806,
+      "historyRank": 51098
+    },
+    {
+      "score": 238,
+      "physicsRank": 138883,
+      "historyRank": 51135
+    },
+    {
+      "score": 237,
+      "physicsRank": 138963,
+      "historyRank": 51185
+    },
+    {
+      "score": 236,
+      "physicsRank": 139046,
+      "historyRank": 51210
+    },
+    {
+      "score": 235,
+      "physicsRank": 139147,
+      "historyRank": 51247
+    },
+    {
+      "score": 234,
+      "physicsRank": 139217,
+      "historyRank": 51280
+    },
+    {
+      "score": 233,
+      "physicsRank": 139303,
+      "historyRank": 51316
+    },
+    {
+      "score": 232,
+      "physicsRank": 139382,
+      "historyRank": 51351
+    },
+    {
+      "score": 231,
+      "physicsRank": 139457,
+      "historyRank": 51392
+    },
+    {
+      "score": 230,
+      "physicsRank": 139514,
+      "historyRank": 51414
+    },
+    {
+      "score": 229,
+      "physicsRank": 139575,
+      "historyRank": 51450
+    },
+    {
+      "score": 228,
+      "physicsRank": 139647,
+      "historyRank": 51479
+    },
+    {
+      "score": 227,
+      "physicsRank": 139720,
+      "historyRank": 51513
+    },
+    {
+      "score": 226,
+      "physicsRank": 139787,
+      "historyRank": 51549
+    },
+    {
+      "score": 225,
+      "physicsRank": 139849,
+      "historyRank": 51574
+    },
+    {
+      "score": 224,
+      "physicsRank": 139916,
+      "historyRank": 51606
+    },
+    {
+      "score": 223,
+      "physicsRank": 139976,
+      "historyRank": 51637
+    },
+    {
+      "score": 222,
+      "physicsRank": 140041,
+      "historyRank": 51668
+    },
+    {
+      "score": 221,
+      "physicsRank": 140112,
+      "historyRank": 51696
+    },
+    {
+      "score": 220,
+      "physicsRank": 140175,
+      "historyRank": 51718
+    },
+    {
+      "score": 219,
+      "physicsRank": 140222,
+      "historyRank": 51753
+    },
+    {
+      "score": 218,
+      "physicsRank": 140285,
+      "historyRank": 51781
+    },
+    {
+      "score": 217,
+      "physicsRank": 140335,
+      "historyRank": 51808
+    },
+    {
+      "score": 216,
+      "physicsRank": 140378,
+      "historyRank": 51830
+    },
+    {
+      "score": 215,
+      "physicsRank": 140432,
+      "historyRank": 51861
+    },
+    {
+      "score": 214,
+      "physicsRank": 140490,
+      "historyRank": 51891
+    },
+    {
+      "score": 213,
+      "physicsRank": 140545,
+      "historyRank": 51914
+    },
+    {
+      "score": 212,
+      "physicsRank": 140586,
+      "historyRank": 51939
+    },
+    {
+      "score": 211,
+      "physicsRank": 140625,
+      "historyRank": 51955
+    },
+    {
+      "score": 210,
+      "physicsRank": 140675,
+      "historyRank": 51979
+    },
+    {
+      "score": 209,
+      "physicsRank": 140712,
+      "historyRank": 51990
+    },
+    {
+      "score": 208,
+      "physicsRank": 140754,
+      "historyRank": 52004
+    },
+    {
+      "score": 207,
+      "physicsRank": 140799,
+      "historyRank": 52022
+    },
+    {
+      "score": 206,
+      "physicsRank": 140832,
+      "historyRank": 52033
+    },
+    {
+      "score": 205,
+      "physicsRank": 140869,
+      "historyRank": 52049
+    },
+    {
+      "score": 204,
+      "physicsRank": 140896,
+      "historyRank": 52065
+    },
+    {
+      "score": 203,
+      "physicsRank": 140932,
+      "historyRank": 52085
+    },
+    {
+      "score": 202,
+      "physicsRank": 140967,
+      "historyRank": 52098
+    },
+    {
+      "score": 201,
+      "physicsRank": 140993,
+      "historyRank": 52114
+    },
+    {
+      "score": 200,
+      "physicsRank": 141033,
+      "historyRank": 52131
+    },
+    {
+      "score": 199,
+      "physicsRank": 141063,
+      "historyRank": 52143
+    },
+    {
+      "score": 198,
+      "physicsRank": 141092,
+      "historyRank": 52151
+    },
+    {
+      "score": 197,
+      "physicsRank": 141116,
+      "historyRank": 52159
+    },
+    {
+      "score": 196,
+      "physicsRank": 141138,
+      "historyRank": 52169
+    },
+    {
+      "score": 195,
+      "physicsRank": 141164,
+      "historyRank": 52182
+    },
+    {
+      "score": 194,
+      "physicsRank": 141189,
+      "historyRank": 52196
+    },
+    {
+      "score": 193,
+      "physicsRank": 141208,
+      "historyRank": 52208
+    },
+    {
+      "score": 192,
+      "physicsRank": 141224,
+      "historyRank": 52217
+    },
+    {
+      "score": 191,
+      "physicsRank": 141253,
+      "historyRank": 52223
+    },
+    {
+      "score": 190,
+      "physicsRank": 141281,
+      "historyRank": 52232
+    },
+    {
+      "score": 189,
+      "physicsRank": 141293,
+      "historyRank": 52247
+    },
+    {
+      "score": 188,
+      "physicsRank": 141314,
+      "historyRank": 52252
+    },
+    {
+      "score": 187,
+      "physicsRank": 141334,
+      "historyRank": 52259
+    },
+    {
+      "score": 186,
+      "physicsRank": 141351,
+      "historyRank": 52267
+    },
+    {
+      "score": 185,
+      "physicsRank": 141368,
+      "historyRank": 52279
+    },
+    {
+      "score": 184,
+      "physicsRank": 141386,
+      "historyRank": 52288
+    },
+    {
+      "score": 183,
+      "physicsRank": 141408,
+      "historyRank": 52296
+    },
+    {
+      "score": 182,
+      "physicsRank": 141420,
+      "historyRank": 52305
+    },
+    {
+      "score": 181,
+      "physicsRank": 141433,
+      "historyRank": 52313
+    },
+    {
+      "score": 180,
+      "physicsRank": 141452,
+      "historyRank": 52318
+    },
+    {
+      "score": 179,
+      "physicsRank": 141462,
+      "historyRank": 52325
+    },
+    {
+      "score": 178,
+      "physicsRank": 141475,
+      "historyRank": 52335
+    },
+    {
+      "score": 177,
+      "physicsRank": 141489,
+      "historyRank": 52343
+    },
+    {
+      "score": 176,
+      "physicsRank": 141502,
+      "historyRank": 52347
+    },
+    {
+      "score": 175,
+      "physicsRank": 141518,
+      "historyRank": 52353
+    },
+    {
+      "score": 174,
+      "physicsRank": 141528,
+      "historyRank": 52359
+    },
+    {
+      "score": 173,
+      "physicsRank": 141537,
+      "historyRank": 0
+    },
+    {
+      "score": 172,
+      "physicsRank": 141548,
+      "historyRank": 52366
+    },
+    {
+      "score": 171,
+      "physicsRank": 141556,
+      "historyRank": 52373
+    },
+    {
+      "score": 170,
+      "physicsRank": 141561,
+      "historyRank": 52379
+    },
+    {
+      "score": 169,
+      "physicsRank": 141574,
+      "historyRank": 52385
+    },
+    {
+      "score": 168,
+      "physicsRank": 141584,
+      "historyRank": 52387
+    },
+    {
+      "score": 167,
+      "physicsRank": 141590,
+      "historyRank": 52392
+    },
+    {
+      "score": 166,
+      "physicsRank": 141598,
+      "historyRank": 52397
+    },
+    {
+      "score": 165,
+      "physicsRank": 141612,
+      "historyRank": 52400
+    },
+    {
+      "score": 164,
+      "physicsRank": 141616,
+      "historyRank": 52404
+    },
+    {
+      "score": 163,
+      "physicsRank": 141623,
+      "historyRank": 52408
+    },
+    {
+      "score": 162,
+      "physicsRank": 141631,
+      "historyRank": 52411
+    },
+    {
+      "score": 161,
+      "physicsRank": 141640,
+      "historyRank": 52414
+    },
+    {
+      "score": 160,
+      "physicsRank": 141644,
+      "historyRank": 52422
+    },
+    {
+      "score": 159,
+      "physicsRank": 141650,
+      "historyRank": 52425
+    },
+    {
+      "score": 158,
+      "physicsRank": 141653,
+      "historyRank": 52428
+    },
+    {
+      "score": 157,
+      "physicsRank": 141660,
+      "historyRank": 0
+    },
+    {
+      "score": 156,
+      "physicsRank": 141665,
+      "historyRank": 52431
+    },
+    {
+      "score": 155,
+      "physicsRank": 141670,
+      "historyRank": 52436
+    },
+    {
+      "score": 154,
+      "physicsRank": 141677,
+      "historyRank": 52437
+    },
+    {
+      "score": 153,
+      "physicsRank": 141682,
+      "historyRank": 52442
+    },
+    {
+      "score": 152,
+      "physicsRank": 141684,
+      "historyRank": 52446
+    },
+    {
+      "score": 151,
+      "physicsRank": 0,
+      "historyRank": 52450
+    },
+    {
+      "score": 150,
+      "physicsRank": 141691,
+      "historyRank": 52453
+    }
+  ]
+}

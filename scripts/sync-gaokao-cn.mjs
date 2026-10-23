@@ -2,26 +2,42 @@ import { createHash } from "node:crypto";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  assertCompleteRefresh,
+  assertNoYearDowngrade,
+  assertSourceRecordYears,
+  isSameYearCache,
+  parseSyncYear,
+  sameYearReference
+} from "./admissions-sync-guards.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const admissionsDir = path.join(root, "data", "admissions");
+const year = parseSyncYear(process.argv);
+const canonicalAdmissionsDir = path.join(root, "data", "admissions");
+const outputDir = process.argv.find((arg) => arg.startsWith("--output-dir="))?.slice(13);
+if (outputDir !== undefined && !outputDir.trim()) {
+  throw new Error("--output-dir 不能为空；请指定用于暂存数据的目录。");
+}
+// Staging contains the same admissions-relative layout; source inputs stay read-only.
+const admissionsDir = outputDir ? path.resolve(outputDir) : canonicalAdmissionsDir;
 const aggregateDir = path.join(admissionsDir, "aggregated");
 const provinceDir = path.join(aggregateDir, "provinces");
 const rawDir = path.join(admissionsDir, "raw");
 const indexPath = path.join(aggregateDir, "index.json");
 const schoolDataPath = path.join(root, "data", "schools.json");
-const sourceManifestPath = path.join(admissionsDir, "sources.json");
+const sourceManifestPath = path.join(canonicalAdmissionsDir, "sources.json");
 const providerSchoolPath = path.join(rawDir, "gaokaocn-school-code.json");
 
-const year = Number(
-  process.argv.find((arg) => arg.startsWith("--year="))?.split("=")[1] || 2024
-);
 const requestedProvince =
   process.argv.find((arg) => arg.startsWith("--province="))?.split("=")[1] || "";
 const refresh = process.argv.includes("--refresh");
+const allowRecordDrop = process.argv.includes("--allow-record-drop");
 const concurrency = Number(
   process.argv.find((arg) => arg.startsWith("--concurrency="))?.split("=")[1] || 24
 );
+if (!Number.isInteger(concurrency) || concurrency < 1 || concurrency > 100) {
+  throw new Error("--concurrency 必须为 1–100 的整数。");
+}
 
 const provinceCodes = {
   北京市: "11",
@@ -72,6 +88,7 @@ const rankMapPaths = {
 
 const rankEstimateConfigs = {
   西藏自治区: {
+    year: 2024,
     method: "xizang-score-plan-exponential-v1",
     note:
       "西藏未公开一分一段表，且公开专业录取数据连续多年不提供位次。估算以2024年3.6万名考生、文理科招生计划和A/B类本科二批控制线为锚点，误差可能较大。",
@@ -157,6 +174,7 @@ async function loadRankContext(province) {
   const relativePath = rankMapPaths[province];
   if (!relativePath) return null;
   const payload = await Bun.file(path.join(root, relativePath)).json();
+  if (!sameYearReference(payload, year)) return null;
   const byTrack = {
     physics: new Map(),
     history: new Map()
@@ -177,7 +195,7 @@ async function loadRankContext(province) {
 }
 
 function estimateRankFromScore(province, track, minScore, majorName) {
-  const config = rankEstimateConfigs[province];
+  const config = sameYearReference(rankEstimateConfigs[province], year);
   const trackConfig = config?.tracks?.[track];
   if (!config || !trackConfig || !minScore) return null;
 
@@ -466,15 +484,24 @@ for (const provinceEntry of selectedProvinces) {
   const provinceCode = provinceCodes[province];
   if (!provinceCode) throw new Error(`缺少省份代码: ${province}`);
   const outputPath = path.join(provinceDir, `${province}.json`);
-  if (!refresh && (await Bun.file(outputPath).exists())) {
-    const existing = await Bun.file(outputPath).json();
+  const existing = (await Bun.file(outputPath).exists())
+    ? await Bun.file(outputPath).json()
+    : null;
+  // Compare a staged update against the published dataset as well.
+  const canonicalPath = path.join(canonicalAdmissionsDir, "aggregated", "provinces", `${province}.json`);
+  const published = outputPath !== canonicalPath && (await Bun.file(canonicalPath).exists())
+    ? await Bun.file(canonicalPath).json()
+    : existing;
+  assertNoYearDowngrade(existing, year, province);
+  assertNoYearDowngrade(published, year, province);
+  if (!refresh && isSameYearCache(existing, year)) {
     provinceEntries.push(existing.meta.indexEntry);
     console.log(`Skipped ${province}: ${existing.records.length} cached records.`);
     continue;
   }
 
   const rankContext = await loadRankContext(province);
-  const rankEstimateConfig = rankEstimateConfigs[province] || null;
+  const rankEstimateConfig = sameYearReference(rankEstimateConfigs[province], year);
   let completed = 0;
   const fetched = await mapConcurrent(schoolRequests, concurrency, async (request) => {
     const sourceUrl =
@@ -489,6 +516,7 @@ for (const provinceEntry of selectedProvinces) {
       if (!bytes) return { status: "not-found", request, sourceUrl };
       const payload = JSON.parse(new TextDecoder().decode(bytes));
       const rawRecords = flattenProviderRecords(payload);
+      assertSourceRecordYears(rawRecords, year);
       const sourceId = `gaokaocn-${year}-${provinceCode}`;
       const fileSha256 = sha256(bytes);
       const records = rawRecords
@@ -525,6 +553,13 @@ for (const provinceEntry of selectedProvinces) {
   const available = fetched.filter((entry) => entry.status === "available");
   const failed = fetched.filter((entry) => entry.status === "failed");
   const records = available.flatMap((entry) => entry.records);
+  assertCompleteRefresh({
+    province,
+    records,
+    failed,
+    previousCount: Math.max(existing?.records?.length || 0, published?.records?.length || 0),
+    allowRecordDrop
+  });
   records.sort(
     (a, b) =>
       a.schoolName.localeCompare(b.schoolName, "zh-CN") ||

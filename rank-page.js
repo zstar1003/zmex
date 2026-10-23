@@ -2,7 +2,7 @@ import {
   admissionCoverageForProvince,
   buildAdmissionIndex,
   rankAdvisorMatches,
-} from "./rank-engine.js";
+} from "./rank-engine.js?v=20261024-2";
 import { filterMajorMatches } from "./rank-results.js?v=20261024-1";
 import { exportResultsExcel, printResults } from "./rank-export.js?v=20261024-1";
 
@@ -32,7 +32,7 @@ const emptyResult = document.querySelector("#rankEmpty");
 const exportExcelButton = document.querySelector("#rankExportExcel");
 const exportPdfButton = document.querySelector("#rankExportPdf");
 const exportStatus = document.querySelector("#rankExportStatus");
-const dataCacheVersion = "20260627-art-majors-1";
+const dataCacheVersion = "20261024-admissions-2026";
 const pageSize = 50;
 
 let schools = [];
@@ -142,7 +142,13 @@ function applyMajorFilter() {
   renderCurrentPage();
 }
 
-function resultCardHtml({ school, major, requiredRank, lineScore, sourceYear, sourceLabel, subject, batch, isVerified, rankMethod, dataType }) {
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  })[char]);
+}
+
+function resultCardHtml({ school, major, requiredRank, lineScore, sourceYear, sourceLabel, subject, batch, isVerified, rankMethod, rankNote, dataType }) {
   const rankLabel = !isVerified
     ? "估算位次"
     : dataType === "aggregated"
@@ -150,16 +156,16 @@ function resultCardHtml({ school, major, requiredRank, lineScore, sourceYear, so
         ? "公开数据同分位次上限"
         : "公开数据最低位次"
       : rankMethod === "official-score-cumulative"
-        ? "官方同分位次上限"
+        ? rankNote?.includes("合并档") ? "官方合并档位次上限" : "官方同分位次上限"
         : "官方最低位次";
   return `
     <article class="program-card rank-page-card">
-      <span class="program-school">${school.name}</span>
-      <strong>${major.name}</strong>
-      <span>${school.province} · ${school.city}</span>
+      <span class="program-school">${escapeHtml(school.name)}</span>
+      <strong>${escapeHtml(major.name)}</strong>
+      <span>${escapeHtml(school.province)} · ${escapeHtml(school.city)}</span>
       <div class="program-rank-line">
-        <b>${rankLabel} ${formatNumber.format(requiredRank)} 名</b>
-        <em>${sourceYear ? `${sourceYear}${lineScore ? ` · ${lineScore}分` : ""} · ${sourceLabel}` : `${sourceLabel} · 位次参考`}<br/>${batch || subject}</em>
+        <b title="${escapeHtml(rankNote)}">${rankLabel} ${formatNumber.format(requiredRank)} 名</b>
+        <em>${sourceYear ? `${sourceYear}${lineScore ? ` · ${lineScore}分` : ""} · ${escapeHtml(sourceLabel)}` : `${escapeHtml(sourceLabel)} · 位次参考`}<br/>${escapeHtml([batch, subject].filter(Boolean).join(" · "))}</em>
       </div>
     </article>
   `;
@@ -194,11 +200,16 @@ function renderResults(province, rank, track, targetProvinces = new Set()) {
     targetProvinces: [...targetProvinces],
   });
   const coverage = admissionCoverageForProvince(admissionIndex, province);
+  const referenceYears = [...new Set((coverage?.sources || []).map((source) => source.year).filter(Boolean))]
+    .sort((a, b) => b - a);
+  const referenceYearText = referenceYears.length
+    ? `数据覆盖 ${referenceYears.join("、")} 年，同一专业优先使用已收录的最新年份；未更新的记录保留原年份。`
+    : "";
   resultTitle.textContent = `${province}第 ${formatNumber.format(rank)} 名`;
   resultCount.textContent = String(matches.length);
   const sourceParts = [];
   if (coverage?.officialRecordCount) {
-    sourceParts.push(`${formatNumber.format(coverage.officialRecordCount)} 条考试院官方记录`);
+    sourceParts.push(`${formatNumber.format(coverage.officialRecordCount)} 条官方录取记录`);
   }
   if (coverage?.aggregatedRecordCount) {
     sourceParts.push(`${formatNumber.format(coverage.aggregatedRecordCount)} 条可追溯公开记录`);
@@ -214,8 +225,11 @@ function renderResults(province, rank, track, targetProvinces = new Set()) {
   const latestReferenceText = coverage?.latestOfficialReference
     ? `；另已找到${coverage.latestOfficialReference.year}年${coverage.latestOfficialReference.granularity}投档线，暂不混入专业粒度排序`
     : "";
+  const groupNote = (coverage?.sources || []).some((source) => source.granularity?.includes("院校专业组"))
+    ? "专业组行不含组内专业明细，专业关键词只匹配已提供的名称。"
+    : "";
   summary.textContent = matches.length
-    ? `已读取 ${sourceParts.join("及")}，结果按最低分从高到低排序，同分按位次从小到大，缺失分数的记录排在最后${targetProvinceText}${latestReferenceText}。`
+    ? `${referenceYearText}已读取 ${sourceParts.join("及")}，结果按最低分从高到低排序，同分按位次从小到大，缺失分数的记录排在最后${targetProvinceText}${latestReferenceText}。${groupNote}`
     : coverage?.recordCount
       ? `现有可追溯数据中暂未匹配到符合当前排名${targetProvinces.size ? "和院校所在地" : ""}的专业${latestReferenceText}。`
       : "该省专业录取数据仍在检索，暂不使用未经核实的估算值。";
