@@ -3,6 +3,8 @@ import {
   buildAdmissionIndex,
   rankAdvisorMatches,
 } from "./rank-engine.js";
+import { filterMajorMatches } from "./rank-results.js?v=20261024-1";
+import { exportResultsExcel, printResults } from "./rank-export.js?v=20261024-1";
 
 const formatNumber = new Intl.NumberFormat("zh-CN");
 const form = document.querySelector("#rankForm");
@@ -23,6 +25,13 @@ const nextPageButton = document.querySelector("#rankNextPage");
 const lastPageButton = document.querySelector("#rankLastPage");
 const resultTitle = document.querySelector("#rankResultTitle");
 const resultCount = document.querySelector("#rankResultCount");
+const majorKeywordInput = document.querySelector("#rankMajorKeyword");
+const clearKeywordButton = document.querySelector("#rankClearKeyword");
+const filterStatus = document.querySelector("#rankFilterStatus");
+const emptyResult = document.querySelector("#rankEmpty");
+const exportExcelButton = document.querySelector("#rankExportExcel");
+const exportPdfButton = document.querySelector("#rankExportPdf");
+const exportStatus = document.querySelector("#rankExportStatus");
 const dataCacheVersion = "20260627-art-majors-1";
 const pageSize = 50;
 
@@ -32,8 +41,11 @@ let admissionIndex = buildAdmissionIndex();
 const admissionPayloads = new Map();
 let querySerial = 0;
 const resultState = {
+  allMatches: [],
   matches: [],
   page: 1,
+  query: null,
+  exporting: false,
 };
 
 function dataUrl(path) {
@@ -77,7 +89,7 @@ function readRankQuery() {
   const province = provinceSelect.value;
   const track = trackSelect.value;
   const rank = Number(rankInput.value);
-  if (!province || !Number.isFinite(rank) || rank < 1) return null;
+  if (!province || !Number.isSafeInteger(rank) || rank < 1) return null;
   return { province, track, rank };
 }
 
@@ -98,10 +110,36 @@ function renderTargetProvinceOptions() {
 }
 
 function resetResultState() {
+  resultState.allMatches = [];
   resultState.matches = [];
   resultState.page = 1;
+  resultState.query = null;
   pagination.hidden = true;
   results.innerHTML = "";
+  emptyResult.hidden = true;
+  majorKeywordInput.disabled = true;
+  clearKeywordButton.disabled = true;
+  filterStatus.textContent = "查询后，可在全部结果中按专业名称模糊筛选。";
+  exportStatus.textContent = "";
+  updateExportButtons();
+}
+
+function updateExportButtons() {
+  const disabled = !resultState.query || !resultState.matches.length || resultState.exporting;
+  exportExcelButton.disabled = disabled;
+  exportPdfButton.disabled = disabled;
+}
+
+function applyMajorFilter() {
+  resultState.matches = filterMajorMatches(resultState.allMatches, majorKeywordInput.value);
+  resultState.page = 1;
+  resultCount.textContent = String(resultState.matches.length);
+  clearKeywordButton.disabled = !majorKeywordInput.value;
+  filterStatus.textContent = `原查询 ${formatNumber.format(resultState.allMatches.length)} 条，当前筛选 ${formatNumber.format(resultState.matches.length)} 条。`;
+  emptyResult.hidden = !resultState.allMatches.length || !!resultState.matches.length;
+  exportStatus.textContent = "";
+  updateExportButtons();
+  renderCurrentPage();
 }
 
 function resultCardHtml({ school, major, requiredRank, lineScore, sourceYear, sourceLabel, subject, batch, isVerified, rankMethod, dataType }) {
@@ -156,9 +194,6 @@ function renderResults(province, rank, track, targetProvinces = new Set()) {
     targetProvinces: [...targetProvinces],
   });
   const coverage = admissionCoverageForProvince(admissionIndex, province);
-  const usesCumulativeRank = coverage?.sources?.some(
-    (source) => String(source.rankMethod || "").includes("cumulative"),
-  );
   resultTitle.textContent = `${province}第 ${formatNumber.format(rank)} 名`;
   resultCount.textContent = String(matches.length);
   const sourceParts = [];
@@ -173,11 +208,6 @@ function renderResults(province, rank, track, targetProvinces = new Set()) {
       `${formatNumber.format(coverage.estimatedRecordCount)} 条公开最低分换算的估算记录`,
     );
   }
-  const sortBasis = coverage?.estimatedRecordCount
-    ? "估算位次"
-    : usesCumulativeRank
-      ? "同分位次上限或最低位次"
-      : "最低位次";
   const targetProvinceText = targetProvinces.size
     ? `，院校所在地限定为${formatTargetProvinceSelection(targetProvinces)}`
     : "";
@@ -185,46 +215,56 @@ function renderResults(province, rank, track, targetProvinces = new Set()) {
     ? `；另已找到${coverage.latestOfficialReference.year}年${coverage.latestOfficialReference.granularity}投档线，暂不混入专业粒度排序`
     : "";
   summary.textContent = matches.length
-    ? `已读取 ${sourceParts.join("及")}，结果按${sortBasis}排序${targetProvinceText}${latestReferenceText}。`
+    ? `已读取 ${sourceParts.join("及")}，结果按最低分从高到低排序，同分按位次从小到大，缺失分数的记录排在最后${targetProvinceText}${latestReferenceText}。`
     : coverage?.recordCount
       ? `现有可追溯数据中暂未匹配到符合当前排名${targetProvinces.size ? "和院校所在地" : ""}的专业${latestReferenceText}。`
       : "该省专业录取数据仍在检索，暂不使用未经核实的估算值。";
 
-  resultState.matches = matches;
-  resultState.page = 1;
-  renderCurrentPage();
+  resultState.allMatches = matches;
+  resultState.query = { province, rank, track, targetProvinces: [...targetProvinces] };
+  majorKeywordInput.disabled = false;
+  applyMajorFilter();
 }
 
 async function loadProvinceAdmissions(province) {
   const entry = admissionCatalog?.provinces?.find((item) => item.province === province);
   if (!entry?.dataUrl) {
-    admissionIndex = buildAdmissionIndex(null, admissionCatalog);
-    return;
+    return buildAdmissionIndex(null, admissionCatalog);
   }
   if (!admissionPayloads.has(province)) {
     admissionPayloads.set(province, await fetchJson(entry.dataUrl));
   }
-  admissionIndex = buildAdmissionIndex(admissionPayloads.get(province), admissionCatalog);
+  return buildAdmissionIndex(admissionPayloads.get(province), admissionCatalog);
 }
 
 async function runRankQuery({ showInvalid = true } = {}) {
+  const serial = ++querySerial;
   const query = readRankQuery();
   if (!query) {
-    if (!showInvalid) return;
+    resetResultState();
+    resultCount.textContent = "0";
+    if (!showInvalid) {
+      resultTitle.textContent = "等待输入排名";
+      summary.textContent = "选择省份、科类并输入全省排名。";
+      return;
+    }
     resultTitle.textContent = "排名无效";
     resultCount.textContent = "0";
-    summary.textContent = "请输入大于 0 的全省排名。";
-    resetResultState();
+    summary.textContent = "请输入大于 0 的整数全省排名。";
     return;
   }
 
-  const serial = ++querySerial;
   const { province, rank, track } = query;
+  const targetProvinces = selectedTargetProvinces();
+  resetResultState();
+  resultTitle.textContent = "正在查询…";
+  resultCount.textContent = "0";
   summary.textContent = "正在读取该省专业录取数据…";
   try {
-    await loadProvinceAdmissions(province);
+    const loadedIndex = await loadProvinceAdmissions(province);
     if (serial !== querySerial) return;
-    renderResults(province, rank, track, selectedTargetProvinces());
+    admissionIndex = loadedIndex;
+    renderResults(province, rank, track, targetProvinces);
   } catch (error) {
     if (serial !== querySerial) return;
     console.error(error);
@@ -239,6 +279,40 @@ form.addEventListener("submit", async (event) => {
   event.preventDefault();
   await runRankQuery();
 });
+
+majorKeywordInput.addEventListener("input", applyMajorFilter);
+clearKeywordButton.addEventListener("click", () => {
+  majorKeywordInput.value = "";
+  applyMajorFilter();
+  majorKeywordInput.focus();
+});
+
+async function exportCurrentResults(format) {
+  if (!resultState.query || !resultState.matches.length || resultState.exporting) return;
+  const matches = resultState.matches;
+  const context = { ...resultState.query, keyword: majorKeywordInput.value.trim() };
+  const serial = querySerial;
+  resultState.exporting = true;
+  updateExportButtons();
+  exportStatus.textContent = format === "excel" ? "正在生成 Excel…" : "正在打开打印窗口…";
+  try {
+    if (format === "excel") await exportResultsExcel(matches, context);
+    else printResults(matches, context);
+    if (serial === querySerial && matches === resultState.matches) {
+      exportStatus.textContent = format === "excel"
+        ? `已导出 ${formatNumber.format(matches.length)} 条结果。`
+        : "已打开打印页面，可选择“另存为 PDF”。";
+    }
+  } catch (error) {
+    if (serial === querySerial && matches === resultState.matches) exportStatus.textContent = `导出失败：${error.message}`;
+  } finally {
+    resultState.exporting = false;
+    updateExportButtons();
+  }
+}
+
+exportExcelButton.addEventListener("click", () => exportCurrentResults("excel"));
+exportPdfButton.addEventListener("click", () => exportCurrentResults("pdf"));
 
 async function init() {
   const [data, catalog] = await Promise.all([

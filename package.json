@@ -10,6 +10,7 @@
   },
   "homepage": "https://zmex.zstar.website/",
   "scripts": {
+    "test": "node --test tests/*.test.mjs",
     "start": "bun run scripts/server.mjs",
     "build:data": "bun run scripts/build-data.mjs",
     "sync:admissions": "bun run scripts/sync-admissions.mjs",
@@ -17,7 +18,8 @@
     "build:major-index": "bun run scripts/build-major-admission-index.mjs",
     "parse:xinjiang-ranks": "python3 scripts/parse-xinjiang-ranks.py",
     "verify:admissions": "bun run scripts/verify-admissions.mjs",
-    "vendor:three": "bun run scripts/vendor-three.mjs"
+    "vendor:three": "bun run scripts/vendor-three.mjs",
+    "vendor:xlsx": "bun run scripts/vendor-xlsx.mjs"
   },
   "dependencies": {
     "three": "^0.184.0",
